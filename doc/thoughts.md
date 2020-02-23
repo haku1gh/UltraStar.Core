@@ -13,8 +13,8 @@ roughly everything else of the Game?
 definitely:
 - Decoding of video and buffering of video frames **(already tested)**
 - Decoding of audio and buffering of audio frames **(already tested)**
-- Decoding of images
-- Resizing of images
+- Decoding of images **(already tested)**
+- Resizing of images **(already tested)**
 - Recording of audio **(already tested)**
 - Audio playback **(already tested)**
 - Applying effects to audio streams
@@ -35,9 +35,14 @@ definitely:
   - Read settings **(already tested)**
   - Write settings
 - Use of a database
+  - Demo access **(already tested)**
   - Cache
   - Highscores
-- Logging
+- Logging **(already tested)**
+- Multiple Remote Display with Synchronization
+- Connect to APP via REST
+- Provide real karaoke queueing
+- A good randomizer
 
 unclear:
 - Localization (log files shall not contain localized information)
@@ -46,7 +51,7 @@ unclear:
 
 - FFmpeg 4.2.2
   - License: LGPL 3.0
-  - Use for: decode video; decode audio
+  - Use for: decode video; decode audio, decode images, resize images
 - BASS 2.4.15
   - License: custom, free for non commercial use
   - Use for: record audio; play audio; use DSP framework for audio streams
@@ -62,4 +67,10 @@ unclear:
 - SQLite-net 1.6.292 (not clear if this SQLite wrapper implementation will be used)
   - License: MIT
   - Use for: database
-
+  - There are no real libraries (.so files) for Linux available
+    - Found a possibility with interop files (this should work for Win32, Win64 and Linux)
+- DBreeze 1.95
+  - License: BSD 2-clause
+  - Use for: database
+  - PRO: Easily portable as completely written in C#
+  - CON: Its a NoSQL database. Search might be a bit more difficult. Multiple files in a folder for the database.
