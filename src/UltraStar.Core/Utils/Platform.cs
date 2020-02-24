@@ -1,4 +1,4 @@
-﻿#region License
+﻿#region License (LGPL)
 /*
  * This file is part of UltraStar.Core.
  * 
