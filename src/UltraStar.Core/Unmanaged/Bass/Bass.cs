@@ -239,24 +239,126 @@ namespace UltraStar.Core.Unmanaged.Bass
         [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         private delegate bool bass_getinfo_delegate(out BassInfo info);
         /// <summary>
-        /// Gets information on the device being used. 
+        /// Gets extended information on the device being used. 
         /// </summary>
         /// <remarks>
         /// When using multiple devices, the current thread's device setting (as set with BASS_SetDevice) determines which device this function call applies to.
         /// </remarks>
         /// <returns>Information about the current device.</returns>
         /// <exception cref="BassException">Device is not initialized.</exception>
-        public static BassInfo GetDeviceInfoUsed()
+        public static BassInfo DeviceExtendedInfo
         {
-            bass_getinfo_delegate del = LibraryLoader.GetFunctionDelegate<bass_getinfo_delegate>(libraryHandle, "BASS_GetInfo");
-            BassInfo info;
-            if (!del(out info)) throw new BassException(GetErrorCode());
-            return info;
+            get
+            {
+                bass_getinfo_delegate del = LibraryLoader.GetFunctionDelegate<bass_getinfo_delegate>(libraryHandle, "BASS_GetInfo");
+                BassInfo info;
+                if (!del(out info)) throw new BassException(GetErrorCode());
+                return info;
+            }
+        }
+
+        /// <summary>
+        /// Delegate for BASS_GetVolume.
+        /// </summary>
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        private delegate float bass_getvolume_delegate();
+        /// <summary>
+        /// Delegate for BASS_SetVolume.
+        /// </summary>
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        private delegate bool bass_setvolume_delegate(float volume);
+        /// <summary>
+        /// Gets or sets the devices volume.
+        /// </summary>
+        /// <remarks>
+        /// A returned -1 indicates an error. Call <see cref="GetErrorCode"/> to retrieve the error.
+        /// 
+        /// The volume level is in the range 0 (silent) to 1 (max).
+        /// The actual volume level may not be exactly the same as requested, due to underlying precision differences.
+        /// Use a get on <see cref="DeviceVolume"/> to confirm what the volume is.
+        /// 
+        /// This function affects the volume level of all applications using the same output device.
+        /// If you wish to only affect the level of your application's sounds,
+        /// the BASS_ATTRIB_VOL attribute and/or the BASS_CONFIG_GVOL_MUSIC / BASS_CONFIG_GVOL_SAMPLE / BASS_CONFIG_GVOL_STREAM config options should be used instead.
+        /// 
+        /// When using multiple devices, the current thread's device setting (as set with BASS_SetDevice) determines which device this function call applies to. 
+        /// </remarks>
+        public static float DeviceVolume
+        {
+            get
+            {
+                bass_getvolume_delegate del = LibraryLoader.GetFunctionDelegate<bass_getvolume_delegate>(libraryHandle, "BASS_GetVolume");
+                return del();
+            }
+            set
+            {
+                bass_setvolume_delegate del = LibraryLoader.GetFunctionDelegate<bass_setvolume_delegate>(libraryHandle, "BASS_SetVolume");
+                if (!del(value)) throw new BassException(GetErrorCode());
+            }
+        }
+
+        /// <summary>
+        /// Delegate for BASS_GetDevice.
+        /// </summary>
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        private delegate int bass_getdevice_delegate();
+        /// <summary>
+        /// Delegate for BASS_SetDevice.
+        /// </summary>
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        private delegate bool bass_setdevice_delegate(int device);
+        /// <summary>
+        /// Gets or sets the device for the current thread.
+        /// </summary>
+        /// <remarks>
+        /// A returned -1 indicates an error. Call <see cref="GetErrorCode"/> to retrieve the error.
+        /// 
+        /// Simultaneously using multiple devices is supported in the BASS API via a context switching system;
+        /// instead of there being an extra "device" parameter in the function calls, the device to be used is set prior to calling the functions.
+        /// The device setting is local to the current thread, so calling functions with different devices simultaneously in multiple threads is not a problem.
+        /// 
+        /// When one of the above functions (or BASS_GetDevice) is called, BASS will check the current thread's device setting,
+        /// and if no device is selected (or the selected device is not initialized), BASS will automatically select the lowest device that is initialized.
+        /// This means that when using a single device, there is no need to use this function; BASS will automatically use the device that is initialized.
+        /// Even if you free the device, and initialize another, BASS will automatically switch to the one that is initialized.
+        /// </remarks>
+        /// <exception cref="BassException">Device is not initialized or does not exist.</exception>
+        public static int CurrentDevice
+        {
+            get
+            {
+                bass_getdevice_delegate del = LibraryLoader.GetFunctionDelegate<bass_getdevice_delegate>(libraryHandle, "BASS_GetDevice");
+                return del();
+            }
+            set
+            {
+                bass_setdevice_delegate del = LibraryLoader.GetFunctionDelegate<bass_setdevice_delegate>(libraryHandle, "BASS_SetDevice");
+                if(!del(value)) throw new BassException(GetErrorCode());
+            }
         }
 
         #endregion Playback
 
+        #region Streams
+
+        // StreamCreate
+        // StreamFree
+        // StreamPutData
+
+        #endregion Streams
+
         #region Recording
+
+        // GetRecordingDevice
+        // RecordingDeviceInfo
+        // RecordingInit
+        // RecordingFree
+        // RecordingExtendedInfo
+        // RecordingInput
+        // RecordingInputName
+        // RecordingStart
+        // CurrentRecordingDevice
+
         #endregion Recording
 
         #region Channels
