@@ -68,6 +68,7 @@
     <Compile Include="Utils\Architecture.cs" />
     <Compile Include="Utils\Platform.cs" />
     <Compile Include="Utils\SystemInformation.cs" />
+    <Compile Include="Utils\VolumeConversion.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
