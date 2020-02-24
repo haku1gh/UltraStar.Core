@@ -1,4 +1,4 @@
-﻿#region License
+﻿#region License (LGPL)
 /*
  * This file is part of UltraStar.Core.
  * 
@@ -41,8 +41,8 @@ namespace UltraStar.Core
         /// </summary>
         /// <remarks>
         /// Per default it is assumed that all libraries reside in their sub-directories.
-        /// If this value is <c>true</c>, then libaries will be searched in: "[rootPath]/[platform]/[architecture]/".
-        /// If this value is <c>false</c>, then libaries will be searched in: "[rootPath]/".
+        /// If this value is <see langword="true"/>, then libaries will be searched in: "[rootPath]/[platform]/[architecture]/".
+        /// If this value is <see langword="false"/>, then libaries will be searched in: "[rootPath]/".
         /// </remarks>
         public static bool LibrarySubFoldersExisting { get; set; }
     }

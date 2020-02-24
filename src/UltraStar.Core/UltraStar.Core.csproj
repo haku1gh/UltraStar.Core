@@ -22,6 +22,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -51,7 +52,16 @@
   <ItemGroup>
     <Compile Include="Class1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Unmanaged\Bass.cs" />
+    <Compile Include="Unmanaged\Bass\Bass.cs" />
+    <Compile Include="Unmanaged\Bass\BassConfigurationOption.cs" />
+    <Compile Include="Unmanaged\Bass\BassDeviceInfo.cs" />
+    <Compile Include="Unmanaged\Bass\BassDeviceInfoFlags.cs" />
+    <Compile Include="Unmanaged\Bass\BassDeviceInitFlags.cs" />
+    <Compile Include="Unmanaged\Bass\BassDeviceType.cs" />
+    <Compile Include="Unmanaged\Bass\BassErrorCode.cs" />
+    <Compile Include="Unmanaged\Bass\BassException.cs" />
+    <Compile Include="Unmanaged\Bass\BassInfo.cs" />
+    <Compile Include="Unmanaged\Bass\BassInfoFlags.cs" />
     <Compile Include="Unmanaged\FFmpeg.cs" />
     <Compile Include="Unmanaged\LibraryLoader.cs" />
     <Compile Include="UsConfig.cs" />
