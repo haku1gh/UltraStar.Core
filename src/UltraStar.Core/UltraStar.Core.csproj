@@ -62,6 +62,10 @@
     <Compile Include="Unmanaged\Bass\BassException.cs" />
     <Compile Include="Unmanaged\Bass\BassInfo.cs" />
     <Compile Include="Unmanaged\Bass\BassInfoFlags.cs" />
+    <Compile Include="Unmanaged\Bass\BassRecordStartFlags.cs" />
+    <Compile Include="Unmanaged\Bass\BassStreamCreateFlags.cs" />
+    <Compile Include="Unmanaged\Bass\BassStreamProcedure.cs" />
+    <Compile Include="Unmanaged\Bass\BassStreamProcedureType.cs" />
     <Compile Include="Unmanaged\FFmpeg.cs" />
     <Compile Include="Unmanaged\LibraryLoader.cs" />
     <Compile Include="UsConfig.cs" />
