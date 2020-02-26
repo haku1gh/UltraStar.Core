@@ -693,9 +693,70 @@ namespace UltraStar.Core.Unmanaged.Bass
         // ChannelGetLevelEx
         // ChannelGetPosition
         // ChannelIsActive
-        // ChannelIsSliding
-        // ChannelPause
-        // ChannelPlay
+
+        /// <summary>
+        /// Delegate for BASS_ChannelIsSliding.
+        /// </summary>
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        private delegate bool bass_channelissliding_delegate(int handle, BassChannelAttribute attribute);
+        /// <summary>
+        /// Checks if an attribute (or any attribute) of a sample, stream, or MOD music is sliding.
+        /// </summary>
+        /// <param name="handle">The channel handle... a HCHANNEL, HSTREAM or HMUSIC.</param>
+        /// <param name="attribute">The attribute to check for sliding.</param>
+        /// <returns><see langword="true" /> if the attribute is sliding; otherwise <see langword="false" />.</returns>
+        public static bool ChannelIsSliding(int handle, BassChannelAttribute attribute)
+        {
+            bass_channelissliding_delegate del = LibraryLoader.GetFunctionDelegate<bass_channelissliding_delegate>(libraryHandle, "BASS_ChannelIsSliding");
+            return del(handle, attribute);
+        }
+
+        /// <summary>
+        /// Delegate for BASS_ChannelPause.
+        /// </summary>
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        private delegate bool bass_channelpause_delegate(int handle);
+        /// <summary>
+        /// Pauses a sample, stream, MOD music, or recording.
+        /// </summary>
+        /// <remarks>
+        /// Use BASS_ChannelPlay to resume a paused channel. BASS_ChannelStop can be used to stop a paused channel.
+        /// </remarks>
+        /// <param name="handle">The channel handle... a HCHANNEL, HMUSIC, HSTREAM, or HRECORD.</param>
+        /// <returns><see langword="true" /> if successful; otherwise <see langword="false" />. Use <see cref="GetErrorCode" /> to get the error code.</returns>
+        public static bool ChannelPause(int handle)
+        {
+            bass_channelpause_delegate del = LibraryLoader.GetFunctionDelegate<bass_channelpause_delegate>(libraryHandle, "BASS_ChannelPause");
+            return del(handle);
+        }
+
+        /// <summary>
+        /// Delegate for BASS_ChannelPlay.
+        /// </summary>
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        private delegate bool bass_channelplay_delegate(int handle, bool restart);
+        /// <summary>
+        /// Starts (or resumes) playback of a sample, stream, MOD music, or recording.
+        /// </summary>
+        /// <remarks>
+        /// When streaming in blocks (BASS_STREAM_BLOCK), the restart parameter is ignored as it is not possible to go back to the start.
+        /// The restart parameter is also of no consequence with recording channels.
+        /// 
+        /// If other channels have been linked to the specified channel via BASS_ChannelSetLink,
+        /// this function will attempt to simultaneously start playing them too but if any fail, it will be silently.
+        /// The return value and error code only reflects what happened with the specified channel.
+        /// BASS_ChannelIsActive can be used to confirm the status of linked channels. 
+        /// </remarks>
+        /// <param name="handle">The channel handle... a HCHANNEL, HMUSIC, HSTREAM, or HRECORD.</param>
+        /// <param name="restart">Restart playback from the beginning? If handle is a user stream (created with BASS_StreamCreate), its current buffer contents are cleared.
+        /// If it is a MOD music, its BPM/etc are reset to their initial values.</param>
+        /// <returns><see langword="true" /> if successful; otherwise <see langword="false" />. Use <see cref="GetErrorCode" /> to get the error code.</returns>
+        public static bool ChannelPlay(int handle, bool restart = false)
+        {
+            bass_channelplay_delegate del = LibraryLoader.GetFunctionDelegate<bass_channelplay_delegate>(libraryHandle, "BASS_ChannelPlay");
+            return del(handle, restart);
+        }
+
         // ChannelRemoveDSP
         // ChannelRemoveSync
         // ChannelSeconds2Bytes
@@ -704,8 +765,68 @@ namespace UltraStar.Core.Unmanaged.Bass
         // ChannelSetDSP
         // ChannelSetPosition
         // ChannelSetSync
-        // ChannelSlideAttribute
-        // ChannelUpdate
+
+        /// <summary>
+        /// Delegate for BASS_ChannelSlideAttribute.
+        /// </summary>
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        private delegate bool bass_channelslideattribute_delegate(int handle, int attribute, float value, int time);
+        /// <summary>
+        /// Slides a channel's attribute from its current value to a new value.
+        /// </summary>
+        /// <remarks>
+        /// This function is similar to BASS_ChannelSetAttribute, except that the attribute is ramped to the value over the specified period of time.
+        /// Another difference is that the value is not pre-checked. If it is invalid, the slide will simply end early.
+        /// 
+        /// If an attribute is already sliding, then the old slide is stopped and replaced by the new one.
+        /// 
+        /// BASS_ChannelIsSliding can be used to check if an attribute is currently sliding.A BASS_SYNC_SLIDE sync can also be set via BASS_ChannelSetSync,
+        /// to be triggered at the end of a slide.The sync will not be triggered in the case of an existing slide being replaced by a new one.
+        /// 
+        /// Attribute slides are unaffected by whether the channel is playing, paused or stopped; they carry on regardless.
+        /// </remarks>
+        /// <param name="handle">The channel handle... a HCHANNEL, HSTREAM, HMUSIC, or HRECORD.</param>
+        /// <param name="attribute">The attribute to slide the value of.</param>
+        /// <param name="value">The new attribute value. See the attribute's documentation for details on the possible values.</param>
+        /// <param name="time">The length of time (in milliseconds) that it should take for the attribute to reach the value.</param>
+        /// <param name="logarithmic">An indicator whether to slide logarithmically.</param>
+        /// <returns><see langword="true" /> if successful; otherwise <see langword="false" />. Use <see cref="GetErrorCode" /> to get the error code.</returns>
+        public static bool ChannelSlideAttribute(int handle, BassChannelAttribute attribute, float value, int time, bool logarithmic = false)
+        {
+            bass_channelslideattribute_delegate del = LibraryLoader.GetFunctionDelegate<bass_channelslideattribute_delegate>(libraryHandle, "BASS_ChannelSlideAttribute");
+            int attr = (int)attribute;
+            if (logarithmic) attr |= 0x1000000;
+            return del(handle, attr, value, time);
+        }
+
+        /// <summary>
+        /// Delegate for BASS_ChannelUpdate.
+        /// </summary>
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        private delegate bool bass_channelupdate_delegate(int handle, int length);
+        /// <summary>
+        /// Updates the playback buffer of a stream or MOD music.
+        /// </summary>
+        /// <remarks>
+        /// When starting playback of a stream or MOD music, after creating it or changing its position, there will be a slight delay while the initial data is generated for playback.
+        /// Usually the delay is not noticeable or important, but if you need playback to start instantly when you call BASS_ChannelPlay, then use this function first.
+        /// The length parameter should be at least equal to the update period.
+        /// 
+        /// It may not always be possible to render the requested amount of data, in which case this function will still succeed.
+        /// BASS_ChannelGetData(BASS_DATA_AVAILABLE) can be used to check how much data a channel has buffered for playback.
+        /// 
+        /// When automatic updating is disabled(BASS_CONFIG_UPDATEPERIOD = 0 or BASS_CONFIG_UPDATETHREADS = 0),
+        /// this function could be used instead of BASS_Update to implement different update periods for different channels,
+        /// instead of a single update period for all.Unlike BASS_Update, this function can also be used while automatic updating is enabled.
+        /// </remarks>
+        /// <param name="handle">The channel handle... a HMUSIC or HSTREAM.</param>
+        /// <param name="length">The amount of data to render, in milliseconds... 0 = default (2 x update period). This is capped at the space available in the buffer.</param>
+        /// <returns><see langword="true" /> if successful; otherwise <see langword="false" />. Use <see cref="GetErrorCode" /> to get the error code.</returns>
+        public static bool ChannelUpdate(int handle, int length)
+        {
+            bass_channelupdate_delegate del = LibraryLoader.GetFunctionDelegate<bass_channelupdate_delegate>(libraryHandle, "BASS_ChannelUpdate");
+            return del(handle, length);
+        }
 
         #endregion Channels
 

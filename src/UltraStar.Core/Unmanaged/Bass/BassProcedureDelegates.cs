@@ -15,10 +15,10 @@ namespace UltraStar.Core.Unmanaged.Bass
     /// <summary>
     /// User stream writing callback delegate.
     /// </summary>
-    /// <param name="Handle">The stream that needs writing.</param>
-    /// <param name="Buffer">The pointer to the Buffer to write the sample data in. The sample data must be written in standard Windows PCM format - 8-bit samples are unsigned, 16-bit samples are signed, 32-bit floating-point samples range from -1 to 1.</param>
-    /// <param name="Length">The number of bytes to write.</param>
-    /// <param name="User">The user instance data given when BASS_StreamCreate was called.</param>
+    /// <param name="handle">The stream that needs writing.</param>
+    /// <param name="buffer">The pointer to the Buffer to write the sample data in. The sample data must be written in standard Windows PCM format - 8-bit samples are unsigned, 16-bit samples are signed, 32-bit floating-point samples range from -1 to 1.</param>
+    /// <param name="length">The number of bytes to write.</param>
+    /// <param name="user">The user instance data given when BASS_StreamCreate was called.</param>
     /// <returns>The number of bytes written by the function, optionally using the BASS_STREAMPROC_END flag to signify that the end of the stream is reached.</returns>
     /// <remarks>
     /// <para>A stream writing function should be as quick as possible because other playing streams (and MOD musics) cannot be updated until it has finished (unless multiple update threads are enabled via the BASS_CONFIG_UPDATETHREADS option).
@@ -39,22 +39,42 @@ namespace UltraStar.Core.Unmanaged.Bass
     /// <para>6 channels(5.1): left-front, right-front, center, LFE, left-rear/side, right-rear/side.</para>
     /// <para>8 channels(7.1): left-front, right-front, center, LFE, left-rear/side, right-rear/side, left-rear center, right-rear center.</para>
     /// </remarks>
-    internal delegate int BassStreamProcedure(int Handle, IntPtr Buffer, int Length, IntPtr User);
+    internal delegate int BassStreamProcedure(int handle, IntPtr buffer, int length, IntPtr user);
 
     /// <summary>
     /// User defined callback function to process recorded sample data.
     /// </summary>
-    /// <param name="Handle">The recording Handle that the data is from.</param>
-    /// <param name="Buffer">
+    /// <param name="handle">The recording Handle that the data is from.</param>
+    /// <param name="buffer">
     /// The pointer to the Buffer containing the recorded sample data.
     /// The sample data is in standard Windows PCM format, that is 8-bit samples are unsigned, 16-bit samples are signed, 32-bit floating-point samples range from -1 to +1.
     /// </param>
-    /// <param name="Length">The number of bytes in the Buffer.</param>
-    /// <param name="User">The User instance data given when BASS_RecordStart was called.</param>
+    /// <param name="length">The number of bytes in the Buffer.</param>
+    /// <param name="user">The User instance data given when BASS_RecordStart was called.</param>
     /// <returns>Return <see langword="true" /> to stop recording, and anything else to continue recording.</returns>
     /// <remarks>
     /// BASS_RecordFree should not be used to free the recording device within a recording callback function.
     /// Nor should BASS_ChannelStop be used to stop the recording; return <see langword="false" /> to do that instead.
     /// </remarks>
-    internal delegate bool BassRecordProcedure(int Handle, IntPtr Buffer, int Length, IntPtr User);
+    internal delegate bool BassRecordProcedure(int handle, IntPtr buffer, int length, IntPtr user);
+
+    /// <summary>
+    /// User defined DSP callback function (to be used with BASS_ChannelSetDSP.
+    /// </summary>
+    /// <param name="handle">The DSP Handle (as returned by BASS_ChannelSetDSP.</param>
+    /// <param name="channel">Channel that the DSP is being applied to.</param>
+    /// <param name="buffer">
+    /// The pointer to the Buffer to apply the DSP to.
+    /// The sample data is in standard Windows PCM format - 8-bit samples are unsigned, 16-bit samples are signed, 32-bit floating-point samples range from -1 to 1 (not clipped, so can actually be outside this range).
+    /// </param>
+    /// <param name="length">The number of bytes to process.</param>
+    /// <param name="user">The User instance data given when BASS_ChannelSetDSP was called.</param>
+    /// <remarks>
+    /// <para>The format of the sample data is as stated by BASS_ChannelGetInfo, except that it will always be floating-point if the BASS_CONFIG_FLOATDSP config option is enabled.</para>
+    /// <para>If the DSP processing requires a particular amount of data, the BASS_ATTRIB_GRANULE attribute can be used to specify that.</para>
+    /// <para>A DSP function should be as quick as possible, as any lengthy delays can result in stuttering playback.
+    /// Some functions can cause problems if called from within a DSP function. Do not call BASS_Stop or BASS_Free from within a DSP callback,
+    /// and do not call BASS_ChannelStop, BASS_MusicFree or BASS_StreamFree with the same channel handle as received by the callback.</para>
+    /// </remarks>
+    internal delegate void BassDSPProcedure(int handle, int channel, IntPtr buffer, int length, IntPtr user);
 }
