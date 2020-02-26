@@ -30,11 +30,11 @@ namespace UltraStar.Core.Unmanaged.Bass
     [StructLayout(LayoutKind.Sequential)]
     public struct BassRecordInfo
     {
-        int flags;
-        int formats;
-        int inputs;
-        bool singlein;
-        int freq;
+        private readonly int flags;
+        private readonly int formats;
+        private readonly int inputs;
+        private readonly bool singlein;
+        private readonly int freq;
 
         /// <summary>
         /// The standard wave formats supported by the device.

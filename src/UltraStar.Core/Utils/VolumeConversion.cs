@@ -103,7 +103,7 @@ namespace UltraStar.Core.Utils
         /// This parameter is in the range 0 ... 1.
         /// The full precision of float can be considered for this value.
         /// </returns>
-        public static float convertLoudnessToLinear(float loudnessVolume)
+        public static float ConvertLoudnessToLinear(float loudnessVolume)
         {
             // Adapt float to be in range
             if (loudnessVolume < +0) loudnessVolume = +0;
@@ -130,7 +130,7 @@ namespace UltraStar.Core.Utils
         /// This parameter is in the range 0 ... 1.
         /// The precision for the value is in 0.01 steps.
         /// </returns>
-        public static float convertLinearToLoudness(float linearVolume)
+        public static float ConvertLinearToLoudness(float linearVolume)
         {
             // Adapt float to be in range
             if (linearVolume < +0) linearVolume = +0;

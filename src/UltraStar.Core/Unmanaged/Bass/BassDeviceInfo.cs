@@ -25,6 +25,7 @@ namespace UltraStar.Core.Unmanaged.Bass
     /// <para>
     /// When a new device is connected, it can affect the other devices and result in the system moving them to new device entries.
     /// If an affected device is initialized, it will stop working and will need to be reinitialized using its new device number.
+    /// </para>
     /// <para>
     /// Depending on the BASS_CONFIG_UNICODE setting, <see cref="Name"/> and <see cref="Driver"/> can be in ANSI or UTF-8 form on Windows.
     /// They are always in UTF-16 form on Windows CE, and UTF-8 on other platforms.
@@ -34,41 +35,19 @@ namespace UltraStar.Core.Unmanaged.Bass
     [StructLayout(LayoutKind.Sequential)]
     internal struct BassDeviceInfo
     {
-        IntPtr name;
-        IntPtr driver;
-        BassDeviceInfoFlags flags;
-
-        /// <summary>
-        /// Returns a UTF-8 string from a pointer to a UTF-8 string.
-        /// </summary>
-        /// <param name="Ptr">The pointer to the UTF-8 string.</param>
-        /// <returns>A <see cref="String"/>.</returns>
-        public unsafe static string ptrToStringUTF8(IntPtr Ptr)
-        {
-            // Get pointer to byte array
-            byte* bytes = (byte*)Ptr.ToPointer();
-            // Checks
-            if (Ptr == IntPtr.Zero) return null;
-            if (bytes[0] == 0) return String.Empty;
-            // Get size of the array
-            int size = 0;
-            while (bytes[size] != 0) size++;
-            // Copy data to a managed array
-            byte[] buffer = new byte[size];
-            Marshal.Copy(Ptr, buffer, 0, size);
-            // Return UTF-8 string
-            return Encoding.UTF8.GetString(buffer, 0, buffer.Length);
-        }
+        private readonly IntPtr name;
+        private readonly IntPtr driver;
+        private readonly BassDeviceInfoFlags flags;
 
         /// <summary>
         /// The description of the device.
         /// </summary>
-        public string Name => ptrToStringUTF8(name);
+        public string Name => Bass.PtrToStringUTF8(name);
 
         /// <summary>
         /// The ID of the driver.
         /// </summary>
-        public string Driver => ptrToStringUTF8(driver);
+        public string Driver => Bass.PtrToStringUTF8(driver);
 
         /// <summary>
         /// The device is the system default device.

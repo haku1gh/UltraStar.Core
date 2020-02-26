@@ -36,20 +36,20 @@ namespace UltraStar.Core.Unmanaged.Bass
     [StructLayout(LayoutKind.Sequential)]
     internal struct BassInfo
     {
-        BassInfoFlags flags;
-        int hwsize;
-        int hwfree;
-        int freesam;
-        int free3d;
-        int minrate;
-        int maxrate;
-        bool eax;
-        int minbuf;
-        int dsver;
-        int latency;
-        BassDeviceInitFlags initFlags;
-        int speakers;
-        int freq;
+        private readonly BassInfoFlags flags;
+        private readonly int hwsize;
+        private readonly int hwfree;
+        private readonly int freesam;
+        private readonly int free3d;
+        private readonly int minrate;
+        private readonly int maxrate;
+        private readonly bool eax;
+        private readonly int minbuf;
+        private readonly int dsver;
+        private readonly int latency;
+        private readonly BassDeviceInitFlags initFlags;
+        private readonly int speakers;
+        private readonly int freq;
 
         /// <summary>
         /// The device's total amount of hardware memory.
@@ -82,13 +82,13 @@ namespace UltraStar.Core.Unmanaged.Bass
         public int MaxSampleRate => maxrate;
 
         /// <summary>The device supports EAX and has it enabled?
-        /// <para>The device's "Hardware acceleration" needs to be set to "Full" in it's "Advanced Properties" setup, else EAX is disabled.</para>
-        /// <para>This is always <see langword="false" /> if <see cref="BassDeviceInitFlags.Device3D"/> was not used when <see cref="Bass.Init" /> was called.</para>
+        /// The device's "Hardware acceleration" needs to be set to "Full" in its "Advanced Properties" setup, else EAX is disabled.
+        /// This is always FALSE if BASS_DEVICE_3D was not specified when BASS_Init was called.
         /// </summary>
         public bool EAXEnabled => eax;
 
-        /// <summary>The minimum Buffer Length (rounded up to the nearest millisecond) recommended for use with the <see cref="Bass.PlaybackBufferLength"/> config option.
-        /// <para>Requires that <see cref="BassDeviceInitFlags.Latency"/> was used when <see cref="Bass.Init" /> was called.</para>
+        /// <summary>The minimum buffer length (rounded up to the nearest millisecond)
+        /// recommended for use (with the BASS_CONFIG_BUFFER config option).
         /// </summary>
         public int MinBufferLength => minbuf;
 
@@ -104,19 +104,20 @@ namespace UltraStar.Core.Unmanaged.Bass
         /// </summary>
         public int DSVersion => dsver;
 
-        /// <summary>The delay (rounded up to the nearest millisecond) for playback of HSTREAM/HMUSIC channels to start and be heard.
-        /// <para>Requires that <see cref="BassDeviceInitFlags.Latency"/> was used when <see cref="Bass.Init" /> was called.</para>
+        /// <summary>The average delay (rounded up to the nearest millisecond) for playback of HSTREAM/HMUSIC channels to start and be heard.
+        /// <para>Requires that <see cref="BassDeviceInitFlags.Latency"/> was used when <see cref="Bass.DeviceInit" /> was called.</para>
         /// </summary>
         public int Latency => latency;
 
         /// <summary>
-        /// The flags parameter of the <see cref="Bass.Init" /> call (<see cref="BassDeviceInitFlags" />).
+        /// The flags parameter of the <see cref="Bass.DeviceInit" /> call (<see cref="BassDeviceInitFlags" />).
         /// </summary>
         public BassDeviceInitFlags InitFlags => initFlags;
 
         /// <summary>The number of speakers the device/drivers supports... 2 means that there is no support for speaker assignment - this will always be the case with non-WDM drivers in Windows.
         /// <para>It's also possible that it could mistakenly be 2 with some devices/drivers, when the device in fact supports more speakers.</para>
-        /// <para>In that case the <see cref="BassDeviceInitFlags.ForcedSpeakerAssignment"/> or <see cref="BassDeviceInitFlags.CPSpeakers"/> flag can be used in the <see cref="Bass.Init" /> call to force the enabling of speaker assignment.</para>
+        /// <para>In that case the <see cref="BassDeviceInitFlags.ForcedSpeakerAssignment"/> or <see cref="BassDeviceInitFlags.CPSpeakers"/> flag
+        /// can be used in the <see cref="Bass.DeviceInit" /> call to force the enabling of speaker assignment.</para>
         /// </summary>
         public int SpeakerCount => speakers;
 

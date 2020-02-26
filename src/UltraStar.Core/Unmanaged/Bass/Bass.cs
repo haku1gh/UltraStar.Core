@@ -23,8 +23,8 @@ namespace UltraStar.Core.Unmanaged.Bass
         /// </summary>
         private static readonly IntPtr libraryHandle;
 
-        private static Version minSupportedVersion = new Version(2, 4, 15, 0);
-        private static Version maxSupportedVersion = new Version(2, 4, 255, 255);
+        private static readonly Version minSupportedVersion = new Version(2, 4, 15, 0);
+        private static readonly Version maxSupportedVersion = new Version(2, 4, 255, 255);
 
         /// <summary>
         /// Initializes <see cref="Bass"/>.
@@ -333,7 +333,7 @@ namespace UltraStar.Core.Unmanaged.Bass
             set
             {
                 bass_setdevice_delegate del = LibraryLoader.GetFunctionDelegate<bass_setdevice_delegate>(libraryHandle, "BASS_SetDevice");
-                if(!del(value)) throw new BassException(GetErrorCode());
+                if (!del(value)) throw new BassException(GetErrorCode());
             }
         }
 
@@ -511,7 +511,7 @@ namespace UltraStar.Core.Unmanaged.Bass
         /// </remarks>
         /// <param name="device">The device to use... -1 = default device, 0 = first. BASS_RecordGetDeviceInfo can be used to enumerate the available devices.</param>
         /// <returns><see langword="true" /> if successful; otherwise <see langword="false" />. Use <see cref="GetErrorCode" /> to get the error code.</returns>
-        public static bool RecordingDeviceInit(int device = -1, int frequency = 44100, BassDeviceInitFlags flags = BassDeviceInitFlags.Default, IntPtr win = default(IntPtr), IntPtr clsID = default(IntPtr))
+        public static bool RecordingDeviceInit(int device = -1)
         {
             bass_recordinit_delegate del = LibraryLoader.GetFunctionDelegate<bass_recordinit_delegate>(libraryHandle, "BASS_RecordInit");
             return del(device);
@@ -561,10 +561,47 @@ namespace UltraStar.Core.Unmanaged.Bass
             }
         }
 
-        // RecordingInput
-        // RecordingInputName
+        /// <summary>
+        /// Delegate for BASS_RecordGetInputName.
+        /// </summary>
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        private delegate IntPtr bass_recordgetinputname_delegate(int input);
+        /// <summary>
+        /// Gets the text description of a recording input source.
+        /// </summary>
+        /// <param name="input">The input to get the description of... 0 = first, -1 = master.</param>
+        /// <returns>If successful, then the text description is returned; otherwise <see langword="null"/> is returned.</returns>
+        public static string BASS_RecordingDeviceInputName(int input)
+        {
+            bass_recordgetinputname_delegate del = LibraryLoader.GetFunctionDelegate<bass_recordgetinputname_delegate>(libraryHandle, "BASS_RecordGetInputName");
+            IntPtr ptr = del(input);
+            // Check if an error occurred.
+            if (ptr == IntPtr.Zero) return null;
+            // Return string
+            return PtrToStringUTF8(ptr);
+        }
 
-
+        /// <summary>
+        /// Delegate for BASS_RecordSetInput.
+        /// </summary>
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        private delegate bool bass_recordsetinput_delegate(int input, int flags, float volume);
+        /// <summary>
+        /// Enables or Disables a recording input source.
+        /// </summary>
+        /// <remarks>
+        /// If the device only allows one input at a time, then any previously enabled input will be disabled by this.
+        /// If the device only allows one input at a time, then its not allowed to disable the only enabled input.
+        /// On OSX, there is no master input (-1).
+        /// </remarks>
+        /// <param name="input">The input to enable or disable... 0 = first, -1 = master.</param>
+        /// <param name="enabled"><see langword="true" /> to enable the input. <see langword="false" /> to disable the input.</param>
+        /// <returns><see langword="true" /> if successful; otherwise <see langword="false" />. Use <see cref="GetErrorCode" /> to get the error code.</returns>
+        public static bool RecordingDeviceChangeInput(int input, bool enabled)
+        {
+            bass_recordsetinput_delegate del = LibraryLoader.GetFunctionDelegate<bass_recordsetinput_delegate>(libraryHandle, "BASS_RecordSetInput");
+            return del(input, enabled ? 0x20000 : 0x10000, -1);
+        }
 
         /// <summary>
         /// Delegate for BASS_RecordStart (normal stream).
@@ -649,6 +686,49 @@ namespace UltraStar.Core.Unmanaged.Bass
         #endregion Recording
 
         #region Channels
+
+        // ChannelGetAttribute
+        // ChannelGetData
+        // ChannelGetDevice
+        // ChannelGetLevelEx
+        // ChannelGetPosition
+        // ChannelIsActive
+        // ChannelIsSliding
+        // ChannelPause
+        // ChannelPlay
+        // ChannelRemoveDSP
+        // ChannelRemoveSync
+        // ChannelSeconds2Bytes
+        // ChannelSetAttribute
+        // ChannelSetDevice
+        // ChannelSetDSP
+        // ChannelSetPosition
+        // ChannelSetSync
+        // ChannelSlideAttribute
+        // ChannelUpdate
+
         #endregion Channels
+
+        /// <summary>
+        /// Returns a UTF-8 string from a pointer to a UTF-8 string.
+        /// </summary>
+        /// <param name="Ptr">The pointer to the UTF-8 string.</param>
+        /// <returns>A <see cref="String"/>.</returns>
+        public unsafe static string PtrToStringUTF8(IntPtr Ptr)
+        {
+            // Get pointer to byte array
+            byte* bytes = (byte*)Ptr.ToPointer();
+            // Checks
+            if (Ptr == IntPtr.Zero) return null;
+            if (bytes[0] == 0) return String.Empty;
+            // Get size of the array
+            int size = 0;
+            while (bytes[size] != 0) size++;
+            // Copy data to a managed array
+            byte[] buffer = new byte[size];
+            Marshal.Copy(Ptr, buffer, 0, size);
+            // Return UTF-8 string
+            return System.Text.Encoding.UTF8.GetString(buffer, 0, buffer.Length);
+        }
     }
 }
