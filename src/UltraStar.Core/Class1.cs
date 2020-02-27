@@ -11,7 +11,7 @@ using System;
 
 namespace UltraStar.Core
 {
-    public class Class1
+    internal class Class1
     {
 
         void asdsad()

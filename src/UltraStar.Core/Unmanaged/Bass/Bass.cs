@@ -689,10 +689,81 @@ namespace UltraStar.Core.Unmanaged.Bass
 
         // ChannelGetAttribute
         // ChannelGetData
-        // ChannelGetDevice
-        // ChannelGetLevelEx
-        // ChannelGetPosition
-        // ChannelIsActive
+
+        /// <summary>
+        /// Delegate for BASS_ChannelGetDevice.
+        /// </summary>
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        private delegate int bass_channelgetdevice_delegate(int handle);
+        /// <summary>
+        /// Gets the device that a channel is using.
+        /// </summary>
+        /// <param name="handle">The channel handle... a HCHANNEL, HMUSIC, HSTREAM, or HRECORD. HSAMPLE handles may also be used.</param>
+        /// <returns>If successful, the device number is returned, else -1 is returned. Use <see cref="GetErrorCode" /> to get the error code.</returns>
+        public static int ChannelGetDevice(int handle)
+        {
+            bass_channelgetdevice_delegate del = LibraryLoader.GetFunctionDelegate<bass_channelgetdevice_delegate>(libraryHandle, "BASS_ChannelGetDevice");
+            return del(handle);
+        }
+
+        /// <summary>
+        /// Delegate for BASS_ChannelGetLevelEx.
+        /// </summary>
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        private delegate bool bass_channelgetlevelex_delegate(int handle, [In, Out] float[] levels, float length, BassChannelLevelFlags flags);
+        /// <summary>
+        /// Retrieves the level of a sample, stream, MOD music, or recording channel.
+        /// </summary>
+        /// <remarks>
+        /// The levels are not clipped, so may exceed +/-1.0 on floating-point channels.
+        /// </remarks>
+        /// <param name="handle">The channel handle... a HCHANNEL, HMUSIC, HSTREAM, or HRECORD.</param>
+        /// <param name="channels"></param>
+        /// <param name="length">The amount of data to inspect to calculate the level, in seconds. The maximum is 1 second.
+        /// Less data than requested may be used if the full amount is not available, eg. if the channel's playback buffer is shorter.</param>
+        /// <param name="flags">What levels to retrieve.</param>
+        /// <returns>Array of levels on success, else <see langword="null" />. Use <see cref="GetErrorCode" /> to get the error code.</returns>
+        public static float[] ChannelGetLevel(int handle, int channels, float length, BassChannelLevelFlags flags)
+        {
+            if (channels < 1) return null;
+            float[] levels = new float[channels];
+            bass_channelgetlevelex_delegate del = LibraryLoader.GetFunctionDelegate<bass_channelgetlevelex_delegate>(libraryHandle, "BASS_ChannelGetLevelEx");
+            return del(handle, levels, length, flags) ? levels : null;
+        }
+
+        /// <summary>
+        /// Delegate for BASS_ChannelGetPosition.
+        /// </summary>
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        private delegate long bass_channelgetposition_delegate(int handle, int mode);
+        /// <summary>
+        /// Retrieves the playback position of a sample, stream, or MOD music. Can also be used with a recording channel.
+        /// </summary>
+        /// <param name="handle">The channel handle... a HCHANNEL, HMUSIC, HSTREAM, or HRECORD.</param>
+        /// <returns>If successful, then the channel's position is returned, else -1 is returned. Use <see cref="GetErrorCode"/> to get the error code.</returns>
+        public static long ChannelGetPosition(int handle)
+        {
+            bass_channelgetposition_delegate del = LibraryLoader.GetFunctionDelegate<bass_channelgetposition_delegate>(libraryHandle, "BASS_ChannelGetPosition");
+            return del(handle, 0);
+        }
+
+        /// <summary>
+        /// Delegate for BASS_ChannelIsActive.
+        /// </summary>
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        private delegate BassChannelState bass_channelisactive_delegate(int handle);
+        /// <summary>
+        /// Returns the state of the channel.
+        /// </summary>
+        /// <param name="handle">The channel handle... a HCHANNEL, HMUSIC, HSTREAM, or HRECORD.</param>
+        /// <returns>The state of the channel.</returns>
+        public static BassChannelState ChannelState(int handle)
+        {
+            bass_channelisactive_delegate del = LibraryLoader.GetFunctionDelegate<bass_channelisactive_delegate>(libraryHandle, "BASS_ChannelIsActive");
+            BassChannelState state = del(handle);
+            if (GetErrorCode() != BassErrorCode.Success) state = BassChannelState.Invalid;
+            return state;
+        }
 
         /// <summary>
         /// Delegate for BASS_ChannelIsSliding.
