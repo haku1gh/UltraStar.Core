@@ -14,7 +14,7 @@ using UltraStar.Core.Utils;
 namespace UltraStar.Core.Unmanaged.Bass
 {
     /// <summary>
-    /// This class is a wrapper around the BASS library.
+    /// Represents a wrapper class around the BASS library.
     /// </summary>
     internal static class Bass
     {
@@ -687,8 +687,36 @@ namespace UltraStar.Core.Unmanaged.Bass
 
         #region Channels
 
-        // ChannelGetAttribute
-        // ChannelGetData
+        /// <summary>
+        /// Delegate for BASS_ChannelGetAttribute.
+        /// </summary>
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        private delegate bool bass_channelgetattribute_delegate(int handle, BassChannelAttribute attribute, out float value);
+        /// <summary>
+        /// Gets the value of a channel attribute.
+        /// </summary>
+        /// <param name="handle">The channel handle... a HCHANNEL, HMUSIC, HSTREAM, or HRECORD.</param>
+        /// <param name="attribute">The channel attribute to get the value from.</param>
+        /// <param name="value">The attribute value.</param>
+        /// <returns><see langword="true" /> if successful; otherwise <see langword="false" />. Use <see cref="GetErrorCode" /> to get the error code.</returns>
+        public static bool ChannelGetAttribute(int handle, BassChannelAttribute attribute, out float value)
+        {
+            bass_channelgetattribute_delegate del = LibraryLoader.GetFunctionDelegate<bass_channelgetattribute_delegate>(libraryHandle, "BASS_ChannelGetAttribute");
+            return del(handle, attribute, out value);
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="handle">The channel handle... a HCHANNEL, HMUSIC, HSTREAM, or HRECORD.</param>
+        /// <param name="attribute">The channel attribute to get the value from.</param>
+        /// <returns>The attribute value.</returns>
+        /// <exception cref="BassException">Either handle is invalid, or attribute is not available/existing.</exception>
+        public static float ChannelGetAttribute(int handle, BassChannelAttribute attribute)
+        {
+            float value;
+            if (!ChannelGetAttribute(handle, attribute, out value)) throw new BassException(GetErrorCode());
+            return value;
+        }
 
         /// <summary>
         /// Delegate for BASS_ChannelGetDevice.
@@ -744,7 +772,7 @@ namespace UltraStar.Core.Unmanaged.Bass
         public static long ChannelGetPosition(int handle)
         {
             bass_channelgetposition_delegate del = LibraryLoader.GetFunctionDelegate<bass_channelgetposition_delegate>(libraryHandle, "BASS_ChannelGetPosition");
-            return del(handle, 0);
+            return del(handle, 0) / 4;
         }
 
         /// <summary>
@@ -828,14 +856,140 @@ namespace UltraStar.Core.Unmanaged.Bass
             return del(handle, restart);
         }
 
-        // ChannelRemoveDSP
-        // ChannelRemoveSync
-        // ChannelSeconds2Bytes
-        // ChannelSetAttribute
-        // ChannelSetDevice
-        // ChannelSetDSP
-        // ChannelSetPosition
-        // ChannelSetSync
+        /// <summary>
+        /// Delegate for BASS_ChannelRemoveDSP.
+        /// </summary>
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        private delegate bool bass_channelremovedsp_delegate(int channelHandle, int dspHandle);
+        /// <summary>
+        /// Removes a DSP function from a stream, MOD music, or recording channel.
+        /// </summary>
+        /// <param name="channelHandle">The channel handle... a HSTREAM, HMUSIC, or HRECORD.</param>
+        /// <param name="dspHandle">Handle of the DSP function to remove from the channel. This can also be an HFX handle to remove an effect.</param>
+        /// <returns><see langword="true" /> if successful; otherwise <see langword="false" />. Use <see cref="GetErrorCode" /> to get the error code.</returns>
+        public static bool ChannelRemoveDSP(int channelHandle, int dspHandle)
+        {
+            bass_channelremovedsp_delegate del = LibraryLoader.GetFunctionDelegate<bass_channelremovedsp_delegate>(libraryHandle, "BASS_ChannelRemoveDSP");
+            return del(channelHandle, dspHandle);
+        }
+
+        /// <summary>
+        /// Delegate for BASS_ChannelSeconds2Bytes.
+        /// </summary>
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        private delegate long bass_channelseconds2bytes_delegate(int handle, double position);
+        /// <summary>
+        /// Translates a time (seconds) position into bytes, based on a channel's format.
+        /// </summary>
+        /// <remarks>
+        /// The translation is based on the channel's initial sample rate, when it was created.
+        /// The return value is rounded down to the position of the nearest sample.
+        /// </remarks>
+        /// <param name="handle">The channel handle... a HCHANNEL, HMUSIC, HSTREAM, or HRECORD. HSAMPLE handles may also be used.</param>
+        /// <param name="position">The position to translate.</param>
+        /// <returns>If successful, then the translated length is returned, else -1 is returned. Use <see cref="GetErrorCode" /> to get the error code.</returns>
+        public static long ChannelSeconds2Bytes(int handle, double position)
+        {
+            bass_channelseconds2bytes_delegate del = LibraryLoader.GetFunctionDelegate<bass_channelseconds2bytes_delegate>(libraryHandle, "BASS_ChannelSeconds2Bytes");
+            return del(handle, position);
+        }
+
+        /// <summary>
+        /// Delegate for BASS_ChannelSetAttribute.
+        /// </summary>
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        private delegate bool bass_channelsetattribute_delegate(int handle, BassChannelAttribute attribute, float value);
+        /// <summary>
+        /// Sets the value of a channel attribute.
+        /// </summary>
+        /// <remarks>
+        /// The actual attribute value may not be exactly the same as requested, due to precision differences.
+        /// For example, an attribute might only allow whole number values. BASS_ChannelGetAttribute can be used to confirm what the value is.
+        /// </remarks>
+        /// <param name="handle">The channel handle... a HCHANNEL, HMUSIC, HSTREAM, or HRECORD.</param>
+        /// <param name="attribute">The channel attribute to set the value to.</param>
+        /// <param name="value">The new attribute value.</param>
+        /// <returns><see langword="true" /> if successful; otherwise <see langword="false" />. Use <see cref="GetErrorCode" /> to get the error code.</returns>
+        public static bool ChannelSetAttribute(int handle, BassChannelAttribute attribute, float value)
+        {
+            bass_channelsetattribute_delegate del = LibraryLoader.GetFunctionDelegate<bass_channelsetattribute_delegate>(libraryHandle, "BASS_ChannelSetAttribute");
+            return del(handle, attribute, value);
+        }
+
+        /// <summary>
+        /// Delegate for BASS_ChannelSetDevice.
+        /// </summary>
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        private delegate bool bass_channelsetdevice_delegate(int handle, int device);
+        /// <summary>
+        /// Sets the device that a stream, MOD music or sample is using.
+        /// </summary>
+        /// <remarks>
+        /// All of the channel's current settings are carried over to the new device, but if the channel is using the "with FX flag" DX8 effect implementation,
+        /// the internal state (eg. buffers) of the DX8 effects will be reset. When using the "without FX flag" DX8 effect implementation, the state of the DX8 effects is preserved.
+        /// 
+        /// When changing a sample's device, all the sample's existing channels(HCHANNELs) are freed.It is not possible to change the device of an individual sample channel.
+        /// 
+        /// The BASS_NODEVICE option can be used to disassociate a decoding channel from a device, so that it does not get freed when BASS_Free is called.
+        /// </remarks>
+        /// <param name="handle">The channel or sample handle... a HMUSIC, HSTREAM or HSAMPLE.</param>
+        /// <param name="device">The device to use... 0 = no sound, 1 = first real output device, BASS_NODEVICE (0x20000) = no device.</param>
+        /// <returns><see langword="true" /> if successful; otherwise <see langword="false" />. Use <see cref="GetErrorCode" /> to get the error code.</returns>
+        public static bool ChannelSetDevice(int handle, int device)
+        {
+            bass_channelsetdevice_delegate del = LibraryLoader.GetFunctionDelegate<bass_channelsetdevice_delegate>(libraryHandle, "BASS_ChannelSetDevice");
+            return del(handle, device);
+        }
+
+        /// <summary>
+        /// Delegate for BASS_ChannelSetDSP.
+        /// </summary>
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        private delegate int bass_channelsetdsp_delegate(int handle, BassDSPProcedure procedure, IntPtr user, int priority);
+        /// <summary>
+        /// Sets up a user DSP function on a stream, MOD music, or recording channel.
+        /// </summary>
+        /// <remarks>
+        /// DSP functions can set and removed at any time, including mid-playback. Use BASS_ChannelRemoveDSP to remove a DSP function.
+        /// 
+        /// Multiple DSP functions may be used per channel, in which case the order that the functions are called is determined by their priorities.
+        /// The priorities can be changed via BASS_FXSetPriority. Any DSPs that have the same priority are called in the order that they were given that priority.
+        /// 
+        /// DSP functions can be applied to MOD musics and streams, but not samples.If you want to apply a DSP function to a sample then you should stream it instead.
+        /// </remarks>
+        /// <param name="handle">The channel handle... a HSTREAM, HMUSIC, or HRECORD.</param>
+        /// <param name="procedure">The callback function.</param>
+        /// <param name="priority">The priority of the new DSP, which determines its position in the DSP chain. DSPs with higher priority are called before those with lower.</param>
+        /// <returns>If successful, then the new DSP's handle is returned, else 0 is returned. Use <see cref="GetErrorCode" /> to get the error code.</returns>
+        public static int ChannelSetDSP(int handle, BassDSPProcedure procedure, int priority = 0)
+        {
+            bass_channelsetdsp_delegate del = LibraryLoader.GetFunctionDelegate<bass_channelsetdsp_delegate>(libraryHandle, "BASS_ChannelSetDSP");
+            return del(handle, procedure, default(IntPtr), priority);
+        }
+
+        /// <summary>
+        /// Delegate for BASS_ChannelSetPosition.
+        /// </summary>
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        private delegate bool bass_channelsetposition_delegate(int handle, long position, int mode);
+        /// <summary>
+        /// Sets the playback position of a sample, MOD music, or stream.
+        /// </summary>
+        /// <remarks>
+        /// User streams (created with BASS_StreamCreate) are not seekable, but it is possible to reset a user stream (including its buffer contents) by setting its position to byte 0.
+        /// </remarks>
+        /// <param name="handle">The channel handle... a HCHANNEL, HSTREAM or HMUSIC.</param>
+        /// <param name="position">The new sample position in the stream.</param>
+        /// <param name="relative">Indicator whether the position is relative or absolute.</param>
+        /// <returns><see langword="true" /> if successful; otherwise <see langword="false" />. Use <see cref="GetErrorCode" /> to get the error code.</returns>
+        public static bool ChannelSetPosition(int handle, long position, bool relative = false)
+        {
+            bass_channelsetposition_delegate del = LibraryLoader.GetFunctionDelegate<bass_channelsetposition_delegate>(libraryHandle, "BASS_ChannelSetPosition");
+            if (relative)
+                return del(handle, position * 4, 0x4000000);
+            else
+                return del(handle, position * 4, 0);
+        }
 
         /// <summary>
         /// Delegate for BASS_ChannelSlideAttribute.
