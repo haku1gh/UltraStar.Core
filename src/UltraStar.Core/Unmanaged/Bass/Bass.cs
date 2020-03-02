@@ -58,6 +58,9 @@ namespace UltraStar.Core.Unmanaged.Bass
             // Set UTF-8 mode for Windows (so that strings are correctly parsed)
             if (SystemInformation.Platform == Platform.Windows)
                 SetConfiguration(BassConfigurationOption.UnicodeDeviceInformation, 1);
+            // Set Default device for Windows and Mac
+            if (SystemInformation.Platform == Platform.Windows || SystemInformation.Platform == Platform.Mac)
+                SetConfiguration(BassConfigurationOption.IncludeDefaultDevice, 1);
         }
 
         #region Common
@@ -607,7 +610,7 @@ namespace UltraStar.Core.Unmanaged.Bass
         /// Delegate for BASS_RecordStart (normal stream).
         /// </summary>
         [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
-        private delegate int bass_recordstart_delegate(int frequency, int channels, BassRecordStartFlags flags, BassRecordProcedure procedure, IntPtr user);
+        private delegate int bass_recordstart_delegate(int frequency, int channels, int flags, BassRecordProcedure procedure, IntPtr user);
         /// <summary>
         /// Starts recording on the device.
         /// </summary>
@@ -634,12 +637,14 @@ namespace UltraStar.Core.Unmanaged.Bass
         /// <param name="channels">The number of channels... 1 = mono, 2 = stereo, etc. 0 = device's current channel count.</param>
         /// <param name="flags">A combination of <see cref="BassRecordStartFlags"/>.</param>
         /// <param name="procedure">The user defined function to receive the recorded sample data... can be NULL if you do not wish to use a callback (see <see cref="BassRecordProcedure" />).</param>
-        /// <param name="user">User instance data to pass to the callback function.</param>
+        /// <param name="period">Set the period (in milliseconds) between calls to the callback function.
+        /// The minimum period is 5ms, the maximum the maximum is half the BASS_CONFIG_REC_BUFFER setting.
+        /// If the period specified is outside this range, it is automatically capped. The default is 100ms.</param>
         /// <returns>If successful, the new stream's recording handle is returned, else 0 is returned. Use <see cref="GetErrorCode"/> to get the error code.</returns>
-        public static int RecordingDeviceStart(int frequency, int channels, BassRecordStartFlags flags, BassRecordProcedure procedure, IntPtr user = default(IntPtr))
+        public static int RecordingDeviceStart(int frequency, int channels, BassRecordStartFlags flags, BassRecordProcedure procedure, int period = 100)
         {
             bass_recordstart_delegate del = LibraryLoader.GetFunctionDelegate<bass_recordstart_delegate>(libraryHandle, "BASS_RecordStart");
-            return del(frequency, channels, flags, procedure, user);
+            return del(frequency, channels, (int)flags | (period << 16), procedure, default(IntPtr));
         }
 
         /// <summary>
