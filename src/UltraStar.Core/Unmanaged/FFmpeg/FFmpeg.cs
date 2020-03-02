@@ -12,7 +12,7 @@ using System;
 namespace UltraStar.Core.Unmanaged
 {
     /// <summary>
-    /// This class is a wrapper around the FFmpeg library.
+    /// Represents a wrapper class around the FFmpeg library.
     /// </summary>
     internal static class FFmpeg
     {
