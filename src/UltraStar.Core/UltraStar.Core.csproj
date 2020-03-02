@@ -53,10 +53,16 @@
     <Reference Include="System.Net.Http" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Audio\Audio.cs" />
+    <Compile Include="Audio\AudioCallbacks.cs" />
+    <Compile Include="Audio\AudioRecording.cs" />
+    <Compile Include="Audio\BassAudioRecording.cs" />
     <Compile Include="Class1.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Unmanaged\Bass\Bass.cs" />
+    <Compile Include="Unmanaged\Bass\BassChannelAttribute.cs" />
+    <Compile Include="Unmanaged\Bass\BassChannelLevelFlags.cs" />
     <Compile Include="Unmanaged\Bass\BassConfigurationOption.cs" />
     <Compile Include="Unmanaged\Bass\BassDeviceInfo.cs" />
     <Compile Include="Unmanaged\Bass\BassDeviceInfoFlags.cs" />
@@ -71,10 +77,13 @@
     <Compile Include="Unmanaged\Bass\BassStreamCreateFlags.cs" />
     <Compile Include="Unmanaged\Bass\BassProcedureDelegates.cs" />
     <Compile Include="Unmanaged\Bass\BassStreamProcedureType.cs" />
-    <Compile Include="Unmanaged\FFmpeg.cs" />
+    <Compile Include="Unmanaged\Bass\BassChannelState.cs" />
+    <Compile Include="Unmanaged\FFmpeg\FFmpeg.cs" />
     <Compile Include="Unmanaged\LibraryLoader.cs" />
     <Compile Include="UsConfig.cs" />
+    <Compile Include="USAudioRecordingDevice.cs" />
     <Compile Include="Utils\Architecture.cs" />
+    <Compile Include="Utils\LibrarySettings.cs" />
     <Compile Include="Utils\Platform.cs" />
     <Compile Include="Utils\SystemInformation.cs" />
     <Compile Include="Utils\VolumeConversion.cs" />
