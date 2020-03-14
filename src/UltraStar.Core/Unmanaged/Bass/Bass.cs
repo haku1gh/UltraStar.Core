@@ -68,7 +68,7 @@ namespace UltraStar.Core.Unmanaged.Bass
         /// <summary>
         /// Delegate for BASS_GetVersion.
         /// </summary>
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        [UnmanagedFunctionPointer(CallingConvention.Winapi, CharSet = CharSet.Ansi)]
         private delegate int bass_getversion_delegate();
         /// <summary>
         /// Gets the version of BASS that is loaded.
@@ -89,7 +89,7 @@ namespace UltraStar.Core.Unmanaged.Bass
         /// <summary>
         /// Delegate for BASS_ErrorGetCode.
         /// </summary>
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        [UnmanagedFunctionPointer(CallingConvention.Winapi, CharSet = CharSet.Ansi)]
         private delegate BassErrorCode bass_errorgetcode_delegate();
         /// <summary>
         /// Gets the last BASS error code.
@@ -110,7 +110,7 @@ namespace UltraStar.Core.Unmanaged.Bass
         /// <summary>
         /// Delegate for BASS_SetConfig.
         /// </summary>
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        [UnmanagedFunctionPointer(CallingConvention.Winapi, CharSet = CharSet.Ansi)]
         private delegate bool bass_setconfig_delegate(BassConfigurationOption option, int newValue);
         /// <summary>
         /// Sets a configuration option.
@@ -133,7 +133,7 @@ namespace UltraStar.Core.Unmanaged.Bass
         /// <summary>
         /// Delegate for BASS_GetConfig.
         /// </summary>
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        [UnmanagedFunctionPointer(CallingConvention.Winapi, CharSet = CharSet.Ansi)]
         private delegate int bass_getconfig_delegate(BassConfigurationOption option);
         /// <summary>
         /// Gets a configuration option.
@@ -153,7 +153,7 @@ namespace UltraStar.Core.Unmanaged.Bass
         /// <summary>
         /// Delegate for BASS_GetDeviceInfo.
         /// </summary>
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        [UnmanagedFunctionPointer(CallingConvention.Winapi, CharSet = CharSet.Ansi)]
         private delegate bool bass_getdeviceinfo_delegate(int device, out BassDeviceInfo info);
         /// <summary>
         /// Gets information on an playback device.
@@ -198,7 +198,7 @@ namespace UltraStar.Core.Unmanaged.Bass
         /// <summary>
         /// Delegate for BASS_Init.
         /// </summary>
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        [UnmanagedFunctionPointer(CallingConvention.Winapi, CharSet = CharSet.Ansi)]
         private delegate bool bass_init_delegate(int device, int frequency, BassDeviceInitFlags flags, IntPtr win, IntPtr clsID);
         /// <summary>
         /// Initializes an output device.
@@ -210,7 +210,7 @@ namespace UltraStar.Core.Unmanaged.Bass
         /// <param name="win">The application's main window... 0 = the desktop window (use this for console applications). This is only needed when using DirectSound output.</param>
         /// <param name="clsID">Class identifier of the object to create, that will be used to initialize DirectSound... NULL = use default.</param>
         /// <returns><see langword="true" /> if successful; otherwise <see langword="false" />. Use <see cref="GetErrorCode" /> to get the error code.</returns>
-        public static bool DeviceInit(int device = -1, int frequency = 44100, BassDeviceInitFlags flags = BassDeviceInitFlags.Default, IntPtr win = default(IntPtr), IntPtr clsID = default(IntPtr))
+        public static bool DeviceInit(int device = -1, int frequency = 48000, BassDeviceInitFlags flags = BassDeviceInitFlags.Default, IntPtr win = default(IntPtr), IntPtr clsID = default(IntPtr))
         {
             bass_init_delegate del = LibraryLoader.GetFunctionDelegate<bass_init_delegate>(libraryHandle, "BASS_Init");
             return del(device, frequency, flags, win, clsID);
@@ -219,7 +219,7 @@ namespace UltraStar.Core.Unmanaged.Bass
         /// <summary>
         /// Delegate for BASS_Free.
         /// </summary>
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        [UnmanagedFunctionPointer(CallingConvention.Winapi, CharSet = CharSet.Ansi)]
         private delegate bool bass_free_delegate();
         /// <summary>
         /// Frees all resources used by the output device, including all its samples, streams and MOD musics.
@@ -239,7 +239,7 @@ namespace UltraStar.Core.Unmanaged.Bass
         /// <summary>
         /// Delegate for BASS_GetInfo.
         /// </summary>
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        [UnmanagedFunctionPointer(CallingConvention.Winapi, CharSet = CharSet.Ansi)]
         private delegate bool bass_getinfo_delegate(out BassInfo info);
         /// <summary>
         /// Gets extended information on the device being used. 
@@ -263,12 +263,12 @@ namespace UltraStar.Core.Unmanaged.Bass
         /// <summary>
         /// Delegate for BASS_GetVolume.
         /// </summary>
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        [UnmanagedFunctionPointer(CallingConvention.Winapi, CharSet = CharSet.Ansi)]
         private delegate float bass_getvolume_delegate();
         /// <summary>
         /// Delegate for BASS_SetVolume.
         /// </summary>
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        [UnmanagedFunctionPointer(CallingConvention.Winapi, CharSet = CharSet.Ansi)]
         private delegate bool bass_setvolume_delegate(float volume);
         /// <summary>
         /// Gets or sets the devices volume.
@@ -303,12 +303,12 @@ namespace UltraStar.Core.Unmanaged.Bass
         /// <summary>
         /// Delegate for BASS_GetDevice.
         /// </summary>
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        [UnmanagedFunctionPointer(CallingConvention.Winapi, CharSet = CharSet.Ansi)]
         private delegate int bass_getdevice_delegate();
         /// <summary>
         /// Delegate for BASS_SetDevice.
         /// </summary>
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        [UnmanagedFunctionPointer(CallingConvention.Winapi, CharSet = CharSet.Ansi)]
         private delegate bool bass_setdevice_delegate(int device);
         /// <summary>
         /// Gets or sets the device for the current thread.
@@ -347,12 +347,12 @@ namespace UltraStar.Core.Unmanaged.Bass
         /// <summary>
         /// Delegate for BASS_StreamCreate (normal stream).
         /// </summary>
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        [UnmanagedFunctionPointer(CallingConvention.Winapi, CharSet = CharSet.Ansi)]
         private delegate int bass_streamcreate_delegate(int frequency, int channels, BassStreamCreateFlags flags, BassStreamProcedure procedure, IntPtr user);
         /// <summary>
         /// Delegate for BASS_StreamCreate (push stream).
         /// </summary>
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        [UnmanagedFunctionPointer(CallingConvention.Winapi, CharSet = CharSet.Ansi)]
         private delegate int bass_streamcreatepush_delegate(int frequency, int channels, BassStreamCreateFlags flags, BassStreamProcedureType type, IntPtr user);
         /// <summary>
         /// Creates a user sample stream.
@@ -400,7 +400,7 @@ namespace UltraStar.Core.Unmanaged.Bass
         /// <summary>
         /// Delegate for BASS_StreamFree.
         /// </summary>
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        [UnmanagedFunctionPointer(CallingConvention.Winapi, CharSet = CharSet.Ansi)]
         private delegate bool bass_streamfree_delegate(int handle);
         /// <summary>
         /// Frees a sample stream's resources, including any SYNC/DSP/FX it has.
@@ -416,7 +416,7 @@ namespace UltraStar.Core.Unmanaged.Bass
         /// <summary>
         /// Delegate for BASS_StreamPutData.
         /// </summary>
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        [UnmanagedFunctionPointer(CallingConvention.Winapi, CharSet = CharSet.Ansi)]
         private delegate int bass_streamputdata_delegate(int handle, IntPtr buffer, int length);
         /// <summary>
         /// Adds sample data to a "push" stream.
@@ -453,7 +453,7 @@ namespace UltraStar.Core.Unmanaged.Bass
         /// <summary>
         /// Delegate for BASS_RecordGetDeviceInfo.
         /// </summary>
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        [UnmanagedFunctionPointer(CallingConvention.Winapi, CharSet = CharSet.Ansi)]
         private delegate bool bass_recordgetdeviceinfo_delegate(int device, out BassDeviceInfo info);
         /// <summary>
         /// Gets information on a recording device.
@@ -496,7 +496,7 @@ namespace UltraStar.Core.Unmanaged.Bass
         /// <summary>
         /// Delegate for BASS_RecordInit.
         /// </summary>
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        [UnmanagedFunctionPointer(CallingConvention.Winapi, CharSet = CharSet.Ansi)]
         private delegate bool bass_recordinit_delegate(int device);
         /// <summary>
         /// Initializes an output device.
@@ -523,7 +523,7 @@ namespace UltraStar.Core.Unmanaged.Bass
         /// <summary>
         /// Delegate for BASS_RecordFree.
         /// </summary>
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        [UnmanagedFunctionPointer(CallingConvention.Winapi, CharSet = CharSet.Ansi)]
         private delegate bool bass_recordfree_delegate();
         /// <summary>
         /// Frees all resources used by the recording device.
@@ -543,7 +543,7 @@ namespace UltraStar.Core.Unmanaged.Bass
         /// <summary>
         /// Delegate for BASS_RecordGetInfo.
         /// </summary>
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        [UnmanagedFunctionPointer(CallingConvention.Winapi, CharSet = CharSet.Ansi)]
         private delegate bool bass_recordgetinfo_delegate(out BassRecordInfo info);
         /// <summary>
         /// Gets extended information on the recording device being used. 
@@ -567,7 +567,7 @@ namespace UltraStar.Core.Unmanaged.Bass
         /// <summary>
         /// Delegate for BASS_RecordGetInputName.
         /// </summary>
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        [UnmanagedFunctionPointer(CallingConvention.Winapi, CharSet = CharSet.Ansi)]
         private delegate IntPtr bass_recordgetinputname_delegate(int input);
         /// <summary>
         /// Gets the text description of a recording input source.
@@ -585,9 +585,28 @@ namespace UltraStar.Core.Unmanaged.Bass
         }
 
         /// <summary>
+        /// Delegate for BASS_RecordGetInput.
+        /// </summary>
+        [UnmanagedFunctionPointer(CallingConvention.Winapi, CharSet = CharSet.Ansi)]
+        private delegate int bass_recordgetinput_delegate(int input, out float volume);
+        /// <summary>
+        /// Retrieves the volume of a recording input source.
+        /// </summary>
+        /// <param name="input">The input to enable or disable... 0 = first, -1 = master.</param>
+        /// <returns>The volume of the recording devices input source or -1 if unknown.</returns>
+        public static float RecordingDeviceVolume(int input)
+        {
+            bass_recordgetinput_delegate del = LibraryLoader.GetFunctionDelegate<bass_recordgetinput_delegate>(libraryHandle, "BASS_RecordGetInput");
+            float volume;
+            int ret = del(input, out volume);
+            if (ret == -1) volume = -1;
+            return volume;
+        }
+
+        /// <summary>
         /// Delegate for BASS_RecordSetInput.
         /// </summary>
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        [UnmanagedFunctionPointer(CallingConvention.Winapi, CharSet = CharSet.Ansi)]
         private delegate bool bass_recordsetinput_delegate(int input, int flags, float volume);
         /// <summary>
         /// Enables or Disables a recording input source.
@@ -609,7 +628,7 @@ namespace UltraStar.Core.Unmanaged.Bass
         /// <summary>
         /// Delegate for BASS_RecordStart (normal stream).
         /// </summary>
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        [UnmanagedFunctionPointer(CallingConvention.Winapi, CharSet = CharSet.Ansi)]
         private delegate int bass_recordstart_delegate(int frequency, int channels, int flags, BassRecordProcedure procedure, IntPtr user);
         /// <summary>
         /// Starts recording on the device.
@@ -650,12 +669,12 @@ namespace UltraStar.Core.Unmanaged.Bass
         /// <summary>
         /// Delegate for BASS_RecordGetDevice.
         /// </summary>
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        [UnmanagedFunctionPointer(CallingConvention.Winapi, CharSet = CharSet.Ansi)]
         private delegate int bass_recordgetdevice_delegate();
         /// <summary>
         /// Delegate for BASS_RecordSetDevice.
         /// </summary>
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        [UnmanagedFunctionPointer(CallingConvention.Winapi, CharSet = CharSet.Ansi)]
         private delegate bool bass_recordsetdevice_delegate(int device);
         /// <summary>
         /// Gets or sets the recording device for the current thread.
@@ -695,7 +714,7 @@ namespace UltraStar.Core.Unmanaged.Bass
         /// <summary>
         /// Delegate for BASS_ChannelGetAttribute.
         /// </summary>
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        [UnmanagedFunctionPointer(CallingConvention.Winapi, CharSet = CharSet.Ansi)]
         private delegate bool bass_channelgetattribute_delegate(int handle, BassChannelAttribute attribute, out float value);
         /// <summary>
         /// Gets the value of a channel attribute.
@@ -726,7 +745,7 @@ namespace UltraStar.Core.Unmanaged.Bass
         /// <summary>
         /// Delegate for BASS_ChannelGetDevice.
         /// </summary>
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        [UnmanagedFunctionPointer(CallingConvention.Winapi, CharSet = CharSet.Ansi)]
         private delegate int bass_channelgetdevice_delegate(int handle);
         /// <summary>
         /// Gets the device that a channel is using.
@@ -742,7 +761,7 @@ namespace UltraStar.Core.Unmanaged.Bass
         /// <summary>
         /// Delegate for BASS_ChannelGetLevelEx.
         /// </summary>
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        [UnmanagedFunctionPointer(CallingConvention.Winapi, CharSet = CharSet.Ansi)]
         private delegate bool bass_channelgetlevelex_delegate(int handle, [In, Out] float[] levels, float length, BassChannelLevelFlags flags);
         /// <summary>
         /// Retrieves the level of a sample, stream, MOD music, or recording channel.
@@ -767,7 +786,7 @@ namespace UltraStar.Core.Unmanaged.Bass
         /// <summary>
         /// Delegate for BASS_ChannelGetPosition.
         /// </summary>
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        [UnmanagedFunctionPointer(CallingConvention.Winapi, CharSet = CharSet.Ansi)]
         private delegate long bass_channelgetposition_delegate(int handle, int mode);
         /// <summary>
         /// Retrieves the playback position of a sample, stream, or MOD music. Can also be used with a recording channel.
@@ -783,7 +802,7 @@ namespace UltraStar.Core.Unmanaged.Bass
         /// <summary>
         /// Delegate for BASS_ChannelIsActive.
         /// </summary>
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        [UnmanagedFunctionPointer(CallingConvention.Winapi, CharSet = CharSet.Ansi)]
         private delegate BassChannelState bass_channelisactive_delegate(int handle);
         /// <summary>
         /// Returns the state of the channel.
@@ -801,7 +820,7 @@ namespace UltraStar.Core.Unmanaged.Bass
         /// <summary>
         /// Delegate for BASS_ChannelIsSliding.
         /// </summary>
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        [UnmanagedFunctionPointer(CallingConvention.Winapi, CharSet = CharSet.Ansi)]
         private delegate bool bass_channelissliding_delegate(int handle, BassChannelAttribute attribute);
         /// <summary>
         /// Checks if an attribute (or any attribute) of a sample, stream, or MOD music is sliding.
@@ -818,7 +837,7 @@ namespace UltraStar.Core.Unmanaged.Bass
         /// <summary>
         /// Delegate for BASS_ChannelPause.
         /// </summary>
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        [UnmanagedFunctionPointer(CallingConvention.Winapi, CharSet = CharSet.Ansi)]
         private delegate bool bass_channelpause_delegate(int handle);
         /// <summary>
         /// Pauses a sample, stream, MOD music, or recording.
@@ -835,9 +854,29 @@ namespace UltraStar.Core.Unmanaged.Bass
         }
 
         /// <summary>
+        /// Delegate for BASS_ChannelStop.
+        /// </summary>
+        [UnmanagedFunctionPointer(CallingConvention.Winapi, CharSet = CharSet.Ansi)]
+        private delegate bool bass_channelstop_delegate(int handle);
+        /// <summary>
+        /// Stops a sample, stream, MOD music, or recording.
+        /// </summary>
+        /// <remarks>
+        /// Stopping a user stream (created with BASS_StreamCreate) will clear its buffer contents, and stopping a sample channel (HCHANNEL) will result in it being freed.
+        /// Use BASS_ChannelPause instead if you wish to stop a user stream or sample and then resume it from the same point.
+        /// </remarks>
+        /// <param name="handle">The channel handle... a HCHANNEL, HMUSIC, HSTREAM, or HRECORD.</param>
+        /// <returns><see langword="true" /> if successful; otherwise <see langword="false" />. Use <see cref="GetErrorCode" /> to get the error code.</returns>
+        public static bool ChannelStop(int handle)
+        {
+            bass_channelstop_delegate del = LibraryLoader.GetFunctionDelegate<bass_channelstop_delegate>(libraryHandle, "BASS_ChannelStop");
+            return del(handle);
+        }
+
+        /// <summary>
         /// Delegate for BASS_ChannelPlay.
         /// </summary>
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        [UnmanagedFunctionPointer(CallingConvention.Winapi, CharSet = CharSet.Ansi)]
         private delegate bool bass_channelplay_delegate(int handle, bool restart);
         /// <summary>
         /// Starts (or resumes) playback of a sample, stream, MOD music, or recording.
@@ -864,7 +903,7 @@ namespace UltraStar.Core.Unmanaged.Bass
         /// <summary>
         /// Delegate for BASS_ChannelRemoveDSP.
         /// </summary>
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        [UnmanagedFunctionPointer(CallingConvention.Winapi, CharSet = CharSet.Ansi)]
         private delegate bool bass_channelremovedsp_delegate(int channelHandle, int dspHandle);
         /// <summary>
         /// Removes a DSP function from a stream, MOD music, or recording channel.
@@ -881,7 +920,7 @@ namespace UltraStar.Core.Unmanaged.Bass
         /// <summary>
         /// Delegate for BASS_ChannelSeconds2Bytes.
         /// </summary>
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        [UnmanagedFunctionPointer(CallingConvention.Winapi, CharSet = CharSet.Ansi)]
         private delegate long bass_channelseconds2bytes_delegate(int handle, double position);
         /// <summary>
         /// Translates a time (seconds) position into bytes, based on a channel's format.
@@ -902,7 +941,7 @@ namespace UltraStar.Core.Unmanaged.Bass
         /// <summary>
         /// Delegate for BASS_ChannelSetAttribute.
         /// </summary>
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        [UnmanagedFunctionPointer(CallingConvention.Winapi, CharSet = CharSet.Ansi)]
         private delegate bool bass_channelsetattribute_delegate(int handle, BassChannelAttribute attribute, float value);
         /// <summary>
         /// Sets the value of a channel attribute.
@@ -924,7 +963,7 @@ namespace UltraStar.Core.Unmanaged.Bass
         /// <summary>
         /// Delegate for BASS_ChannelSetDevice.
         /// </summary>
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        [UnmanagedFunctionPointer(CallingConvention.Winapi, CharSet = CharSet.Ansi)]
         private delegate bool bass_channelsetdevice_delegate(int handle, int device);
         /// <summary>
         /// Sets the device that a stream, MOD music or sample is using.
@@ -949,7 +988,7 @@ namespace UltraStar.Core.Unmanaged.Bass
         /// <summary>
         /// Delegate for BASS_ChannelSetDSP.
         /// </summary>
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        [UnmanagedFunctionPointer(CallingConvention.Winapi, CharSet = CharSet.Ansi)]
         private delegate int bass_channelsetdsp_delegate(int handle, BassDSPProcedure procedure, IntPtr user, int priority);
         /// <summary>
         /// Sets up a user DSP function on a stream, MOD music, or recording channel.
@@ -975,7 +1014,7 @@ namespace UltraStar.Core.Unmanaged.Bass
         /// <summary>
         /// Delegate for BASS_ChannelSetPosition.
         /// </summary>
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        [UnmanagedFunctionPointer(CallingConvention.Winapi, CharSet = CharSet.Ansi)]
         private delegate bool bass_channelsetposition_delegate(int handle, long position, int mode);
         /// <summary>
         /// Sets the playback position of a sample, MOD music, or stream.
@@ -997,9 +1036,39 @@ namespace UltraStar.Core.Unmanaged.Bass
         }
 
         /// <summary>
+        /// Delegate for BASS_ChannelSetSync.
+        /// </summary>
+        [UnmanagedFunctionPointer(CallingConvention.Winapi, CharSet = CharSet.Ansi)]
+        private delegate int bass_channelsetsync_delegate(int handle, int type, long param, BassSyncProcedure procedure, IntPtr user);
+        /// <summary>
+        /// Sets up a synchronizer on a MOD music, stream or recording channel.
+        /// </summary>
+        /// <param name="handle">The channel handle... a HMUSIC, HSTREAM or HRECORD.</param>
+        /// <param name="type">The type of sync.</param>
+        /// <param name="param">The sync parameter. Depends on the sync type.</param>
+        /// <param name="procedure">The callback function.</param>
+        /// <returns>If successful, then the new synchronizer's handle is returned, else 0 is returned. Use <see cref="GetErrorCode" /> to get the error code.</returns>
+        public static int ChannelSetSync(int handle, int type, long param, BassSyncProcedure procedure)
+        {
+            bass_channelsetsync_delegate del = LibraryLoader.GetFunctionDelegate<bass_channelsetsync_delegate>(libraryHandle, "BASS_ChannelSetSync");
+            return del(handle, type, param, procedure, default(IntPtr));
+        }
+        /// <summary>
+        /// Sets up a synchronizer on a MOD music, stream or recording channel to get notified when the channel's device failed.
+        /// </summary>
+        /// <param name="handle">The channel handle... a HMUSIC, HSTREAM or HRECORD.</param>
+        /// <param name="procedure">The callback function.</param>
+        /// <returns>If successful, then the new synchronizer's handle is returned, else 0 is returned. Use <see cref="GetErrorCode" /> to get the error code.</returns>
+        public static int ChannelSetSyncDeviceFail(int handle, BassSyncProcedure procedure)
+        {
+            bass_channelsetsync_delegate del = LibraryLoader.GetFunctionDelegate<bass_channelsetsync_delegate>(libraryHandle, "BASS_ChannelSetSync");
+            return del(handle, 14, 0, procedure, default(IntPtr));
+        }
+
+        /// <summary>
         /// Delegate for BASS_ChannelSlideAttribute.
         /// </summary>
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        [UnmanagedFunctionPointer(CallingConvention.Winapi, CharSet = CharSet.Ansi)]
         private delegate bool bass_channelslideattribute_delegate(int handle, int attribute, float value, int time);
         /// <summary>
         /// Slides a channel's attribute from its current value to a new value.
@@ -1032,7 +1101,7 @@ namespace UltraStar.Core.Unmanaged.Bass
         /// <summary>
         /// Delegate for BASS_ChannelUpdate.
         /// </summary>
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        [UnmanagedFunctionPointer(CallingConvention.Winapi, CharSet = CharSet.Ansi)]
         private delegate bool bass_channelupdate_delegate(int handle, int length);
         /// <summary>
         /// Updates the playback buffer of a stream or MOD music.

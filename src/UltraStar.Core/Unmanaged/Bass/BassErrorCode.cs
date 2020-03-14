@@ -1,10 +1,12 @@
-﻿#region License (MIT)
+﻿#region License (LGPL)
 /*
  * This file is part of UltraStar.Core.
  * 
- * This file is heavily based on the implementation from ManagedBass by Mathew Sachin.
+ * You should have received a copy of the GNU Lesser General Public License 3
+ * along with UltraStar.Core. If not, see <http://www.gnu.org/licenses/lgpl-3.0>.
+ * 
+ * The file is based on the implementation from ManagedBass by Mathew Sachin.
  * ManagedBass is available under the MIT license. For details see <https://github.com/ManagedBass/Home>.
- * In contrast to other files, this file is available under the same license (MIT) as the original.
  */
 #endregion License
 
