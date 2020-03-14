@@ -18,18 +18,43 @@ namespace UltraStar.Core.Utils
     internal static class LibrarySettings
     {
         /// <summary>
-        /// The class name of the audio recording implementation.
+        /// The full qualified class name of the audio playback implementation.
         /// </summary>
-        public static readonly string AudioRecordingClassName = nameof(BassAudioRecording);
+        public static readonly string AudioPlaybackClassName = typeof(BassAudioPlayback).AssemblyQualifiedName;
 
         /// <summary>
-        /// The default sample rate for audio recordings.
+        /// The default sample rate for audio playbacks.
         /// </summary>
-        public static readonly int DefaultAudioRecordingSamplerate = 48000;
+        public static readonly int AudioPlaybackDefaultSamplerate = 48000;
+
+        /// <summary>
+        /// The full qualified class name of the audio recording implementation.
+        /// </summary>
+        public static readonly string AudioRecordingClassName = typeof(BassAudioRecording).AssemblyQualifiedName;
+
+        /// <summary>
+        /// The default channels for audio recordings.
+        /// </summary>
+        public static readonly int AudioRecordingDefaultChannels = 2;
 
         /// <summary>
         /// The default input for audio recordings.
         /// </summary>
-        public static readonly int DefaultAudioRecordingInput = 0;
+        public static readonly int AudioRecordingDefaultInput = 0;
+
+        /// <summary>
+        /// The default sample rate for audio recordings.
+        /// </summary>
+        public static readonly int AudioRecordingDefaultSamplerate = 48000;
+
+        /// <summary>
+        /// The maximum allowed amplification of the channel volume for an audio recording.
+        /// </summary>
+        public static readonly int AudioRecordingMaximumChannelAmplification = 8;
+
+        /// <summary>
+        /// The maximum buffer size per channel for an audio recording.
+        /// </summary>
+        public static readonly int AudioRecordingBufferSizePerChannel = 1024;
     }
 }

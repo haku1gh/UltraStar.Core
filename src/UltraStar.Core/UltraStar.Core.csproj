@@ -55,7 +55,10 @@
   <ItemGroup>
     <Compile Include="Audio\Audio.cs" />
     <Compile Include="Audio\AudioCallbacks.cs" />
+    <Compile Include="Audio\AudioException.cs" />
+    <Compile Include="Audio\AudioPlayback.cs" />
     <Compile Include="Audio\AudioRecording.cs" />
+    <Compile Include="Audio\BassAudioPlayback.cs" />
     <Compile Include="Audio\BassAudioRecording.cs" />
     <Compile Include="Class1.cs" />
     <Compile Include="GlobalSuppressions.cs" />
@@ -71,7 +74,6 @@
     <Compile Include="Unmanaged\Bass\BassErrorCode.cs" />
     <Compile Include="Unmanaged\Bass\BassException.cs" />
     <Compile Include="Unmanaged\Bass\BassInfo.cs" />
-    <Compile Include="Unmanaged\Bass\BassInfoFlags.cs" />
     <Compile Include="Unmanaged\Bass\BassRecordInfo.cs" />
     <Compile Include="Unmanaged\Bass\BassRecordStartFlags.cs" />
     <Compile Include="Unmanaged\Bass\BassStreamCreateFlags.cs" />
@@ -80,8 +82,11 @@
     <Compile Include="Unmanaged\Bass\BassChannelState.cs" />
     <Compile Include="Unmanaged\FFmpeg\FFmpeg.cs" />
     <Compile Include="Unmanaged\LibraryLoader.cs" />
+    <Compile Include="UsAudioRecordingDelay.cs" />
+    <Compile Include="USAudioPlaybackDeviceInfo.cs" />
     <Compile Include="UsConfig.cs" />
-    <Compile Include="USAudioRecordingDevice.cs" />
+    <Compile Include="USAudioRecordingDeviceInfo.cs" />
+    <Compile Include="UsOptions.cs" />
     <Compile Include="Utils\Architecture.cs" />
     <Compile Include="Utils\LibrarySettings.cs" />
     <Compile Include="Utils\Platform.cs" />

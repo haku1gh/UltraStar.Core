@@ -1,4 +1,4 @@
-﻿#region License
+﻿#region License (LGPL)
 /*
  * This file is part of UltraStar.Core.
  * 
@@ -11,18 +11,26 @@ using System;
 
 namespace UltraStar.Core
 {
-    internal class Class1
+    public class Class1
     {
 
-        void asdsad()
+        public static void Asdsad()
         {
-            System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
+            Console.WriteLine("Version: " + Unmanaged.Bass.Bass.GetVersion());
+            int deviceID = 0;
+            while(Unmanaged.Bass.Bass.GetDeviceInfo(deviceID, out Unmanaged.Bass.BassDeviceInfo info))
+            {
+                Console.WriteLine("DeviceID: " + deviceID);
+                Console.WriteLine("Name: " + info.Name);
+                Console.WriteLine("Type: " + info.Type);
+                Console.WriteLine("IsDefault: " + info.IsDefault);
+                Console.WriteLine("IsEnabled: " + info.IsEnabled);
+                Console.WriteLine("IsLoopback: " + info.IsLoopback);
+                Console.WriteLine("Driver: " + info.Driver);
+                Console.WriteLine("");
+                deviceID++;
+            }
         }
-    }
-
-    public class UsOptions
-    {
-        // Add here all possible options.
     }
 
     public class UsLogging

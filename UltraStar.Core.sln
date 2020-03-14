@@ -5,6 +5,13 @@ VisualStudioVersion = 15.0.28307.1000
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UltraStar.Core", "src\UltraStar.Core\UltraStar.Core.csproj", "{4F473126-BAB2-4B98-AB94-4ADE4C97C9E2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestAudio", "test\TestAudio\TestAudio.csproj", "{90D79025-8F7A-4D4B-8AB9-23118C8AE87D}"
+	ProjectSection(ProjectDependencies) = postProject
+		{4F473126-BAB2-4B98-AB94-4ADE4C97C9E2} = {4F473126-BAB2-4B98-AB94-4ADE4C97C9E2}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestAudioConsole", "test\TestAudioConsole\TestAudioConsole.csproj", "{734A64FE-6D25-4F9A-B6DE-EEE655FF8CBE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +22,14 @@ Global
 		{4F473126-BAB2-4B98-AB94-4ADE4C97C9E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4F473126-BAB2-4B98-AB94-4ADE4C97C9E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4F473126-BAB2-4B98-AB94-4ADE4C97C9E2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{90D79025-8F7A-4D4B-8AB9-23118C8AE87D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{90D79025-8F7A-4D4B-8AB9-23118C8AE87D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{90D79025-8F7A-4D4B-8AB9-23118C8AE87D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{90D79025-8F7A-4D4B-8AB9-23118C8AE87D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{734A64FE-6D25-4F9A-B6DE-EEE655FF8CBE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{734A64FE-6D25-4F9A-B6DE-EEE655FF8CBE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{734A64FE-6D25-4F9A-B6DE-EEE655FF8CBE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{734A64FE-6D25-4F9A-B6DE-EEE655FF8CBE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

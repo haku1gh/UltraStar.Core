@@ -18,12 +18,13 @@ namespace UltraStar.Core.Audio
     /// New samples always start at index 0 in the buffer.
     /// The buffer might be larger than length suggests. So always use the length parameter when looping through the data.
     /// This function should be executed as quick as possible.
-    /// Do not call <see cref="AudioRecording.Stop"/> from within this function.
+    /// Do not call <see cref="AudioRecording.Pause"/> from within this function.
     /// </remarks>
     /// <param name="handle">The audio recording from where this callback originates.</param>
     /// <param name="buffer">The buffer containing the sample data.</param>
     /// <param name="length">The number of audio samples provided in the buffer.</param>
-    delegate void AudioRecordingCallback(AudioRecording handle, float[] buffer, int length);
+    /// <param name="paused">An indicator whether the recording is paused.</param>
+    public delegate void AudioRecordingCallback(AudioRecording handle, float[] buffer, int length, bool paused);
 
     /// <summary>
     /// The callback to provide samples for an audio playback.
@@ -39,5 +40,5 @@ namespace UltraStar.Core.Audio
     /// <param name="buffer">The buffer to write new sample data.</param>
     /// <param name="maxLength">The maximum number of audio samples requested.</param>
     /// <returns>The number of audio samples written by the function.</returns>
-    delegate int AudioPlaybackCallback(AudioPlayback handle, float[] buffer, int maxLength);
+    public delegate int AudioPlaybackCallback(AudioPlayback handle, float[] buffer, int maxLength);
 }

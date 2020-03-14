@@ -14,20 +14,21 @@ namespace UltraStar.Core
     /// <summary>
     /// Provides information about audio recording devices.
     /// </summary>
-    public class USAudioRecordingDevice
+    public class USAudioRecordingDeviceInfo
     {
         /// <summary>
-        /// Initializes a new instance of <see cref="USAudioRecordingDevice"/>.
+        /// Initializes a new instance of <see cref="USAudioRecordingDeviceInfo"/>.
         /// </summary>
+        /// <param name="deviceID">The device ID of the audio recording device.</param>
         /// <param name="name">The name of audio recording device.</param>
         /// <param name="type">The type of the audio recording device or "Unknown" if this is not available on the platform.</param>
         /// <param name="isDefault">An indicator whether the device is the default device.</param>
-        /// <param name="inputs">The number of input sources on this device.</param>
+        /// <param name="inputs">The number of input sources on this device (or 0 if unknown).</param>
         /// <param name="inputNames">The names of all input sources.</param>
         /// <param name="channels">The number of channels supported by the device (or 0 if unknown).</param>
         /// <param name="samplerate">The sample rate of the device (or 0 if unknown).</param>
-        /// <param name="volume">The volume of the device (or -1 if unknown).</param>
-        public USAudioRecordingDevice(string name, string type, bool isDefault, int inputs, string[] inputNames, int channels, int samplerate, int volume)
+        /// <param name="volume">The volume of the device (or -1 if unknown). 0=Silent, 1=Max.</param>
+        public USAudioRecordingDeviceInfo(int deviceID, string name, string type, bool isDefault, int inputs, string[] inputNames, int channels, int samplerate, float volume)
         {
             Name = name;
             Type = type;
@@ -40,7 +41,12 @@ namespace UltraStar.Core
         }
 
         /// <summary>
-        /// Gets the name of audio recording device.
+        /// Gets the device ID of the audio recording device.
+        /// </summary>
+        public int DeviceID { get; }
+
+        /// <summary>
+        /// Gets the name of the audio recording device.
         /// </summary>
         public string Name { get; }
 
@@ -55,7 +61,7 @@ namespace UltraStar.Core
         public bool IsDefault { get; }
 
         /// <summary>
-        /// Gets the number of input sources on this device.
+        /// Gets the number of input sources on this device (or 0 if unknown).
         /// </summary>
         public int Inputs { get; }
 
@@ -77,6 +83,6 @@ namespace UltraStar.Core
         /// <summary>
         /// Gets the volume of the device (or -1 if unknown).
         /// </summary>
-        public int Volume { get; }
+        public float Volume { get; }
     }
 }
