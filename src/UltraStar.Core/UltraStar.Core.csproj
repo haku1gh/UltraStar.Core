@@ -19,7 +19,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;ATOMIC_APPEND</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -30,7 +30,7 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+    <DefineConstants>TRACE;ATOMIC_APPEND</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\Release\UltraStar.Core.xml</DocumentationFile>
@@ -98,6 +98,27 @@
     <Compile Include="ThirdParty\NGettext\Plural\IPluralRuleTextParser.cs" />
     <Compile Include="ThirdParty\NGettext\Plural\PluralRule.cs" />
     <Compile Include="ThirdParty\NGettext\Plural\PluralRuleEvaluatorDelegate.cs" />
+    <Compile Include="ThirdParty\Serilog-Sinks-Async\LoggerConfigurationAsyncExtensions.cs" />
+    <Compile Include="ThirdParty\Serilog-Sinks-Async\Sinks\Async\BackgroundWorkerSink.cs" />
+    <Compile Include="ThirdParty\Serilog-Sinks-Async\Sinks\Async\IAsyncLogEventSinkInspector.cs" />
+    <Compile Include="ThirdParty\Serilog-Sinks-Async\Sinks\Async\IAsyncLogEventSinkMonitor.cs" />
+    <Compile Include="ThirdParty\Serilog-Sinks-File\FileLoggerConfigurationExtensions.cs" />
+    <Compile Include="ThirdParty\Serilog-Sinks-File\RollingInterval.cs" />
+    <Compile Include="ThirdParty\Serilog-Sinks-File\Sinks\File\Clock.cs" />
+    <Compile Include="ThirdParty\Serilog-Sinks-File\Sinks\File\FileLifecycleHooks.cs" />
+    <Compile Include="ThirdParty\Serilog-Sinks-File\Sinks\File\FileSink.cs" />
+    <Compile Include="ThirdParty\Serilog-Sinks-File\Sinks\File\IFileSink.cs" />
+    <Compile Include="ThirdParty\Serilog-Sinks-File\Sinks\File\IFlushableFileSink.cs" />
+    <Compile Include="ThirdParty\Serilog-Sinks-File\Sinks\File\IOErrors.cs" />
+    <Compile Include="ThirdParty\Serilog-Sinks-File\Sinks\File\NullSink.cs" />
+    <Compile Include="ThirdParty\Serilog-Sinks-File\Sinks\File\PathRoller.cs" />
+    <Compile Include="ThirdParty\Serilog-Sinks-File\Sinks\File\PeriodicFlushToDiskSink.cs" />
+    <Compile Include="ThirdParty\Serilog-Sinks-File\Sinks\File\RollingFileSink.cs" />
+    <Compile Include="ThirdParty\Serilog-Sinks-File\Sinks\File\RollingIntervalExtensions.cs" />
+    <Compile Include="ThirdParty\Serilog-Sinks-File\Sinks\File\RollingLogFile.cs" />
+    <Compile Include="ThirdParty\Serilog-Sinks-File\Sinks\File\SharedFileSink.AtomicAppend.cs" />
+    <Compile Include="ThirdParty\Serilog-Sinks-File\Sinks\File\SharedFileSink.OSMutex.cs" />
+    <Compile Include="ThirdParty\Serilog-Sinks-File\Sinks\File\WriteCountingStream.cs" />
     <Compile Include="ThirdParty\Serilog\Capturing\DepthLimiter.cs" />
     <Compile Include="ThirdParty\Serilog\Capturing\GetablePropertyFinder.cs" />
     <Compile Include="ThirdParty\Serilog\Capturing\MessageTemplateProcessor.cs" />
@@ -235,6 +256,8 @@
     </None>
     <None Include="packages.config" />
     <None Include="ThirdParty\NGettext\Readme_License.md" />
+    <None Include="ThirdParty\Serilog-Sinks-Async\Readme_License.md" />
+    <None Include="ThirdParty\Serilog-Sinks-File\Readme_License.md" />
     <None Include="ThirdParty\Serilog\Readme_License.md" />
   </ItemGroup>
   <ItemGroup>
