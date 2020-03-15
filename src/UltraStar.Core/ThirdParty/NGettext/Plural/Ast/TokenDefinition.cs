@@ -7,7 +7,18 @@ namespace UltraStar.Core.ThirdParty.NGettext.Plural.Ast
 	/// </summary>
     public class TokenDefinition
 	{
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="self"></param>
+        /// <returns></returns>
 		public delegate Token NullDenotationGetterDelegate(Token self);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="self"></param>
+        /// <param name="left"></param>
+        /// <returns></returns>
 		public delegate Token LeftDenotationGetterDelegate(Token self, Token left);
 
 		/// <summary>
@@ -20,7 +31,13 @@ namespace UltraStar.Core.ThirdParty.NGettext.Plural.Ast
 		/// </summary>
 		public int LeftBindingPower { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
 		protected NullDenotationGetterDelegate NullDenotationGetter;
+        /// <summary>
+        /// 
+        /// </summary>
 		protected LeftDenotationGetterDelegate LeftDenotationGetter;
 
 		/// <summary>

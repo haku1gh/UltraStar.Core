@@ -14,6 +14,9 @@ namespace UltraStar.Core.ThirdParty.NGettext.Plural
 		/// </summary>
 		public int NumPlurals { get; protected set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
 		protected Token AstRoot { get; set; }
 
 		/// <summary>
@@ -42,6 +45,12 @@ namespace UltraStar.Core.ThirdParty.NGettext.Plural
 			return (int)this.Evaluate(this.AstRoot, number);
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="node"></param>
+        /// <param name="number"></param>
+        /// <returns></returns>
 		protected long Evaluate(Token node, long number)
 		{
 			switch (node.Type)

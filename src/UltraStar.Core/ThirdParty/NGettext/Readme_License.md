@@ -6,6 +6,9 @@ The original source can be found here: https://github.com/VitaliiTsilnyk/NGettex
 
 The following modifications had been done to the files:
 - Namespace had been adapted from NGettext\* to UltraStar.Core.ThirdParty.NGettext\*
+- Added a couple of empty XML tags to get rid of Warning CS1591 "Missing XML comment for publicly visible type or member"
+- Added a pragma disable for Warning CS3021 "Type or member does not need a CLSCompliant attribute because the assembly
+  does not have a CLSCompliant attribute" in file BigEndianBinaryReader.cs
 
 # Original License of NGettext
 

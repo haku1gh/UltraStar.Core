@@ -30,6 +30,7 @@ namespace UltraStar.Core.ThirdParty.NGettext.Loaders
 		{
 		}
 
+#pragma warning disable CS3021 // Type or member does not need a CLSCompliant attribute because the assembly does not have a CLSCompliant attribute
 		/// <summary>
 		/// Reads a 2-byte signed integer from the current 
 		/// stream and advances the current position of the stream by two bytes.
@@ -59,8 +60,8 @@ namespace UltraStar.Core.ThirdParty.NGettext.Loaders
 		/// <exception cref="T:System.IO.IOException">An I/O error occurs. </exception>
 		/// <filterpriority>2</filterpriority>
 		[CLSCompliant(false)]
-		public override ushort ReadUInt16()
-		{
+        public override ushort ReadUInt16()
+        {
 			this._FillBuffer(2);
 			return (ushort)(this._Buffer[1] | this._Buffer[0] << 8);
 		}
@@ -144,19 +145,20 @@ namespace UltraStar.Core.ThirdParty.NGettext.Loaders
 			}
 			return BitConverter.ToUInt64(this._Buffer, 0);
 		}
+#pragma warning restore CS3021 // Type or member does not need a CLSCompliant attribute because the assembly does not have a CLSCompliant attribute
 
-		/// <summary>
-		/// Reads a 4-byte floating point value from the current 
-		/// stream and advances the current position of the stream by four bytes.
-		/// </summary>
-		/// <returns>
-		/// A 4-byte floating point value read from the current stream.
-		/// </returns>
-		/// <exception cref="T:System.IO.EndOfStreamException">The end of the stream is reached. </exception>
-		/// <exception cref="T:System.ObjectDisposedException">The stream is closed. </exception>
-		/// <exception cref="T:System.IO.IOException">An I/O error occurs. </exception>
-		/// <filterpriority>2</filterpriority>
-		public override float ReadSingle()
+        /// <summary>
+        /// Reads a 4-byte floating point value from the current 
+        /// stream and advances the current position of the stream by four bytes.
+        /// </summary>
+        /// <returns>
+        /// A 4-byte floating point value read from the current stream.
+        /// </returns>
+        /// <exception cref="T:System.IO.EndOfStreamException">The end of the stream is reached. </exception>
+        /// <exception cref="T:System.ObjectDisposedException">The stream is closed. </exception>
+        /// <exception cref="T:System.IO.IOException">An I/O error occurs. </exception>
+        /// <filterpriority>2</filterpriority>
+        public override float ReadSingle()
 		{
 			this._FillBuffer(4);
 			if (BitConverter.IsLittleEndian)

@@ -2,8 +2,14 @@
 
 namespace UltraStar.Core.ThirdParty.NGettext.Plural.Ast
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public enum TokenType : int
     {
+        /// <summary>
+        /// 
+        /// </summary>
 		None,
 
 		/// <summary>
@@ -91,7 +97,9 @@ namespace UltraStar.Core.ThirdParty.NGettext.Plural.Ast
 		/// </summary>
 		N,
 
-
+        /// <summary>
+        /// 
+        /// </summary>
 		Number,
 
 		/// <summary>
@@ -104,7 +112,9 @@ namespace UltraStar.Core.ThirdParty.NGettext.Plural.Ast
 		/// </summary>
 		RightParenthesis,
 
-
+        /// <summary>
+        /// 
+        /// </summary>
 		EOF,
 	}
 }

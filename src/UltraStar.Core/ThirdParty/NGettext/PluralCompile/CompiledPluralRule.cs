@@ -3,6 +3,9 @@ using UltraStar.Core.ThirdParty.NGettext.Plural;
 
 namespace UltraStar.Core.ThirdParty.NGettext.PluralCompile
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class CompiledPluralRule : PluralRule
 	{
 		/// <summary>

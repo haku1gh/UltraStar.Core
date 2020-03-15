@@ -10,12 +10,24 @@ namespace UltraStar.Core.ThirdParty.NGettext.Plural.Ast
 	/// </summary>
 	public class AstTokenParser
     {
+        /// <summary>
+        /// 
+        /// </summary>
 		protected readonly Dictionary<TokenType, TokenDefinition> TokenDefinitions = new Dictionary<TokenType, TokenDefinition>();
 
+        /// <summary>
+        /// 
+        /// </summary>
 		protected string Input;
 
+        /// <summary>
+        /// 
+        /// </summary>
 		protected int Position;
 
+        /// <summary>
+        /// 
+        /// </summary>
 		protected Token CurrentToken;
 
 		/// <summary>
@@ -83,6 +95,12 @@ namespace UltraStar.Core.ThirdParty.NGettext.Plural.Ast
 			this.RegisterTokenDefinition(TokenType.EOF);
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="tokenType"></param>
+        /// <param name="leftBindingPower"></param>
+        /// <returns></returns>
 		protected TokenDefinition RegisterTokenDefinition(TokenType tokenType, int leftBindingPower = 0)
 		{
 			TokenDefinition definition;
@@ -99,6 +117,12 @@ namespace UltraStar.Core.ThirdParty.NGettext.Plural.Ast
 			return definition;
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="tokenType"></param>
+        /// <param name="leftBindingPower"></param>
+        /// <returns></returns>
 		protected TokenDefinition RegisterLeftInfixTokenDefinition(TokenType tokenType, int leftBindingPower)
 		{
 			return this.RegisterTokenDefinition(tokenType, leftBindingPower)
@@ -109,6 +133,12 @@ namespace UltraStar.Core.ThirdParty.NGettext.Plural.Ast
 				});
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="tokenType"></param>
+        /// <param name="leftBindingPower"></param>
+        /// <returns></returns>
 		protected TokenDefinition RegisterRightInfixTokenDefinition(TokenType tokenType, int leftBindingPower)
 		{
 			return this.RegisterTokenDefinition(tokenType, leftBindingPower)
@@ -119,6 +149,12 @@ namespace UltraStar.Core.ThirdParty.NGettext.Plural.Ast
 				});
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="tokenType"></param>
+        /// <param name="leftBindingPower"></param>
+        /// <returns></returns>
 		protected TokenDefinition RegisterPrefixTokenDefinition(TokenType tokenType, int leftBindingPower)
 		{
 			return this.RegisterTokenDefinition(tokenType, leftBindingPower)
@@ -129,6 +165,11 @@ namespace UltraStar.Core.ThirdParty.NGettext.Plural.Ast
 				});
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="tokenType"></param>
+        /// <returns></returns>
 		protected TokenDefinition GetDefinition(TokenType tokenType)
 		{
 			TokenDefinition tokenDefinition;
@@ -153,6 +194,11 @@ namespace UltraStar.Core.ThirdParty.NGettext.Plural.Ast
 			return this.ParseNextExpression();
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="rightBindingPower"></param>
+        /// <returns></returns>
 		protected Token ParseNextExpression(int rightBindingPower = 0)
 		{
 			var token = this.CurrentToken;
@@ -169,11 +215,18 @@ namespace UltraStar.Core.ThirdParty.NGettext.Plural.Ast
 			return left;
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
 		protected void AdvancePosition()
 		{
 			this.CurrentToken = this.GetNextToken();
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="expectedTokenType"></param>
 		protected void AdvancePosition(TokenType expectedTokenType)
 		{
 			if (this.CurrentToken.Type != expectedTokenType)
@@ -183,6 +236,10 @@ namespace UltraStar.Core.ThirdParty.NGettext.Plural.Ast
 			this.AdvancePosition();
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
 		protected Token GetNextToken()
 		{
 			while (this.Input[this.Position] == ' ' || this.Input[this.Position] == '\t') {

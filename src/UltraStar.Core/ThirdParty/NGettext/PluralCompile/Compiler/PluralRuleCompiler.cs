@@ -11,7 +11,13 @@ namespace UltraStar.Core.ThirdParty.NGettext.PluralCompile.Compiler
 	/// </summary>
 	public class PluralRuleCompiler
     {
+        /// <summary>
+        /// 
+        /// </summary>
 		public const string DYNAMIC_METHOD_NAME = "CompiledPluralRuleDynamicMethod";
+        /// <summary>
+        /// 
+        /// </summary>
 		public const string INVOKE_METHOD_NAME = "Invoke";
 
 		/// <summary>

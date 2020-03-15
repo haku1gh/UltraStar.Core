@@ -7,6 +7,9 @@ namespace UltraStar.Core.ThirdParty.NGettext.Plural.Ast
 	/// </summary>
     public class Token
     {
+        /// <summary>
+        /// 
+        /// </summary>
 		public const int MAX_CHILDREN_COUNT = 3;
 
 		/// <summary>
