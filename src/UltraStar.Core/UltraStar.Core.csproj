@@ -224,14 +224,20 @@
     <Compile Include="Utils\VolumeConversion.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="libs\linux\arm64\libbass.so">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="libs\linux\x64\libbass.so">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="libs\linux\x86\libbass.so">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
     <None Include="ThirdParty\NGettext\Readme_License.md" />
     <None Include="ThirdParty\Serilog\Readme_License.md" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="libs\linux\arm64\" />
-    <Folder Include="libs\linux\x64\" />
-    <Folder Include="libs\linux\x86\" />
     <Folder Include="libs\mac\" />
   </ItemGroup>
   <ItemGroup>
