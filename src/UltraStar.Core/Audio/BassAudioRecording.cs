@@ -10,7 +10,7 @@
 using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
-using Serilog;
+using UltraStar.Core.ThirdParty.Serilog;
 using UltraStar.Core.Unmanaged.Bass;
 using UltraStar.Core.Utils;
 

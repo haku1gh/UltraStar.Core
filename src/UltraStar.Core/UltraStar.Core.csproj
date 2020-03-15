@@ -24,6 +24,7 @@
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <DocumentationFile>bin\Debug\UltraStar.Core.xml</DocumentationFile>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -42,12 +43,15 @@
     </Reference>
     <Reference Include="Serilog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Serilog.2.9.0\lib\net46\Serilog.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Serilog.Sinks.Async, Version=1.4.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Serilog.Sinks.Async.1.4.0\lib\net461\Serilog.Sinks.Async.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Serilog.Sinks.File, Version=2.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Serilog.Sinks.File.4.1.0\lib\net45\Serilog.Sinks.File.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -94,6 +98,101 @@
     <Compile Include="ThirdParty\NGettext\Plural\IPluralRuleTextParser.cs" />
     <Compile Include="ThirdParty\NGettext\Plural\PluralRule.cs" />
     <Compile Include="ThirdParty\NGettext\Plural\PluralRuleEvaluatorDelegate.cs" />
+    <Compile Include="ThirdParty\Serilog\Capturing\DepthLimiter.cs" />
+    <Compile Include="ThirdParty\Serilog\Capturing\GetablePropertyFinder.cs" />
+    <Compile Include="ThirdParty\Serilog\Capturing\MessageTemplateProcessor.cs" />
+    <Compile Include="ThirdParty\Serilog\Capturing\PropertyBinder.cs" />
+    <Compile Include="ThirdParty\Serilog\Capturing\PropertyValueConverter.cs" />
+    <Compile Include="ThirdParty\Serilog\Configuration\ILoggerSettings.cs" />
+    <Compile Include="ThirdParty\Serilog\Configuration\LoggerAuditSinkConfiguration.cs" />
+    <Compile Include="ThirdParty\Serilog\Configuration\LoggerDestructuringConfiguration.cs" />
+    <Compile Include="ThirdParty\Serilog\Configuration\LoggerEnrichmentConfiguration.cs" />
+    <Compile Include="ThirdParty\Serilog\Configuration\LoggerFilterConfiguration.cs" />
+    <Compile Include="ThirdParty\Serilog\Configuration\LoggerMinimumLevelConfiguration.cs" />
+    <Compile Include="ThirdParty\Serilog\Configuration\LoggerSettingsConfiguration.cs" />
+    <Compile Include="ThirdParty\Serilog\Configuration\LoggerSinkConfiguration.cs" />
+    <Compile Include="ThirdParty\Serilog\Context\ImmutableStack.cs" />
+    <Compile Include="ThirdParty\Serilog\Context\LogContext.cs" />
+    <Compile Include="ThirdParty\Serilog\Context\LogContextEnricher.cs" />
+    <Compile Include="ThirdParty\Serilog\Core\Constants.cs" />
+    <Compile Include="ThirdParty\Serilog\Core\Enrichers\ConditionalEnricher.cs" />
+    <Compile Include="ThirdParty\Serilog\Core\Enrichers\EmptyEnricher.cs" />
+    <Compile Include="ThirdParty\Serilog\Core\Enrichers\FixedPropertyEnricher.cs" />
+    <Compile Include="ThirdParty\Serilog\Core\Enrichers\PropertyEnricher.cs" />
+    <Compile Include="ThirdParty\Serilog\Core\Enrichers\SafeAggregateEnricher.cs" />
+    <Compile Include="ThirdParty\Serilog\Core\Filters\DelegateFilter.cs" />
+    <Compile Include="ThirdParty\Serilog\Core\IDestructuringPolicy.cs" />
+    <Compile Include="ThirdParty\Serilog\Core\ILogEventEnricher.cs" />
+    <Compile Include="ThirdParty\Serilog\Core\ILogEventFilter.cs" />
+    <Compile Include="ThirdParty\Serilog\Core\ILogEventPropertyFactory.cs" />
+    <Compile Include="ThirdParty\Serilog\Core\ILogEventPropertyValueFactory.cs" />
+    <Compile Include="ThirdParty\Serilog\Core\ILogEventSink.cs" />
+    <Compile Include="ThirdParty\Serilog\Core\IMessageTemplateParser.cs" />
+    <Compile Include="ThirdParty\Serilog\Core\IScalarConversionPolicy.cs" />
+    <Compile Include="ThirdParty\Serilog\Core\LevelOverrideMap.cs" />
+    <Compile Include="ThirdParty\Serilog\Core\Logger.cs" />
+    <Compile Include="ThirdParty\Serilog\Core\LoggingLevelSwitch.cs" />
+    <Compile Include="ThirdParty\Serilog\Core\MessageTemplateFormatMethodAttribute.cs" />
+    <Compile Include="ThirdParty\Serilog\Core\Pipeline\MessageTemplateCache.cs" />
+    <Compile Include="ThirdParty\Serilog\Core\Pipeline\SilentLogger.cs" />
+    <Compile Include="ThirdParty\Serilog\Core\Sinks\AggregateSink.cs" />
+    <Compile Include="ThirdParty\Serilog\Core\Sinks\ConditionalSink.cs" />
+    <Compile Include="ThirdParty\Serilog\Core\Sinks\FilteringSink.cs" />
+    <Compile Include="ThirdParty\Serilog\Core\Sinks\RestrictedSink.cs" />
+    <Compile Include="ThirdParty\Serilog\Core\Sinks\SafeAggregateSink.cs" />
+    <Compile Include="ThirdParty\Serilog\Core\Sinks\SecondaryLoggerSink.cs" />
+    <Compile Include="ThirdParty\Serilog\Data\LogEventPropertyValueRewriter.cs" />
+    <Compile Include="ThirdParty\Serilog\Data\LogEventPropertyValueVisitor.cs" />
+    <Compile Include="ThirdParty\Serilog\Debugging\LoggingFailedException.cs" />
+    <Compile Include="ThirdParty\Serilog\Debugging\SelfLog.cs" />
+    <Compile Include="ThirdParty\Serilog\Events\DictionaryValue.cs" />
+    <Compile Include="ThirdParty\Serilog\Events\EventProperty.cs" />
+    <Compile Include="ThirdParty\Serilog\Events\LevelAlias.cs" />
+    <Compile Include="ThirdParty\Serilog\Events\LogEvent.cs" />
+    <Compile Include="ThirdParty\Serilog\Events\LogEventLevel.cs" />
+    <Compile Include="ThirdParty\Serilog\Events\LogEventProperty.cs" />
+    <Compile Include="ThirdParty\Serilog\Events\LogEventPropertyValue.cs" />
+    <Compile Include="ThirdParty\Serilog\Events\MessageTemplate.cs" />
+    <Compile Include="ThirdParty\Serilog\Events\ScalarValue.cs" />
+    <Compile Include="ThirdParty\Serilog\Events\SequenceValue.cs" />
+    <Compile Include="ThirdParty\Serilog\Events\StructureValue.cs" />
+    <Compile Include="ThirdParty\Serilog\Filters\Matching.cs" />
+    <Compile Include="ThirdParty\Serilog\Formatting\Display\LevelOutputFormat.cs" />
+    <Compile Include="ThirdParty\Serilog\Formatting\Display\MessageTemplateTextFormatter.cs" />
+    <Compile Include="ThirdParty\Serilog\Formatting\Display\Obsolete\LiteralStringValue.cs" />
+    <Compile Include="ThirdParty\Serilog\Formatting\Display\Obsolete\LogEventLevelValue.cs" />
+    <Compile Include="ThirdParty\Serilog\Formatting\Display\Obsolete\LogEventPropertiesValue.cs" />
+    <Compile Include="ThirdParty\Serilog\Formatting\Display\Obsolete\LogEventPropertyMessageValue.cs" />
+    <Compile Include="ThirdParty\Serilog\Formatting\Display\OutputProperties.cs" />
+    <Compile Include="ThirdParty\Serilog\Formatting\Display\PropertiesOutputFormat.cs" />
+    <Compile Include="ThirdParty\Serilog\Formatting\ITextFormatter.cs" />
+    <Compile Include="ThirdParty\Serilog\Formatting\Json\JsonFormatter.cs" />
+    <Compile Include="ThirdParty\Serilog\Formatting\Json\JsonValueFormatter.cs" />
+    <Compile Include="ThirdParty\Serilog\Formatting\Raw\RawFormatter.cs" />
+    <Compile Include="ThirdParty\Serilog\ILogger.cs" />
+    <Compile Include="ThirdParty\Serilog\Log.cs" />
+    <Compile Include="ThirdParty\Serilog\LoggerConfiguration.cs" />
+    <Compile Include="ThirdParty\Serilog\LoggerExtensions.cs" />
+    <Compile Include="ThirdParty\Serilog\Parsing\Alignment.cs" />
+    <Compile Include="ThirdParty\Serilog\Parsing\AlignmentDirection.cs" />
+    <Compile Include="ThirdParty\Serilog\Parsing\Destructuring.cs" />
+    <Compile Include="ThirdParty\Serilog\Parsing\MessageTemplateParser.cs" />
+    <Compile Include="ThirdParty\Serilog\Parsing\MessageTemplateToken.cs" />
+    <Compile Include="ThirdParty\Serilog\Parsing\PropertyToken.cs" />
+    <Compile Include="ThirdParty\Serilog\Parsing\TextToken.cs" />
+    <Compile Include="ThirdParty\Serilog\Policies\ByteArrayScalarConversionPolicy.cs" />
+    <Compile Include="ThirdParty\Serilog\Policies\DelegateDestructuringPolicy.cs" />
+    <Compile Include="ThirdParty\Serilog\Policies\EnumScalarConversionPolicy.cs" />
+    <Compile Include="ThirdParty\Serilog\Policies\ProjectedDestructuringPolicy.cs" />
+    <Compile Include="ThirdParty\Serilog\Policies\ReflectionTypesScalarDestructuringPolicy.cs" />
+    <Compile Include="ThirdParty\Serilog\Policies\SimpleScalarConversionPolicy.cs" />
+    <Compile Include="ThirdParty\Serilog\Rendering\Casing.cs" />
+    <Compile Include="ThirdParty\Serilog\Rendering\MessageTemplateRenderer.cs" />
+    <Compile Include="ThirdParty\Serilog\Rendering\Padding.cs" />
+    <Compile Include="ThirdParty\Serilog\Settings\KeyValuePairs\CallableConfigurationMethodFinder.cs" />
+    <Compile Include="ThirdParty\Serilog\Settings\KeyValuePairs\KeyValuePairSettings.cs" />
+    <Compile Include="ThirdParty\Serilog\Settings\KeyValuePairs\SettingValueConversions.cs" />
+    <Compile Include="ThirdParty\Serilog\Settings\KeyValuePairs\SurrogateConfigurationMethods.cs" />
     <Compile Include="Unmanaged\Bass\Bass.cs" />
     <Compile Include="Unmanaged\Bass\BassChannelAttribute.cs" />
     <Compile Include="Unmanaged\Bass\BassChannelLevelFlags.cs" />
@@ -127,6 +226,7 @@
   <ItemGroup>
     <None Include="packages.config" />
     <None Include="ThirdParty\NGettext\Readme_License.md" />
+    <None Include="ThirdParty\Serilog\Readme_License.md" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="libs\linux\arm64\" />
