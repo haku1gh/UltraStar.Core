@@ -94,7 +94,7 @@ namespace UltraStar.Core.Audio
             {
                 activeRecordingDevice.Stopped -= ActiveRecordingDevice_Stopped;
             }
-            onStopped();
+            onClosed();
         }
 
         /// <summary>
@@ -209,6 +209,8 @@ namespace UltraStar.Core.Audio
                 }
                 // Set references to null
                 activeRecordingDevice = null;
+                // Raise event
+                if (disposing) onClosed();
             }
             base.Dispose(disposing);
         }
@@ -332,7 +334,6 @@ namespace UltraStar.Core.Audio
                 if (activeRecordingDevice.NumberOfListeners == 0)
                     activeRecordingDevice.Stop(true);
             }
-            onStopped();
         }
 
         /// <summary>
@@ -456,7 +457,7 @@ namespace UltraStar.Core.Audio
             {
                 BassDeviceInfo info = Bass.GetRecordingDeviceInfo(deviceID);
                 if (!info.IsEnabled || info.IsLoopback || info.IsInitialized)
-                    throw new AudioException("Recording device " + info.Name + " not found or already in use.");
+                    throw new AudioException("Recording device " + info.Name + " disabled or already in use.");
                 // Initialize variables
                 DeviceID = deviceID;
                 Channels = channels;
@@ -467,10 +468,10 @@ namespace UltraStar.Core.Audio
                 users = new List<BassAudioRecording>();
                 for (int c = 0; c < channels; c++)
                 {
-                    buffer[c] = new float[LibrarySettings.AudioRecordingBufferSizePerChannel];
+                    buffer[c] = new float[LibrarySettings.AudioRecordingBufferSize];
                     channelVolume[c] = 1.0f;
                 }
-                emptyBuffer = new float[LibrarySettings.AudioRecordingBufferSizePerChannel];
+                emptyBuffer = new float[LibrarySettings.AudioRecordingBufferSize];
                 for (int i = 0; i < emptyBuffer.Length; i++)
                     emptyBuffer[i] = 0;
                 // Open device
@@ -490,7 +491,7 @@ namespace UltraStar.Core.Audio
                 if (handle != 0) return; // Nothing to do, the device is already running
                 BassDeviceInfo info = Bass.GetRecordingDeviceInfo(DeviceID);
                 if (!info.IsEnabled || info.IsLoopback || info.IsInitialized)
-                    throw new AudioException("Recording device " + info.Name + " not found or already in use.");
+                    throw new AudioException("Recording device " + info.Name + " disabled or already in use.");
                 // Open device
                 bool success = Bass.RecordingDeviceInit(DeviceID);
                 if (!success) throw new BassException(Bass.GetErrorCode());
@@ -554,7 +555,7 @@ namespace UltraStar.Core.Audio
                     for (int c = 0; c < Channels; c++)
                         buffer[c][bufferPos] = _pBuffer[pos++] * channelVolume[c];
                     bufferPos++;
-                    if (bufferPos == LibrarySettings.AudioRecordingBufferSizePerChannel) // This should usually not be called
+                    if (bufferPos == LibrarySettings.AudioRecordingBufferSize) // This should usually not be called
                     {
                         // Inform listeners
                         informListeners(bufferPos);

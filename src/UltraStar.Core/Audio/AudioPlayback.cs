@@ -31,16 +31,17 @@ namespace UltraStar.Core.Audio
         /// <summary>
         /// Initializes a new instance of <see cref="AudioPlayback"/>.
         /// </summary>
-        /// <param name="deviceID">The device ID of the audio playback device.</param>
+        /// <param name="samplerate">The sample rate of the playback.</param>
         /// <param name="channels">The number of channels the playback shall have.</param>
         /// <param name="audioPlaybackCallback">A callback function for the audio playback.</param>
-        /// <param name="samplerate">The sample rate of the playback.</param>
-        public AudioPlayback(int deviceID, int channels, AudioPlaybackCallback audioPlaybackCallback, int samplerate)
+        /// <param name="noSound"><see langword="true"/> if a virtual playback device shall be used;
+        /// otherwise <see langword="false"/> and the default playback device will be used.</param>
+        public AudioPlayback(int samplerate, int channels, AudioPlaybackCallback audioPlaybackCallback, bool noSound)
         {
-            DeviceID = deviceID;
+            Samplerate = samplerate;
             Channels = channels;
             this.audioPlaybackCallback = audioPlaybackCallback;
-            Samplerate = samplerate;
+            IsUsingNoSoundDevice = noSound;
         }
 
         /// <summary>
@@ -58,47 +59,85 @@ namespace UltraStar.Core.Audio
         }
 
         /// <summary>
-        /// Opens a new audio playback device.
+        /// Gets information about the default playback device. <see langword="null"/> is returned in case no default device is available.
         /// </summary>
-        /// <param name="device">The audio playback device.</param>
-        /// <param name="channels">The number of channels the playback shall have.</param>
-        /// <param name="audioPlaybackCallback">A callback function for the audio playback, or NULL if audio data is manually provided.</param>
-        /// <returns>A new instance of <see cref="AudioPlayback"/>.</returns>
-        public static AudioPlayback Open(USAudioPlaybackDeviceInfo device, int channels, AudioPlaybackCallback audioPlaybackCallback)
+        public static USAudioPlaybackDeviceInfo DefaultDevice
         {
-            int samplerate = (device.Samplerate != 0) ? device.Samplerate : LibrarySettings.AudioPlaybackDefaultSamplerate;
-            return Open(device.DeviceID, channels, audioPlaybackCallback, samplerate);
+            get
+            {
+                // Get the type where the class AudioPlayback is implemented
+                Type audioPlaybackClass = Type.GetType(LibrarySettings.AudioPlaybackClassName, true);
+                // Get the property "DefaultDevice"
+                PropertyInfo pinfo = audioPlaybackClass.GetProperty("DefaultDevice", BindingFlags.Public | BindingFlags.Static | BindingFlags.GetProperty | BindingFlags.DeclaredOnly);
+                // Call the property
+                return (USAudioPlaybackDeviceInfo)pinfo.GetValue(null);
+            }
+        }
+
+        /// <summary>
+        /// Gets information about the virtual playback device. <see langword="null"/> is returned in case no virtual device is available.
+        /// </summary>
+        public static USAudioPlaybackDeviceInfo NoSoundDevice
+        {
+            get
+            {
+                // Get the type where the class AudioPlayback is implemented
+                Type audioPlaybackClass = Type.GetType(LibrarySettings.AudioPlaybackClassName, true);
+                // Get the property "NoSoundDevice"
+                PropertyInfo pinfo = audioPlaybackClass.GetProperty("NoSoundDevice", BindingFlags.Public | BindingFlags.Static | BindingFlags.GetProperty | BindingFlags.DeclaredOnly);
+                // Call the property
+                return (USAudioPlaybackDeviceInfo)pinfo.GetValue(null);
+            }
+        }
+
+        /// <summary>
+        /// Gets an indicator whether the default playback device is available.
+        /// </summary>
+        public static bool IsDefaultDeviceAvailable
+        {
+            get
+            {
+                // Get the type where the class AudioPlayback is implemented
+                Type audioPlaybackClass = Type.GetType(LibrarySettings.AudioPlaybackClassName, true);
+                // Get the property "IsDefaultDeviceAvailable"
+                PropertyInfo pinfo = audioPlaybackClass.GetProperty("IsDefaultDeviceAvailable", BindingFlags.Public | BindingFlags.Static | BindingFlags.GetProperty | BindingFlags.DeclaredOnly);
+                // Call the property
+                return (bool)pinfo.GetValue(null);
+            }
+        }
+
+        /// <summary>
+        /// Gets an indicator whether the virtual playback device is available.
+        /// </summary>
+        public static bool IsNoSoundDeviceAvailable
+        {
+            get
+            {
+                // Get the type where the class AudioPlayback is implemented
+                Type audioPlaybackClass = Type.GetType(LibrarySettings.AudioPlaybackClassName, true);
+                // Get the property "IsNoSoundDeviceAvailable"
+                PropertyInfo pinfo = audioPlaybackClass.GetProperty("IsNoSoundDeviceAvailable", BindingFlags.Public | BindingFlags.Static | BindingFlags.GetProperty | BindingFlags.DeclaredOnly);
+                // Call the property
+                return (bool)pinfo.GetValue(null);
+            }
         }
 
         /// <summary>
         /// Opens a new audio playback device.
         /// </summary>
-        /// <param name="device">The audio playback device.</param>
-        /// <param name="channels">The number of channels the playback shall have.</param>
-        /// <param name="audioPlaybackCallback">A callback function for the audio playback, or NULL if audio data is manually provided.</param>
         /// <param name="samplerate">The sample rate of the playback. This can be different from the devices sample rate.</param>
-        /// <returns>A new instance of <see cref="AudioPlayback"/>.</returns>
-        public static AudioPlayback Open(USAudioPlaybackDeviceInfo device, int channels, AudioPlaybackCallback audioPlaybackCallback, int samplerate)
-        {
-            return Open(device.DeviceID, channels, audioPlaybackCallback, samplerate);
-        }
-
-        /// <summary>
-        /// Opens a new audio playback device.
-        /// </summary>
-        /// <param name="deviceID">The device ID of the audio playback device.</param>
-        /// <param name="channels">The number of channels the playback shall have.</param>
+        /// <param name="channels">The number of channels the playback shall have. This can be different from the devices number of channels.</param>
         /// <param name="audioPlaybackCallback">A callback function for the audio playback, or NULL if audio data is manually provided.</param>
-        /// <param name="samplerate">The sample rate of the playback. This can be different from the devices sample rate.</param>
-        /// <returns>A new instance of <see cref="AudioPlayback"/>.</returns>
-        public static AudioPlayback Open(int deviceID, int channels, AudioPlaybackCallback audioPlaybackCallback, int samplerate)
+        /// <param name="noSound"><see langword="true"/> if a virtual playback device shall be used;
+        /// otherwise <see langword="false"/> and the default playback device will be used.</param>
+        public static AudioPlayback Open(int samplerate = 48000, int channels = 2, AudioPlaybackCallback audioPlaybackCallback = null, bool noSound = false)
         {
             // Get the type where the class AudioPlayback is implemented
             Type audioPlaybackClass = Type.GetType(LibrarySettings.AudioPlaybackClassName, true);
             // Get the constructor
-            ConstructorInfo cInfo = audioPlaybackClass.GetConstructor(new Type[] { typeof(int), typeof(int), typeof(AudioPlaybackCallback), typeof(int) });
+            ConstructorInfo cInfo = audioPlaybackClass.GetConstructor(new Type[] { typeof(int), typeof(int), typeof(AudioPlaybackCallback), typeof(bool) });
             // Return the newly created object
-            return (AudioPlayback)cInfo.Invoke(new object[] { deviceID, channels, audioPlaybackCallback, samplerate });
+            return (AudioPlayback)cInfo.Invoke(new object[] { samplerate, channels, audioPlaybackCallback, noSound });
         }
 
         /// <summary>
@@ -123,25 +162,36 @@ namespace UltraStar.Core.Audio
                 isDisposed = true;
             }
             // Set references to null
-            Stopped = null;
+            Closed = null;
         }
 
         /// <summary>
-        /// Occurs when an audio playback stopped.
+        /// Occurs when an audio playback had been closed.
         /// </summary>
         /// <remarks>
-        /// This can happen in two cases. Either the method <see cref="Stop"/> had been called,
+        /// This can happen in two cases. Either the methods <see cref="Close"/> or <see cref="Dispose()"/> had been called,
         /// or the playback device became unavailable.
         /// </remarks>
-        public event EventHandler<EventArgs> Stopped;
+        public event EventHandler<EventArgs> Closed;
 
         /// <summary>
-        /// Helpermethod for event <c>Stopped</c>.
+        /// Helpermethod for event <c>Closed</c>.
         /// </summary>
-        protected virtual void onStopped()
+        protected virtual void onClosed()
         {
-            Stopped?.Invoke(this, new EventArgs());
+            Closed?.Invoke(this, new EventArgs());
         }
+
+        /// <summary>
+        /// Re-initializes the playback.
+        /// </summary>
+        /// <remarks>
+        /// A call to this method is usually not necessary.
+        /// This method has only an effect when the playback had been stopped, then
+        /// it will re-initialize the playback device as if it will be created anew. This means that the
+        /// playback device is already pre-buffered and a call to the <see cref="Start"/> method will instantly start playback.
+        /// </remarks>
+        public abstract void ReInitialize();
 
         /// <summary>
         /// Starts the playback.
@@ -149,9 +199,19 @@ namespace UltraStar.Core.Audio
         public abstract void Start();
 
         /// <summary>
+        /// Restarts the playback.
+        /// </summary>
+        public abstract void Restart();
+
+        /// <summary>
         /// Pauses the playback.
         /// </summary>
         public abstract void Pause();
+
+        /// <summary>
+        /// Resumes the playback.
+        /// </summary>
+        public abstract void Resume();
 
         /// <summary>
         /// Stops the playback.
@@ -174,19 +234,12 @@ namespace UltraStar.Core.Audio
         public abstract float Volume { get; set; }
 
         /// <summary>
-        /// Gets information about the audio playback device.
+        /// Gets the sample rate of the playback.
         /// </summary>
-        public abstract USAudioPlaybackDeviceInfo DeviceInfo { get; }
-
-        /// <summary>
-        /// Gets the device ID of the audio playback device.
-        /// </summary>
-        public int DeviceID { get; }
-
-        /// <summary>
-        /// Gets the name of the audio playback device.
-        /// </summary>
-        public string Name => DeviceInfo.Name;
+        /// <remarks>
+        /// This is not necessarily the same as the devices sample rate.
+        /// </remarks>
+        public int Samplerate { get; }
 
         /// <summary>
         /// Gets the number of channels the playback has.
@@ -194,11 +247,13 @@ namespace UltraStar.Core.Audio
         public int Channels { get; }
 
         /// <summary>
-        /// Gets the sample rate of the playback.
+        /// Gets an indicator whether this playback is using a virtual playback device.
         /// </summary>
-        /// <remarks>
-        /// This is not necessarily the same as the devices sample rate.
-        /// </remarks>
-        public int Samplerate { get; }
+        public bool IsUsingNoSoundDevice { get; }
+
+        /// <summary>
+        /// Gets an indicator whether this playback is using the default playback device.
+        /// </summary>
+        public bool IsUsingDefaultDevice => !IsUsingNoSoundDevice;
     }
 }

@@ -146,24 +146,24 @@ namespace UltraStar.Core.Audio
                 isDisposed = true;
             }
             // Set references to null
-            Stopped = null;
+            Closed = null;
         }
 
         /// <summary>
-        /// Occurs when an audio recording stopped.
+        /// Occurs when an audio playback had been closed.
         /// </summary>
         /// <remarks>
-        /// This can happen in two cases. Either the method <see cref="Stop"/> had been called,
-        /// or the recording device became unavailable.
+        /// This can happen in two cases. Either the methods <see cref="Close"/> or <see cref="Dispose()"/> had been called,
+        /// or the playback device became unavailable.
         /// </remarks>
-        public event EventHandler<EventArgs> Stopped;
+        public event EventHandler<EventArgs> Closed;
 
         /// <summary>
-        /// Helpermethod for event <c>Stopped</c>.
+        /// Helpermethod for event <c>Closed</c>.
         /// </summary>
-        protected virtual void onStopped()
+        protected virtual void onClosed()
         {
-            Stopped?.Invoke(this, new EventArgs());
+            Closed?.Invoke(this, new EventArgs());
         }
 
         /// <summary>

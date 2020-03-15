@@ -20,11 +20,6 @@ namespace UltraStar.Core.Unmanaged.Bass
     public enum BassStreamProcedureType
     {
         /// <summary>
-        /// Flag to signify that the end of the stream is reached.
-        /// </summary>
-        End = -2147483648,
-
-        /// <summary>
         /// Create a "push" stream.
         /// Instead of BASS pulling data from a StreamProcedure function, data is pushed to BASS via BASS_StreamPutData.
         /// </summary>

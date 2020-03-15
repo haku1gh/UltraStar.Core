@@ -28,6 +28,16 @@ namespace UltraStar.Core.Utils
         public static readonly int AudioPlaybackDefaultSamplerate = 48000;
 
         /// <summary>
+        /// The maximum allowed amplification of the channel volume for an audio playback.
+        /// </summary>
+        public static readonly int AudioPlaybackMaximumChannelAmplification = 8;
+
+        /// <summary>
+        /// The maximum buffer size for audio playbacks.
+        /// </summary>
+        public static readonly int AudioPlaybackBufferSize = 8192;
+
+        /// <summary>
         /// The full qualified class name of the audio recording implementation.
         /// </summary>
         public static readonly string AudioRecordingClassName = typeof(BassAudioRecording).AssemblyQualifiedName;
@@ -53,8 +63,8 @@ namespace UltraStar.Core.Utils
         public static readonly int AudioRecordingMaximumChannelAmplification = 8;
 
         /// <summary>
-        /// The maximum buffer size per channel for an audio recording.
+        /// The maximum buffer size for audio recordings.
         /// </summary>
-        public static readonly int AudioRecordingBufferSizePerChannel = 1024;
+        public static readonly int AudioRecordingBufferSize = 1024;
     }
 }
