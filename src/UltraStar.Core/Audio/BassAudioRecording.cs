@@ -337,6 +337,36 @@ namespace UltraStar.Core.Audio
         }
 
         /// <summary>
+        /// Gets an indicator whether the recording stream is active.
+        /// </summary>
+        public override bool IsActive
+        {
+            get
+            {
+                // Check if disposed
+                if (isDisposed)
+                    throw new ObjectDisposedException(nameof(BassAudioRecording));
+                // Return value
+                return running;
+            }
+        }
+
+        /// <summary>
+        /// Gets an indicator whether the recording stream is paused.
+        /// </summary>
+        public override bool IsPaused
+        {
+            get
+            {
+                // Check if disposed
+                if (isDisposed)
+                    throw new ObjectDisposedException(nameof(BassAudioRecording));
+                // Return value
+                return activeRecordingDevice.Paused;
+            }
+        }
+
+        /// <summary>
         /// Gets the sample position of the recording stream.
         /// </summary>
         /// <remarks>

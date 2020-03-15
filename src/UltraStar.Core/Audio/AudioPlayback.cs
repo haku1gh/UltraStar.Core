@@ -219,12 +219,27 @@ namespace UltraStar.Core.Audio
         public abstract void Stop();
 
         /// <summary>
+        /// Gets an indicator whether the playback stream is active.
+        /// </summary>
+        public abstract bool IsActive { get; }
+
+        /// <summary>
+        /// Gets an indicator whether the playback stream is paused.
+        /// </summary>
+        public abstract bool IsPaused { get; }
+
+        /// <summary>
+        /// Gets an indicator whether this instance is already closed/disposed.
+        /// </summary>
+        public bool IsClosed => isDisposed;
+
+        /// <summary>
         /// Gets the sample position of the playback stream.
         /// </summary>
         public abstract long Position { get; }
 
         /// <summary>
-        /// Gets or sets the volume of the recording stream.
+        /// Gets or sets the volume of the playback stream.
         /// </summary>
         /// <remarks>
         /// The volume is provided on a linear base.

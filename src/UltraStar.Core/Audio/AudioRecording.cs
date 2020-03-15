@@ -214,6 +214,21 @@ namespace UltraStar.Core.Audio
         public abstract void Stop();
 
         /// <summary>
+        /// Gets an indicator whether the recording stream is active.
+        /// </summary>
+        public abstract bool IsActive { get; }
+
+        /// <summary>
+        /// Gets an indicator whether the recording stream is paused.
+        /// </summary>
+        public abstract bool IsPaused { get; }
+
+        /// <summary>
+        /// Gets an indicator whether this instance is already closed/disposed.
+        /// </summary>
+        public bool IsClosed => isDisposed;
+
+        /// <summary>
         /// Gets the sample position of the recording stream.
         /// </summary>
         /// <remarks>

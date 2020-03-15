@@ -407,6 +407,36 @@ namespace UltraStar.Core.Audio
         }
 
         /// <summary>
+        /// Gets an indicator whether the playback stream is active.
+        /// </summary>
+        public override bool IsActive
+        {
+            get
+            {
+                // Check if disposed
+                if (isDisposed)
+                    throw new ObjectDisposedException(nameof(BassAudioRecording));
+                // Return value
+                return running;
+            }
+        }
+
+        /// <summary>
+        /// Gets an indicator whether the playback stream is paused.
+        /// </summary>
+        public override bool IsPaused
+        {
+            get
+            {
+                // Check if disposed
+                if (isDisposed)
+                    throw new ObjectDisposedException(nameof(BassAudioRecording));
+                // Return value
+                return paused;
+            }
+        }
+
+        /// <summary>
         /// Gets the sample position of the playback stream.
         /// </summary>
         public override long Position
@@ -469,110 +499,5 @@ namespace UltraStar.Core.Audio
                 }
             }
         }
-
-
-
-
-//        /// <summary>
-//        /// Represents an active playback device.
-//        /// </summary>
-//        private class ActivePlaybackDevice
-//        {
-//            private int handle;
-
-//            /// <summary>
-//            /// Gets the playback device info for the active playback.
-//            /// </summary>
-//            public USAudioPlaybackDeviceInfo DeviceInfo { get; private set; }
-//            /// <summary>
-//            /// Gets the device ID of the active playback device.
-//            /// </summary>
-//            public int DeviceID { get; private set; }
-
-//            /// <summary>
-//            /// Initializes a new instance of <see cref="ActivePlaybackDevice"/>.
-//            /// </summary>
-//            /// <param name="deviceID">The device ID of the device.</param>
-//            /// <param name="channels">The number of channels for recording.</param>
-//            /// <param name="samplerate">The samplerate for recording.</param>
-//            /// <param name="input">The input on which recording shall be preformed.</param>
-//            /// <exception cref="BassException">An unknown error from the BASS library occurred.</exception>
-//            /// <exception cref="AudioException">The recording device does not exist or is already in use.</exception>
-//            public ActivePlaybackDevice(int deviceID, int channels, int samplerate, int input)
-//            {
-//                BassDeviceInfo info = Bass.GetDeviceInfo(deviceID);
-//                if (!info.IsEnabled || info.IsInitialized)
-//                    throw new AudioException("Playback device " + info.Name + " disabled or already in use.");
-//                // Initialize variables
-//                DeviceID = deviceID;
-////                Channels = channels;
-//                handle = 0;
-////                users = new List<BassAudioRecording>();
-//                // Open device
-//                Initialize(samplerate, input);
-//            }
-
-//            /// <summary>
-//            /// Initializes or Re-Initializes (in case recording was stopped) the recording device.
-//            /// </summary>
-//            /// <param name="samplerate">The samplerate for recording.</param>
-//            /// <param name="input">The input on which recording shall be preformed.</param>
-//            /// <exception cref="BassException">An unknown error from the BASS library occurred.</exception>
-//            /// <exception cref="AudioException">The recording device does not exist or is already in use.</exception>
-//            public void Initialize(int samplerate, int input)
-//            {
-//                // Some basic checks
-//                if (handle != 0) return; // Nothing to do, the device is already running
-//                BassDeviceInfo info = Bass.GetDeviceInfo(DeviceID);
-//                if (!info.IsEnabled || info.IsInitialized)
-//                    throw new AudioException("Recording device " + info.Name + " disabled or already in use.");
-//                // Open device
-//                bool success = Bass.DeviceInit(device: DeviceID, flags: BassDeviceInitFlags.Latency);
-//                if (!success) throw new BassException(Bass.GetErrorCode());
-//                Bass.CurrentDevice = DeviceID;
-//                // Get extended info
-//                if (DeviceInfo != null && info.Name != DeviceInfo.Name)
-//                    throw new AudioException("Internal association of playback devices changed. Can't open the playback device " + DeviceInfo.Name + " again." +
-//                        "This could happen when playback devices had been attached or detached in the meantime.");
-//                DeviceInfo = GetDeviceInfo(DeviceID, input);
-//                // Prepare class variables
-////                Position = 0;
-//            }
-
-//            /// <summary>
-//            /// Gets information about an audio playback device.
-//            /// </summary>
-//            /// <remarks>
-//            /// Try to ensure that you are only calling this function when the device is initialized. Otherwise it will contain only limited information.
-//            /// </remarks>
-//            /// <param name="deviceID">The device ID.</param>
-//            /// <param name="input">The input from which the volume information will be used.</param>
-//            /// <returns>A <see cref="USAudioRecordingDeviceInfo"/> object.</returns>
-//            public static USAudioPlaybackDeviceInfo GetDeviceInfo(int deviceID, int input)
-//            {
-//                bool result = Bass.GetRecordingDeviceInfo(deviceID, out BassDeviceInfo deviceInfo);
-//                // If it fails, return NULL
-//                if (!result) return null;
-//                // If it is initialized, then we can add more information        
-//                if (deviceInfo.IsInitialized)
-//                {
-//                    // Set current device ID
-//                    int currentDeviceID = Bass.CurrentDevice;
-//                    if (deviceID != currentDeviceID) Bass.CurrentDevice = deviceID;
-//                    // Get extended info
-//                    BassInfo info = Bass.DeviceExtendedInfo;
-//                    // Get volume
-//                    float volume = Bass.RecordingDeviceVolume(input);
-//                    // Return device info
-//                    if (deviceID != currentDeviceID) Bass.CurrentRecordingDevice = currentDeviceID;
-//                    return new USAudioPlaybackDeviceInfo(deviceID, deviceInfo.Name, deviceInfo.Type.ToString(), deviceInfo.IsDefault, info.MinimumBufferLength,
-//                        info.Latency, info.SpeakerCount, info.Samplerate, volume);
-//                }
-//                else
-//                {
-//                    return new USAudioPlaybackDeviceInfo(deviceID, deviceInfo.Name, deviceInfo.Type.ToString(), deviceInfo.IsDefault, 0, 0, 0, 0, -1);
-//                }
-//            }
-//        }
     }
 }
