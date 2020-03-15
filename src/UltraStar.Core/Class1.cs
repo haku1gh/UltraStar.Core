@@ -11,6 +11,7 @@ using System;
 
 namespace UltraStar.Core
 {
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
     public class Class1
     {
 
@@ -91,4 +92,5 @@ namespace UltraStar.Core
         }
 
     }
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
 }

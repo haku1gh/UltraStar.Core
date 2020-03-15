@@ -4,6 +4,8 @@
 // a specific target and scoped to a namespace, type, member, etc.
 
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0018:Inline variable declaration", Justification = "Does not always make it more readable.")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0034:Simplify 'default' expression", Justification = "Does not always make it more readable. Though it could be considered in the future.")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0016:Use 'throw' expression (Null check can be simplified)", Justification = "Does not always make it more readable. Though it could be considered in the future.")]
 
 // Disable warnings from NGettext
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0044:Add readonly modifier", Justification = "<Pending>", Scope = "member", Target = "~F:UltraStar.Core.ThirdParty.NGettext.Loaders.BigEndianBinaryReader._Buffer")]
