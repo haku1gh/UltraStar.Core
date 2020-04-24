@@ -18,7 +18,7 @@ namespace UltraStar.Core.Unmanaged.Bass
     /// Flags for creating a recording stream.
     /// </summary>
     [Flags]
-    public enum BassRecordStartFlags : uint
+    internal enum BassRecordStartFlags : uint
     {
         /// <summary>
         /// 0 = default create stream

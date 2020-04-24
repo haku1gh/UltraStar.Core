@@ -30,7 +30,7 @@ namespace UltraStar.Core.Unmanaged.Bass
     /// </para>
     /// </remarks>
     [StructLayout(LayoutKind.Sequential)]
-    public struct BassRecordInfo
+    internal struct BassRecordInfo
     {
         private readonly int flags;
         private readonly int formats;

@@ -17,7 +17,7 @@ namespace UltraStar.Core.Unmanaged.Bass
     /// <summary>
     /// Flags used to create special output streams.
     /// </summary>
-    public enum BassStreamProcedureType
+    internal enum BassStreamProcedureType
     {
         /// <summary>
         /// Create a "push" stream.

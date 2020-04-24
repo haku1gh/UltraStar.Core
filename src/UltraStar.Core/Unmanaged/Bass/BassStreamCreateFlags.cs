@@ -18,7 +18,7 @@ namespace UltraStar.Core.Unmanaged.Bass
     /// Flags for creating an output stream.
     /// </summary>
     [Flags]
-    public enum BassStreamCreateFlags : uint
+    internal enum BassStreamCreateFlags : uint
     {
         /// <summary>
         /// 0 = default create stream: 16 Bit, stereo, no Float, hardware mixing, no Loop, no 3D, no speaker assignments...
