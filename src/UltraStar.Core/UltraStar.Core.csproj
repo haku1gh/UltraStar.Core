@@ -35,6 +35,7 @@
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\Release\UltraStar.Core.xml</DocumentationFile>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="NGettext, Version=0.6.1.0, Culture=neutral, PublicKeyToken=08d3d1c89dfd2985, processorArchitecture=MSIL">
@@ -231,7 +232,33 @@
     <Compile Include="Unmanaged\Bass\BassProcedureDelegates.cs" />
     <Compile Include="Unmanaged\Bass\BassStreamProcedureType.cs" />
     <Compile Include="Unmanaged\Bass\BassChannelState.cs" />
+    <Compile Include="Unmanaged\FFmpeg\AVChannelLayout.cs" />
+    <Compile Include="Unmanaged\FFmpeg\AVCodec.cs" />
+    <Compile Include="Unmanaged\FFmpeg\AVCodecContext.cs" />
+    <Compile Include="Unmanaged\FFmpeg\AVFormatContext.cs" />
+    <Compile Include="Unmanaged\FFmpeg\AVInputFormat.cs" />
+    <Compile Include="Unmanaged\FFmpeg\AVMediaType.cs" />
+    <Compile Include="Unmanaged\FFmpeg\AVPacket.cs" />
+    <Compile Include="Unmanaged\FFmpeg\AVPixelFormat.cs" />
+    <Compile Include="Unmanaged\FFmpeg\AVProbeData.cs" />
+    <Compile Include="Unmanaged\FFmpeg\AVSampleFormat.cs" />
+    <Compile Include="Unmanaged\FFmpeg\AVStream.cs" />
+    <Compile Include="Unmanaged\FFmpeg\FFmpegException.cs" />
+    <Compile Include="Unmanaged\FFmpeg\ConstCharPtrMarshaler.cs" />
     <Compile Include="Unmanaged\FFmpeg\FFmpeg.cs" />
+    <Compile Include="Unmanaged\FFmpeg\FFmpegCallbackDelegates.cs" />
+    <Compile Include="Unmanaged\FFmpeg\AVFrame.cs" />
+    <Compile Include="Unmanaged\FFmpeg\FFmpegFrameConverter.cs" />
+    <Compile Include="Unmanaged\FFmpeg\FFmpegImageCodec.cs" />
+    <Compile Include="Unmanaged\FFmpeg\FFmpegImagePacketDecoder.cs" />
+    <Compile Include="Unmanaged\FFmpeg\FFmpegImagePacketEncoder.cs" />
+    <Compile Include="Unmanaged\FFmpeg\FFmpegLogLevel.cs" />
+    <Compile Include="Unmanaged\FFmpeg\FFmpegImageStreamDecoder.cs" />
+    <Compile Include="Unmanaged\FFmpeg\FFmpegAudioStreamDecoder.cs" />
+    <Compile Include="Unmanaged\FFmpeg\FFmpegScaleMode.cs" />
+    <Compile Include="Unmanaged\FFmpeg\FFmpegVideoStreamDecoder.cs" />
+    <Compile Include="Unmanaged\FFmpeg\FFmpegStreamDecoder.cs" />
+    <Compile Include="Unmanaged\FFmpeg\MoreStructs.cs" />
     <Compile Include="Unmanaged\LibraryLoader.cs" />
     <Compile Include="UsAudioRecordingDelay.cs" />
     <Compile Include="USAudioPlaybackDeviceInfo.cs" />

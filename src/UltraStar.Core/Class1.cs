@@ -8,6 +8,10 @@
 #endregion License
 
 using System;
+using System.Runtime.CompilerServices;
+
+// Temporarily added here for testing access of project TestVideoConsole
+[assembly: InternalsVisibleTo("TestVideoConsole")]
 
 namespace UltraStar.Core
 {
