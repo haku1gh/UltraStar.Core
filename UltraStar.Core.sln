@@ -12,6 +12,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestAudio", "test\TestAudio
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestAudioConsole", "test\TestAudioConsole\TestAudioConsole.csproj", "{734A64FE-6D25-4F9A-B6DE-EEE655FF8CBE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestVideoConsole", "test\TestVideoConsole\TestVideoConsole.csproj", "{FA2F167F-4A6F-4257-A5A9-137635BD0C01}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,6 +32,10 @@ Global
 		{734A64FE-6D25-4F9A-B6DE-EEE655FF8CBE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{734A64FE-6D25-4F9A-B6DE-EEE655FF8CBE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{734A64FE-6D25-4F9A-B6DE-EEE655FF8CBE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FA2F167F-4A6F-4257-A5A9-137635BD0C01}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FA2F167F-4A6F-4257-A5A9-137635BD0C01}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FA2F167F-4A6F-4257-A5A9-137635BD0C01}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FA2F167F-4A6F-4257-A5A9-137635BD0C01}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
