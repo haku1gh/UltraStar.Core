@@ -47,7 +47,7 @@ namespace UltraStar.Core.Unmanaged.Bass
                     break;
             }
             // Load the library
-            libraryHandle = LibraryLoader.LoadNativeLibrary(UsConfig.LibraryRootPath, fullLibraryName);
+            libraryHandle = LibraryLoader.LoadNativeLibraryAsPerConfig(fullLibraryName);
             // Check if loading was successful
             if (libraryHandle == IntPtr.Zero)
                 throw new DllNotFoundException("Could not find library " + fullLibraryName + ".");

@@ -109,22 +109,45 @@ namespace UltraStar.Core.Unmanaged
         /// <summary>
         /// Loads a library using native method calls.
         /// </summary>
+        /// <remarks>
+        /// The final path will be constructed as: rootPath + fullLibraryName.
+        /// </remarks>
         /// <param name="rootPath">The root path to the libraries.</param>
         /// <param name="fullLibraryName">The full library name for the native platform.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// The final path will be constructed as: path + platform + architecture + fullLibraryName.
-        /// </remarks>
+        /// <returns>The native handle to the library upon success; otherwise IntPtr.Zero on failure.</returns>
         /// <exception cref="PlatformNotSupportedException">The current platform is not supported.</exception>
         public static IntPtr LoadNativeLibrary(string rootPath, string fullLibraryName)
         {
+            string fileName = Path.Combine(rootPath, fullLibraryName);
+            return LoadNativeLibrary(fileName);
+        }
+
+        /// <summary>
+        /// Loads a library using native method calls, but using the internal config for determining the real path to the libraries.
+        /// </summary>
+        /// <param name="fullLibraryName">The full library name for the native platform.</param>
+        /// <returns>The native handle to the library upon success; otherwise IntPtr.Zero on failure.</returns>
+        /// <exception cref="PlatformNotSupportedException">The current platform is not supported.</exception>
+        /// <exception cref="DllNotFoundException">The library could not be found.</exception>
+        public static IntPtr LoadNativeLibraryAsPerConfig(string fullLibraryName)
+        {
+            // Construct file name
             string platform = SystemInformation.Platform.ToString().ToLower();
             string architecture = SystemInformation.Architecture.ToString().ToLower();
             string fileName;
             if (UsConfig.LibrarySubFoldersExisting)
-                fileName = Path.Combine(rootPath, platform, architecture, fullLibraryName);
+                fileName = Path.Combine(UsConfig.LibraryRootPath, platform, architecture, fullLibraryName);
             else
-                fileName = Path.Combine(rootPath, fullLibraryName);
+                fileName = Path.Combine(UsConfig.LibraryRootPath, fullLibraryName);
+            // First try loading the library with the root path
+            IntPtr ptr = LoadNativeLibrary(fileName);
+            // Then try loading directly
+            if(UsConfig.LibrarySearchWithoutRootPath && ptr == IntPtr.Zero)
+                ptr = LoadNativeLibrary(fullLibraryName);
+            // Raise an exception if no library could be loaded
+            if (ptr == IntPtr.Zero)
+                throw new DllNotFoundException("Could not find library " + fullLibraryName + ".");
+            // Return successful loaded library
             return LoadNativeLibrary(fileName);
         }
 

@@ -49,11 +49,11 @@ namespace UltraStar.Core.Unmanaged.FFmpeg
         static FFmpeg()
         {
             // Load the library
-            libraryHandleAvUtil     = loadLibrary(UsConfig.LibraryRootPath, getFullLibraryName("avutil"    , supportedAvUtilVersion));
-            libraryHandleSwResample = loadLibrary(UsConfig.LibraryRootPath, getFullLibraryName("swresample", supportedSwResampleVersion));
-            libraryHandleSwScale    = loadLibrary(UsConfig.LibraryRootPath, getFullLibraryName("swscale"   , supportedSwScaleVersion));
-            libraryHandleAvCodec    = loadLibrary(UsConfig.LibraryRootPath, getFullLibraryName("avcodec"   , supportedAvCodecVersion));
-            libraryHandleAvFormat   = loadLibrary(UsConfig.LibraryRootPath, getFullLibraryName("avformat"  , supportedAvFormatVersion));
+            libraryHandleAvUtil     = LibraryLoader.LoadNativeLibraryAsPerConfig(getFullLibraryName("avutil"    , supportedAvUtilVersion));
+            libraryHandleSwResample = LibraryLoader.LoadNativeLibraryAsPerConfig(getFullLibraryName("swresample", supportedSwResampleVersion));
+            libraryHandleSwScale    = LibraryLoader.LoadNativeLibraryAsPerConfig(getFullLibraryName("swscale"   , supportedSwScaleVersion));
+            libraryHandleAvCodec    = LibraryLoader.LoadNativeLibraryAsPerConfig(getFullLibraryName("avcodec"   , supportedAvCodecVersion));
+            libraryHandleAvFormat   = LibraryLoader.LoadNativeLibraryAsPerConfig(getFullLibraryName("avformat"  , supportedAvFormatVersion));
         }
 
         /// <summary>
@@ -75,20 +75,6 @@ namespace UltraStar.Core.Unmanaged.FFmpeg
                     break;
             }
             return fullLibraryName;
-        }
-
-        private static IntPtr loadLibrary(string rootPath, string fullLibraryName)
-        {
-            // First try loading the library from the specified root path
-            IntPtr ptr = LibraryLoader.LoadNativeLibrary(rootPath, fullLibraryName);
-            // If not found, try with just the library name
-            if (libraryHandleAvCodec == IntPtr.Zero)
-                ptr = LibraryLoader.LoadNativeLibrary(fullLibraryName);
-            // Nothing found? Then throw execption
-            if (libraryHandleAvCodec == IntPtr.Zero)
-                throw new DllNotFoundException("Could not find library " + fullLibraryName + ".");
-            // Otherwise return library handle
-            return ptr;
         }
 
         /// <summary>

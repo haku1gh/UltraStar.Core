@@ -28,6 +28,7 @@ namespace UltraStar.Core
         {
             LibraryRootPath = "." + Path.DirectorySeparatorChar + "libs" + Path.DirectorySeparatorChar;
             LibrarySubFoldersExisting = true;
+            LibrarySearchWithoutRootPath = true;
         }
 
         /// <summary>
@@ -45,5 +46,15 @@ namespace UltraStar.Core
         /// If this value is <see langword="false"/>, then libaries will be searched in: "[rootPath]/".
         /// </remarks>
         public static bool LibrarySubFoldersExisting { get; set; }
+
+        /// <summary>
+        /// Gets or sets an indication whether the libraries could be found without a root path specified.
+        /// </summary>
+        /// <remarks>
+        /// If this value is <see langword="true"/>, then libaries will be searched by the operating systems search strategy;
+        /// otherwise this will be skipped.
+        /// This approach of loading libraies will only be tried when loading the library from the rootPath failed.
+        /// </remarks>
+        public static bool LibrarySearchWithoutRootPath { get; set; }
     }
 }
