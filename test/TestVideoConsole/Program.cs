@@ -40,7 +40,7 @@ namespace TestVideoConsole
 
         private static unsafe void SetupLogging()
         {
-            FFmpeg.AVLogLevel = FFmpegLogLevel.Warning; //FFmpegLogLevel.Error;
+            FFmpeg.AVLogLevel = FFmpegLogLevel.Error;
 
             // do not convert to local function
 #pragma warning disable IDE0039 // Use local function
