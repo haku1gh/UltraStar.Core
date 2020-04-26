@@ -69,6 +69,8 @@
     <Compile Include="Audio\BassAudioPlayback.cs" />
     <Compile Include="Audio\BassAudioRecording.cs" />
     <Compile Include="Class1.cs" />
+    <Compile Include="Clock\GameClock.cs" />
+    <Compile Include="Clock\GlobalClock.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ThirdParty\NGettext\Catalog.cs" />
@@ -289,6 +291,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="libs\mac\" />
+    <Folder Include="Pitch\" />
+    <Folder Include="Video\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="libs\windows\x64\avcodec-58.dll">
