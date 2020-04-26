@@ -235,6 +235,145 @@ namespace UltraStar.Core.Unmanaged.FFmpeg
             return del(ptr, level, fmt, vl, line, line_size, print_prefix);
         }
 
+        /// <summary>
+        /// Delegate for av_frame_alloc.
+        /// </summary>
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        private unsafe delegate AVFrame* ffmpeg_av_frame_alloc_delegate();
+        /// <summary>
+        /// Allocate an <see cref="AVFrame"/> and set its fields to default values.
+        /// </summary>
+        /// <remarks>
+        /// The resulting struct must be freed using <see cref="AVFrameFree"/>.
+        /// This only allocates the <see cref="AVFrame"/> itself, not the data buffers. Those must be allocated through other means.
+        /// </remarks>
+        /// <returns>An <see cref="AVFrame"/> filled with default values or NULL on failure.</returns>
+        public unsafe static AVFrame* AVFrameAlloc()
+        {
+            ffmpeg_av_frame_alloc_delegate del = LibraryLoader.GetFunctionDelegate<ffmpeg_av_frame_alloc_delegate>(libraryHandleAvUtil, "av_frame_alloc");
+            return del();
+        }
+
+        /// <summary>
+        /// Delegate for av_frame_free.
+        /// </summary>
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        private unsafe delegate void ffmpeg_av_frame_free_delegate(AVFrame** frame);
+        /// <summary>
+        /// Free the frame and any dynamically allocated objects in it, e.g. extended_data. If the frame is reference counted, it will be unreferenced first.
+        /// </summary>
+        /// <param name="frame">Frame to be freed. The pointer will be set to NULL.</param>
+        public unsafe static void AVFrameFree(AVFrame* frame)
+        {
+            ffmpeg_av_frame_free_delegate del = LibraryLoader.GetFunctionDelegate<ffmpeg_av_frame_free_delegate>(libraryHandleAvUtil, "av_frame_free");
+            del(&frame);
+        }
+
+        /// <summary>
+        /// Delegate for av_frame_unref.
+        /// </summary>
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        private unsafe delegate void ffmpeg_av_frame_unref_delegate(AVFrame* frame);
+        /// <summary>
+        /// Unreference all the buffers referenced by frame and reset the frame fields.
+        /// </summary>
+        /// <param name="frame">The frame to be unreferenced.</param>
+        public unsafe static void AVFrameUnref(AVFrame* frame)
+        {
+            ffmpeg_av_frame_unref_delegate del = LibraryLoader.GetFunctionDelegate<ffmpeg_av_frame_unref_delegate>(libraryHandleAvUtil, "av_frame_unref");
+            del(frame);
+        }
+
+        /// <summary>
+        /// Delegate for av_image_get_buffer_size.
+        /// </summary>
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        private unsafe delegate int ffmpeg_av_image_get_buffer_size_delegate(AVPixelFormat pix_fmt, int width, int height, int align);
+        /// <summary>
+        /// Return the size in bytes of the amount of data required to store an image with the given parameters.
+        /// </summary>
+        /// <param name="pix_fmt">The pixel format of the image.</param>
+        /// <param name="width">The width of the image in pixels.</param>
+        /// <param name="height">The height of the image in pixels.</param>
+        /// <param name="align">The assumed linesize alignment.</param>
+        /// <returns>The buffer size in bytes, a negative error code in case of failure.</returns>
+        public unsafe static int AVImageGetBufferSize(AVPixelFormat pix_fmt, int width, int height, int align)
+        {
+            ffmpeg_av_image_get_buffer_size_delegate del = LibraryLoader.GetFunctionDelegate<ffmpeg_av_image_get_buffer_size_delegate>(libraryHandleAvUtil, "av_image_get_buffer_size");
+            return del(pix_fmt, width, height, align);
+        }
+
+        /// <summary>
+        /// Delegate for av_image_fill_arrays.
+        /// </summary>
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        private unsafe delegate int ffmpeg_av_image_fill_arrays_delegate(ref IntPtrArray8 dst_data, ref IntArray8 dst_linesize, byte* src, AVPixelFormat pix_fmt, int width, int height, int align);
+        /// <summary>
+        /// Setup the data pointers and linesizes based on the specified image parameters and the provided array.
+        /// </summary>
+        /// <remarks>
+        /// The fields of the given image are filled in by using the src address which points to the image data buffer.
+        /// Depending on the specified pixel format, one or multiple image data pointers and line sizes will be set.
+        /// If a planar format is specified, several pointers will be set pointing to the different picture planes and
+        /// the line sizes of the different planes will be stored in the lines_sizes array.
+        /// Call with src == NULL to get the required size for the src buffer.
+        /// </remarks>
+        /// <param name="dst_data">The data pointers to be filled in.</param>
+        /// <param name="dst_linesize">The linesizes for the image in dst_data to be filled in.</param>
+        /// <param name="src">The buffer which will contain or contains the actual image data, can be NULL.</param>
+        /// <param name="pix_fmt">The pixel format of the image.</param>
+        /// <param name="width">The width of the image in pixels.</param>
+        /// <param name="height">The height of the image in pixels.</param>
+        /// <param name="align">The value used in src for linesize alignment.</param>
+        /// <returns>The buffer size in bytes, a negative error code in case of failure.</returns>
+        public unsafe static int AVImageFillArrays(ref IntPtrArray8 dst_data, ref IntArray8 dst_linesize, byte* src, AVPixelFormat pix_fmt, int width, int height, int align)
+        {
+            ffmpeg_av_image_fill_arrays_delegate del = LibraryLoader.GetFunctionDelegate<ffmpeg_av_image_fill_arrays_delegate>(libraryHandleAvUtil, "av_image_fill_arrays");
+            return del(ref dst_data, ref dst_linesize, src, pix_fmt, width, height, align);
+        }
+
+        /// <summary>
+        /// Delegate for av_image_alloc.
+        /// </summary>
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        private delegate int ffmpeg_av_image_alloc_delegate(ref IntPtrArray8 pointers, ref IntArray8 linesizes, int w, int h, AVPixelFormat pix_fmt, int align);
+        /// <summary>
+        /// Allocate an image with size w and h and pixel format pix_fmt, and fill pointers and linesizes accordingly.
+        /// </summary>
+        /// <remarks>
+        /// The allocated image buffer has to be freed by using <see cref="AVFreeP"/>.
+        /// </remarks>
+        /// <param name="pointers">The data pointers of the <see cref="AVFrame"/>.</param>
+        /// <param name="linesizes">The linesizes of the <see cref="AVFrame"/>.</param>
+        /// <param name="w">The width of the new image.</param>
+        /// <param name="h">The height of the new image.</param>
+        /// <param name="pix_fmt">The pixelformat of the new image.</param>
+        /// <param name="align">The alignment of the image.</param>
+        /// <returns>The size in bytes required for the image buffer, a negative error code in case of failure.</returns>
+        public static int AVImageAlloc(ref IntPtrArray8 pointers, ref IntArray8 linesizes, int w, int h, AVPixelFormat pix_fmt, int align)
+        {
+            ffmpeg_av_image_alloc_delegate del = LibraryLoader.GetFunctionDelegate<ffmpeg_av_image_alloc_delegate>(libraryHandleAvUtil, "av_image_alloc");
+            return del(ref pointers, ref linesizes, w, h, pix_fmt, align);
+        }
+
+        /// <summary>
+        /// Delegate for av_freep.
+        /// </summary>
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        private unsafe delegate void ffmpeg_av_freep_delegate(void* ptr);
+        /// <summary>
+        /// Frees a memory block which has been previously allocated and set the pointer pointing to it to NULL. 
+        /// </summary>
+        /// <param name="ptr">Pointer to the memory block which should be freed.</param>
+        public unsafe static void AVFreeP(IntPtr ptr)
+        {
+            ffmpeg_av_freep_delegate del = LibraryLoader.GetFunctionDelegate<ffmpeg_av_freep_delegate>(libraryHandleAvUtil, "av_freep");
+            del(&ptr);
+        }
+
+        #endregion avutil
+
+        #region avformat
 
         /// <summary>
         /// Delegate for avformat_alloc_context.
@@ -353,6 +492,60 @@ namespace UltraStar.Core.Unmanaged.FFmpeg
             return del(ic, type, wanted_stream_nb, related_stream, decoder_ret, 0);
         }
 
+        /// <summary>
+        /// Delegate for av_read_frame.
+        /// </summary>
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        private unsafe delegate int ffmpeg_av_read_frame_delegate(AVFormatContext* s, AVPacket* pkt);
+        /// <summary>
+        /// Return the next frame of a stream.
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// This function returns what is stored in the file, and does not validate that what is there are valid frames for the decoder.
+        /// It will split what is stored in the file into frames and return one for each call.
+        /// It will not omit invalid data between valid frames so as to give the decoder the maximum information possible for decoding.
+        /// </para>
+        /// <para>
+        /// On success, the returned packet is reference-counted (pkt->buf is set) and valid indefinitely.
+        /// The packet must be freed with av_packet_unref() when it is no longer needed. For video, the packet contains exactly one frame.
+        /// For audio, it contains an integer number of frames if each frame has a known fixed size (e.g. PCM or ADPCM data).
+        /// If the audio frames have a variable size (e.g. MPEG audio), then it contains one frame.
+        /// </para>
+        /// </remarks>
+        /// <param name="s">Handle to the media file.</param>
+        /// <param name="pkt">The new packet to be returned (can contain 1-n frames).</param>
+        /// <returns>0 if OK, &lt; 0 on error or end of file. On error, pkt will be blank (as if it came from <see cref="AVPacketAlloc"/>).</returns>
+        public unsafe static int AVReadFrame(AVFormatContext* s, AVPacket* pkt)
+        {
+            ffmpeg_av_read_frame_delegate del = LibraryLoader.GetFunctionDelegate<ffmpeg_av_read_frame_delegate>(libraryHandleAvFormat, "av_read_frame");
+            return del(s, pkt);
+        }
+
+        /// <summary>
+        /// Delegate for avformat_seek_file.
+        /// </summary>
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        private unsafe delegate int ffmpeg_avformat_seek_file_delegate(AVFormatContext* s, int stream_index, long min_ts, long ts, long max_ts, int flags);
+        /// <summary>
+        /// Seek to timestamp.
+        /// </summary>
+        /// <remarks>
+        /// Seeking will be done so that the point from which all active streams can be presented successfully will be closest, but lower, to <paramref name="timestamp"/>.
+        /// </remarks>
+        /// <param name="s">Handle to the media file.</param>
+        /// <param name="stream_index">Index of the stream which is used as time base reference.</param>
+        /// <param name="timestamp">The largest acceptable and target timestamp.</param>
+        /// <returns>&gt;=0 on success, error code otherwise</returns>
+        public unsafe static int AVFormatSeekFile(AVFormatContext* s, int stream_index, long timestamp)
+        {
+            ffmpeg_avformat_seek_file_delegate del = LibraryLoader.GetFunctionDelegate<ffmpeg_avformat_seek_file_delegate>(libraryHandleAvFormat, "avformat_seek_file");
+            return del(s, stream_index, long.MinValue, timestamp, timestamp, 0);
+        }
+
+        #endregion avformat
+
+        #region avcodec
 
         /// <summary>
         /// Delegate for avcodec_alloc_context3.
@@ -453,57 +646,6 @@ namespace UltraStar.Core.Unmanaged.FFmpeg
             return del(id);
         }
 
-
-        /// <summary>
-        /// Delegate for av_frame_alloc.
-        /// </summary>
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
-        private unsafe delegate AVFrame* ffmpeg_av_frame_alloc_delegate();
-        /// <summary>
-        /// Allocate an <see cref="AVFrame"/> and set its fields to default values.
-        /// </summary>
-        /// <remarks>
-        /// The resulting struct must be freed using <see cref="AVFrameFree"/>.
-        /// This only allocates the <see cref="AVFrame"/> itself, not the data buffers. Those must be allocated through other means.
-        /// </remarks>
-        /// <returns>An <see cref="AVFrame"/> filled with default values or NULL on failure.</returns>
-        public unsafe static AVFrame* AVFrameAlloc()
-        {
-            ffmpeg_av_frame_alloc_delegate del = LibraryLoader.GetFunctionDelegate<ffmpeg_av_frame_alloc_delegate>(libraryHandleAvUtil, "av_frame_alloc");
-            return del();
-        }
-
-        /// <summary>
-        /// Delegate for av_frame_free.
-        /// </summary>
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
-        private unsafe delegate void ffmpeg_av_frame_free_delegate(AVFrame** frame);
-        /// <summary>
-        /// Free the frame and any dynamically allocated objects in it, e.g. extended_data. If the frame is reference counted, it will be unreferenced first.
-        /// </summary>
-        /// <param name="frame">Frame to be freed. The pointer will be set to NULL.</param>
-        public unsafe static void AVFrameFree(AVFrame* frame)
-        {
-            ffmpeg_av_frame_free_delegate del = LibraryLoader.GetFunctionDelegate<ffmpeg_av_frame_free_delegate>(libraryHandleAvUtil, "av_frame_free");
-            del(&frame);
-        }
-
-        /// <summary>
-        /// Delegate for av_frame_unref.
-        /// </summary>
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
-        private unsafe delegate void ffmpeg_av_frame_unref_delegate(AVFrame* frame);
-        /// <summary>
-        /// Unreference all the buffers referenced by frame and reset the frame fields.
-        /// </summary>
-        /// <param name="frame">The frame to be unreferenced.</param>
-        public unsafe static void AVFrameUnref(AVFrame* frame)
-        {
-            ffmpeg_av_frame_unref_delegate del = LibraryLoader.GetFunctionDelegate<ffmpeg_av_frame_unref_delegate>(libraryHandleAvUtil, "av_frame_unref");
-            del(frame);
-        }
-
-
         /// <summary>
         /// Delegate for av_packet_alloc.
         /// </summary>
@@ -552,38 +694,6 @@ namespace UltraStar.Core.Unmanaged.FFmpeg
             ffmpeg_av_packet_unref_delegate del = LibraryLoader.GetFunctionDelegate<ffmpeg_av_packet_unref_delegate>(libraryHandleAvCodec, "av_packet_unref");
             del(pkt);
         }
-
-
-        /// <summary>
-        /// Delegate for av_read_frame.
-        /// </summary>
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
-        private unsafe delegate int ffmpeg_av_read_frame_delegate(AVFormatContext* s, AVPacket* pkt);
-        /// <summary>
-        /// Return the next frame of a stream.
-        /// </summary>
-        /// <remarks>
-        /// <para>
-        /// This function returns what is stored in the file, and does not validate that what is there are valid frames for the decoder.
-        /// It will split what is stored in the file into frames and return one for each call.
-        /// It will not omit invalid data between valid frames so as to give the decoder the maximum information possible for decoding.
-        /// </para>
-        /// <para>
-        /// On success, the returned packet is reference-counted (pkt->buf is set) and valid indefinitely.
-        /// The packet must be freed with av_packet_unref() when it is no longer needed. For video, the packet contains exactly one frame.
-        /// For audio, it contains an integer number of frames if each frame has a known fixed size (e.g. PCM or ADPCM data).
-        /// If the audio frames have a variable size (e.g. MPEG audio), then it contains one frame.
-        /// </para>
-        /// </remarks>
-        /// <param name="s">Handle to the media file.</param>
-        /// <param name="pkt">The new packet to be returned (can contain 1-n frames).</param>
-        /// <returns>0 if OK, &lt; 0 on error or end of file. On error, pkt will be blank (as if it came from <see cref="AVPacketAlloc"/>).</returns>
-        public unsafe static int AVReadFrame(AVFormatContext* s, AVPacket* pkt)
-        {
-            ffmpeg_av_read_frame_delegate del = LibraryLoader.GetFunctionDelegate<ffmpeg_av_read_frame_delegate>(libraryHandleAvFormat, "av_read_frame");
-            return del(s, pkt);
-        }
-
 
         /// <summary>
         /// Delegate for avcodec_receive_packet.
@@ -745,78 +855,39 @@ namespace UltraStar.Core.Unmanaged.FFmpeg
             return del(avctx, frame);
         }
 
-
         /// <summary>
-        /// Delegate for avformat_seek_file.
+        /// Delegate for avcodec_find_decoder.
         /// </summary>
         [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
-        private unsafe delegate int ffmpeg_avformat_seek_file_delegate(AVFormatContext* s, int stream_index, long min_ts, long ts, long max_ts, int flags);
+        private unsafe delegate AVCodec* ffmpeg_avcodec_find_decoder_delegate(int id);
         /// <summary>
-        /// Seek to timestamp.
+        /// Find a registered decoder with a matching codec ID.
         /// </summary>
-        /// <remarks>
-        /// Seeking will be done so that the point from which all active streams can be presented successfully will be closest, but lower, to <paramref name="timestamp"/>.
-        /// </remarks>
-        /// <param name="s">Handle to the media file.</param>
-        /// <param name="stream_index">Index of the stream which is used as time base reference.</param>
-        /// <param name="timestamp">The largest acceptable and target timestamp.</param>
-        /// <returns>&gt;=0 on success, error code otherwise</returns>
-        public unsafe static int AVFormatSeekFile(AVFormatContext* s, int stream_index, long timestamp)
+        /// <param name="id">AVCodecID of the requested decoder.</param>
+        /// <returns>A decoder if one was found, <see langword="null"/> otherwise.</returns>
+        public unsafe static AVCodec* AVCodecFindDecoder(int id)
         {
-            ffmpeg_avformat_seek_file_delegate del = LibraryLoader.GetFunctionDelegate<ffmpeg_avformat_seek_file_delegate>(libraryHandleAvFormat, "avformat_seek_file");
-            return del(s, stream_index, long.MinValue, timestamp, timestamp, 0);
-        }
-
-
-        /// <summary>
-        /// Delegate for av_image_get_buffer_size.
-        /// </summary>
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
-        private unsafe delegate int ffmpeg_av_image_get_buffer_size_delegate(AVPixelFormat pix_fmt, int width, int height, int align);
-        /// <summary>
-        /// Return the size in bytes of the amount of data required to store an image with the given parameters.
-        /// </summary>
-        /// <param name="pix_fmt">The pixel format of the image.</param>
-        /// <param name="width">The width of the image in pixels.</param>
-        /// <param name="height">The height of the image in pixels.</param>
-        /// <param name="align">The assumed linesize alignment.</param>
-        /// <returns>The buffer size in bytes, a negative error code in case of failure.</returns>
-        public unsafe static int AVImageGetBufferSize(AVPixelFormat pix_fmt, int width, int height, int align)
-        {
-            ffmpeg_av_image_get_buffer_size_delegate del = LibraryLoader.GetFunctionDelegate<ffmpeg_av_image_get_buffer_size_delegate>(libraryHandleAvUtil, "av_image_get_buffer_size");
-            return del(pix_fmt, width, height, align);
+            ffmpeg_avcodec_find_decoder_delegate del = LibraryLoader.GetFunctionDelegate<ffmpeg_avcodec_find_decoder_delegate>(libraryHandleAvCodec, "avcodec_find_decoder");
+            return del(id);
         }
 
         /// <summary>
-        /// Delegate for av_image_fill_arrays.
+        /// Delegate for avcodec_find_encoder.
         /// </summary>
         [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
-        private unsafe delegate int ffmpeg_av_image_fill_arrays_delegate(ref IntPtrArray8 dst_data, ref IntArray8 dst_linesize, byte* src, AVPixelFormat pix_fmt, int width, int height, int align);
+        private unsafe delegate AVCodec* ffmpeg_avcodec_find_encoder_delegate(int id);
         /// <summary>
-        /// Setup the data pointers and linesizes based on the specified image parameters and the provided array.
+        /// Find a registered encoder with a matching codec ID.
         /// </summary>
-        /// <remarks>
-        /// The fields of the given image are filled in by using the src address which points to the image data buffer.
-        /// Depending on the specified pixel format, one or multiple image data pointers and line sizes will be set.
-        /// If a planar format is specified, several pointers will be set pointing to the different picture planes and
-        /// the line sizes of the different planes will be stored in the lines_sizes array.
-        /// Call with src == NULL to get the required size for the src buffer.
-        /// </remarks>
-        /// <param name="dst_data">The data pointers to be filled in.</param>
-        /// <param name="dst_linesize">The linesizes for the image in dst_data to be filled in.</param>
-        /// <param name="src">The buffer which will contain or contains the actual image data, can be NULL.</param>
-        /// <param name="pix_fmt">The pixel format of the image.</param>
-        /// <param name="width">The width of the image in pixels.</param>
-        /// <param name="height">The height of the image in pixels.</param>
-        /// <param name="align">The value used in src for linesize alignment.</param>
-        /// <returns>The buffer size in bytes, a negative error code in case of failure.</returns>
-        public unsafe static int AVImageFillArrays(ref IntPtrArray8 dst_data, ref IntArray8 dst_linesize, byte* src, AVPixelFormat pix_fmt, int width, int height, int align)
+        /// <param name="id">AVCodecID of the requested encoder.</param>
+        /// <returns>An encoder if one was found, <see langword="null"/> otherwise.</returns>
+        public unsafe static AVCodec* AVCodecFindEncoder(int id)
         {
-            ffmpeg_av_image_fill_arrays_delegate del = LibraryLoader.GetFunctionDelegate<ffmpeg_av_image_fill_arrays_delegate>(libraryHandleAvUtil, "av_image_fill_arrays");
-            return del(ref dst_data, ref dst_linesize, src, pix_fmt, width, height, align);
+            ffmpeg_avcodec_find_encoder_delegate del = LibraryLoader.GetFunctionDelegate<ffmpeg_avcodec_find_encoder_delegate>(libraryHandleAvCodec, "avcodec_find_encoder");
+            return del(id);
         }
 
-        #endregion avutil
+        #endregion avcodec
 
         #region swscale
 
@@ -892,75 +963,5 @@ namespace UltraStar.Core.Unmanaged.FFmpeg
 
         #endregion swscale
 
-        /// <summary>
-        /// Delegate for av_image_alloc.
-        /// </summary>
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
-        private delegate int ffmpeg_av_image_alloc_delegate(ref IntPtrArray8 pointers, ref IntArray8 linesizes, int w, int h, AVPixelFormat pix_fmt, int align);
-        /// <summary>
-        /// Allocate an image with size w and h and pixel format pix_fmt, and fill pointers and linesizes accordingly.
-        /// </summary>
-        /// <remarks>
-        /// The allocated image buffer has to be freed by using <see cref="AVFreeP"/>.
-        /// </remarks>
-        /// <param name="pointers">The data pointers of the <see cref="AVFrame"/>.</param>
-        /// <param name="linesizes">The linesizes of the <see cref="AVFrame"/>.</param>
-        /// <param name="w">The width of the new image.</param>
-        /// <param name="h">The height of the new image.</param>
-        /// <param name="pix_fmt">The pixelformat of the new image.</param>
-        /// <param name="align">The alignment of the image.</param>
-        /// <returns>The size in bytes required for the image buffer, a negative error code in case of failure.</returns>
-        public static int AVImageAlloc(ref IntPtrArray8 pointers, ref IntArray8 linesizes, int w, int h, AVPixelFormat pix_fmt, int align)
-        {
-            ffmpeg_av_image_alloc_delegate del = LibraryLoader.GetFunctionDelegate<ffmpeg_av_image_alloc_delegate>(libraryHandleAvUtil, "av_image_alloc");
-            return del(ref pointers, ref linesizes, w, h, pix_fmt, align);
-        }
-
-        /// <summary>
-        /// Delegate for av_freep.
-        /// </summary>
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
-        private unsafe delegate void ffmpeg_av_freep_delegate(void* ptr);
-        /// <summary>
-        /// Frees a memory block which has been previously allocated and set the pointer pointing to it to NULL. 
-        /// </summary>
-        /// <param name="ptr">Pointer to the memory block which should be freed.</param>
-        public unsafe static void AVFreeP(IntPtr ptr)
-        {
-            ffmpeg_av_freep_delegate del = LibraryLoader.GetFunctionDelegate<ffmpeg_av_freep_delegate>(libraryHandleAvUtil, "av_freep");
-            del(&ptr);
-        }
-
-        /// <summary>
-        /// Delegate for avcodec_find_decoder.
-        /// </summary>
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
-        private unsafe delegate AVCodec* ffmpeg_avcodec_find_decoder_delegate(int id);
-        /// <summary>
-        /// Find a registered decoder with a matching codec ID.
-        /// </summary>
-        /// <param name="id">AVCodecID of the requested decoder.</param>
-        /// <returns>A decoder if one was found, <see langword="null"/> otherwise.</returns>
-        public unsafe static AVCodec* AVCodecFindDecoder(int id)
-        {
-            ffmpeg_avcodec_find_decoder_delegate del = LibraryLoader.GetFunctionDelegate<ffmpeg_avcodec_find_decoder_delegate>(libraryHandleAvCodec, "avcodec_find_decoder");
-            return del(id);
-        }
-
-        /// <summary>
-        /// Delegate for avcodec_find_encoder.
-        /// </summary>
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
-        private unsafe delegate AVCodec* ffmpeg_avcodec_find_encoder_delegate(int id);
-        /// <summary>
-        /// Find a registered encoder with a matching codec ID.
-        /// </summary>
-        /// <param name="id">AVCodecID of the requested encoder.</param>
-        /// <returns>An encoder if one was found, <see langword="null"/> otherwise.</returns>
-        public unsafe static AVCodec* AVCodecFindEncoder(int id)
-        {
-            ffmpeg_avcodec_find_encoder_delegate del = LibraryLoader.GetFunctionDelegate<ffmpeg_avcodec_find_encoder_delegate>(libraryHandleAvCodec, "avcodec_find_encoder");
-            return del(id);
-        }
     }
 }
