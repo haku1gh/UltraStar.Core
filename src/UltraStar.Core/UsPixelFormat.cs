@@ -17,6 +17,10 @@ namespace UltraStar.Core
     public enum UsPixelFormat
     {
         /// <summary>
+        /// No pixel format specified.
+        /// </summary>
+        None,
+        /// <summary>
         /// Packed RGBA 8:8:8:8, 32bpp, RGBARGBA...
         /// </summary>
         RGBA,

@@ -21,7 +21,7 @@ namespace UltraStar.Core.Audio
         /// Initializes a new instance of <see cref="AudioDecoder"/>.
         /// </summary>
         /// <param name="minimumBufferSize">The minimum size of the internal buffer.</param>
-        public AudioDecoder(int minimumBufferSize) : base(minimumBufferSize, 1)
+        public AudioDecoder(int minimumBufferSize) : base(minimumBufferSize, LibrarySettings.AudioDecoderNonOverwritingItems)
         { }
 
         /// <summary>

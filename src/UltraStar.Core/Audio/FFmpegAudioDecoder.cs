@@ -21,7 +21,6 @@ namespace UltraStar.Core.Audio
     {
         // Private variables
         private FFmpegAudioStreamDecoder decoder;
-        private static readonly int sampleSize = 512;
         private float[] tempSampleStorage;
         private int tempSampleStoragePos;
         private bool eofReached = false;
@@ -45,10 +44,10 @@ namespace UltraStar.Core.Audio
             if (Channels > 8) Channels = 8;
             SampleRate = decoder.SampleRate;
             // Resize buffer (each entry has 256*channels samples
-            int minBufferSize = (int)Math.Round((double)decoder.SampleRate * UsOptions.AudioFilePreBufferLength / 1000 / sampleSize);
+            int minBufferSize = (int)Math.Round((double)decoder.SampleRate * UsOptions.AudioFilePreBufferLength / 1000 / LibrarySettings.AudioDecoderSamplePacketSize);
             if (minBufferSize < 4) minBufferSize = 4; // This should not be possible, but lets play safe. If this statement is reached, then we would have just a 2k samplerate with 500ms PreBuffer.
             resizeBuffer(minBufferSize);
-            tempSampleStorage = new float[sampleSize * Channels];
+            tempSampleStorage = new float[LibrarySettings.AudioDecoderSamplePacketSize * Channels];
             tempSampleStoragePos = 0;
             // Start thread to decode samples
             startThread("FFmpeg Audio Decoder Thread");
@@ -94,7 +93,7 @@ namespace UltraStar.Core.Audio
             // Get current frame
             AVFrame* frame = decoder.CurrentFrame;
             // Create new entry
-            if (entry.Item == null) entry.Item = new float[sampleSize * Channels];
+            if (entry.Item == null) entry.Item = new float[LibrarySettings.AudioDecoderSamplePacketSize * Channels];
             entry.Timestamp = (totalSamplePos * 1000000 / SampleRate) + StartTimestamp;
             int entryPos = 0;
             // Store result

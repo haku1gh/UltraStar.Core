@@ -76,5 +76,23 @@ namespace UltraStar.Core.Utils
         /// Value equal or greater than 1 represent a fixed number of cores.
         /// </remarks>
         public static readonly int VideoDecodingThreadCount = -1;
+
+        /// <summary>
+        /// The number of video frames which can be retrieved from the decoder before any of these frames will be overwritten.
+        /// </summary>
+        public static readonly int VideoDecoderNonOverwritingItems = 4;
+
+        /// <summary>
+        /// The number of audio sample packets which can be retrieved from the decoder before any of these sample packets will be overwritten.
+        /// </summary>
+        public static readonly int AudioDecoderNonOverwritingItems = 1;
+
+        /// <summary>
+        /// The number of audio samples in a audio sample packet.
+        /// </summary>
+        /// <remarks>
+        /// Higher numbers improve slightly the efficiency when providing the data to an audio playback.
+        /// </remarks>
+        public static readonly int AudioDecoderSamplePacketSize = 512;
     }
 }

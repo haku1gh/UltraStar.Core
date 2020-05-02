@@ -21,7 +21,7 @@ namespace UltraStar.Core.Video
         /// Initializes a new instance of <see cref="VideoDecoder"/>.
         /// </summary>
         /// <param name="minimumBufferSize">The minimum size of the internal buffer.</param>
-        public VideoDecoder(int minimumBufferSize) : base(minimumBufferSize, 4)
+        public VideoDecoder(int minimumBufferSize) : base(minimumBufferSize, LibrarySettings.VideoDecoderNonOverwritingItems)
         { }
 
         /// <summary>
