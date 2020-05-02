@@ -35,7 +35,7 @@ namespace UltraStar.Core.Utils
         /// <summary>
         /// The maximum buffer size for audio playbacks.
         /// </summary>
-        public static readonly int AudioPlaybackBufferSize = 8192;
+        public static readonly int AudioPlaybackBufferSize = 24576;
 
         /// <summary>
         /// The full qualified class name of the audio recording implementation.
@@ -66,5 +66,15 @@ namespace UltraStar.Core.Utils
         /// The maximum buffer size for audio recordings.
         /// </summary>
         public static readonly int AudioRecordingBufferSize = 1024;
+
+        /// <summary>
+        /// The number of threads to be used for video decoding.
+        /// </summary>
+        /// <remarks>
+        /// This value can have the values -1 or greater then 0.
+        /// Where -1 represents an automatic detection based on available processor cores.
+        /// Value equal or greater than 1 represent a fixed number of cores.
+        /// </remarks>
+        public static readonly int VideoDecodingThreadCount = -1;
     }
 }
