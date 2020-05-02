@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
@@ -16,19 +17,35 @@ namespace TestGUI
     {
         private VideoDecoder videoDecoder;
         private AudioDecoder audioDecoder;
+        private ImageDecoder imageDecoder;
         private AudioPlayback audioPlayback;
         private GameClock clock;
+        private UsImage image;
 
         public MainWindow()
         {
             InitializeComponent();
+            sw.Start();
+            sw.Stop();
         }
 
         private void MainWindow_Load(object sender, EventArgs e)
         {
+            sw.Restart();
             string url = "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
+            string url2 = "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
+            string url3 = "<Enter picture file here>";
+
+            imageDecoder = new FFmpegImageDecoder(UsPixelFormat.BGR24, 400, 1);
+            UsImage image = imageDecoder.DecodeImage(url3);
+            int stride = image.Width * 3;
+            int rest = stride % 4;
+            if (rest != 0) stride += 4 - rest;
+            imageBox.Image = new Bitmap(image.Width, image.Height, stride, PixelFormat.Format24bppRgb, Marshal.UnsafeAddrOfPinnedArrayElement(image.Data, 0));
+
             videoDecoder = new FFmpegVideoDecoder(url, UsPixelFormat.BGR24);
-            audioDecoder = new FFmpegAudioDecoder(url);
+
+            audioDecoder = new FFmpegAudioDecoder(url2);
             while (!audioDecoder.BufferFull)
             {
                 System.Threading.Thread.Sleep(10);
@@ -41,11 +58,15 @@ namespace TestGUI
             audioPlayback.Start(delay);
             delay += clock.Elapsed + AudioPlayback.DefaultDevice.Latency;
             labAudioDelay.Text = ((double)delay / 1000000).ToString("F3").Replace(',', '.') + " ms";
+            sw.Stop();
+            labDelay.Text = ((double)sw.ElapsedTicks / 10000).ToString("F1").Replace(',', '.') + " ms";
         }
 
         private void MainWindow_FormClosed(object sender, FormClosedEventArgs e)
         {
             videoDecoder.Close();
+            audioPlayback.Close();
+            audioDecoder.Close();
         }
 
         TimestampItem<byte[]> nextEntry;

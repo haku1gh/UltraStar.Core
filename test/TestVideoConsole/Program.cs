@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
@@ -38,7 +37,7 @@ namespace TestVideoConsole
             vsd.Close();
 
             sw.Restart();
-            FFmpegVideoDecoder videoDecoder = new FFmpegVideoDecoder("http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4", UsPixelFormat.BGR24);
+            FFmpegVideoDecoder videoDecoder = new FFmpegVideoDecoder(url, UsPixelFormat.RGBA);
             Console.WriteLine("FFmpeg Video Decoder created. Property stats:");
             Console.WriteLine("=======================================================================================");
             Console.WriteLine("DecoderRunning : " + videoDecoder.DecoderRunning);

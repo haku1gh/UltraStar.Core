@@ -46,8 +46,10 @@
             this.label2 = new System.Windows.Forms.Label();
             this.labBuffer = new System.Windows.Forms.Label();
             this.labJitter = new System.Windows.Forms.Label();
+            this.imageBox = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.frameBox)).BeginInit();
             this.panel2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.imageBox)).BeginInit();
             this.SuspendLayout();
             // 
             // frameBox
@@ -244,11 +246,23 @@
             this.labJitter.TabIndex = 2;
             this.labJitter.Text = "0.0 ms";
             // 
+            // imageBox
+            // 
+            this.imageBox.BackColor = System.Drawing.Color.Black;
+            this.imageBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.imageBox.Location = new System.Drawing.Point(246, 12);
+            this.imageBox.Name = "imageBox";
+            this.imageBox.Size = new System.Drawing.Size(135, 135);
+            this.imageBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.imageBox.TabIndex = 5;
+            this.imageBox.TabStop = false;
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.imageBox);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.frameBox);
             this.Name = "MainWindow";
@@ -258,6 +272,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.frameBox)).EndInit();
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.imageBox)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -281,6 +296,7 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label labAudioBuffer;
         private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.PictureBox imageBox;
     }
 }
 
