@@ -63,11 +63,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Audio\AudioCallbacks.cs" />
+    <Compile Include="Audio\AudioDecoder.cs" />
     <Compile Include="Audio\AudioException.cs" />
     <Compile Include="Audio\AudioPlayback.cs" />
     <Compile Include="Audio\AudioRecording.cs" />
     <Compile Include="Audio\BassAudioPlayback.cs" />
     <Compile Include="Audio\BassAudioRecording.cs" />
+    <Compile Include="Audio\FFmpegAudioDecoder.cs" />
     <Compile Include="Class1.cs" />
     <Compile Include="Clock\GameClock.cs" />
     <Compile Include="Clock\GlobalClock.cs" />
@@ -267,11 +269,19 @@
     <Compile Include="UsConfig.cs" />
     <Compile Include="USAudioRecordingDeviceInfo.cs" />
     <Compile Include="UsOptions.cs" />
+    <Compile Include="UsPixelFormat.cs" />
     <Compile Include="Utils\Architecture.cs" />
+    <Compile Include="Utils\Decoder.cs" />
+    <Compile Include="Utils\FastRingBuffer.cs" />
+    <Compile Include="Utils\IRingBuffer.cs" />
     <Compile Include="Utils\LibrarySettings.cs" />
     <Compile Include="Utils\Platform.cs" />
+    <Compile Include="Utils\RingBuffer.cs" />
     <Compile Include="Utils\SystemInformation.cs" />
+    <Compile Include="Utils\TimestampItem.cs" />
     <Compile Include="Utils\VolumeConversion.cs" />
+    <Compile Include="Video\FFmpegVideoDecoder.cs" />
+    <Compile Include="Video\VideoDecoder.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="libs\linux\arm64\libbass.so">
@@ -291,8 +301,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="libs\mac\" />
-    <Folder Include="Pitch\" />
-    <Folder Include="Video\" />
+    <Folder Include="Voice\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="libs\windows\x64\avcodec-58.dll">
