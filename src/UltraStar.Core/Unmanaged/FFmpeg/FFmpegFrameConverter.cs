@@ -137,6 +137,8 @@ namespace UltraStar.Core.Unmanaged.FFmpeg
         private void initialize(int srcWidth, int srcHeight, AVPixelFormat srcPixelFormat, int scaleWidth, int scaleHeight, FFmpegScaleMode scaleMode,
             int dstCropLeft, int dstCropRight, int dstCropTop, int dstCropBottom, AVPixelFormat dstPixelFormat, int alignment)
         {
+            Width = scaleWidth - dstCropLeft - dstCropRight;
+            Height = scaleHeight - dstCropTop - dstCropBottom;
             cropRequired = isCropping(dstCropLeft, dstCropRight, dstCropTop, dstCropBottom);
             // Prepare scaling 1
             if(cropRequired && !((srcWidth == scaleWidth) && (srcHeight == scaleHeight) && (srcPixelFormat == AVPixelFormat.AV_PIX_FMT_RGBA)))
@@ -149,13 +151,11 @@ namespace UltraStar.Core.Unmanaged.FFmpeg
             // Prepare cropping
             if (cropRequired)
             {
-                int finalWidth = scaleWidth - dstCropLeft - dstCropRight;
-                int finalHeight = scaleHeight - dstCropTop - dstCropBottom;
                 cropLeft = dstCropLeft;
                 cropRight = dstCropRight;
                 cropTop = dstCropTop;
                 cropBottom = dstCropBottom;
-                allocateImage(ref _pFrame2, finalWidth, finalHeight, AVPixelFormat.AV_PIX_FMT_RGBA, 4);
+                allocateImage(ref _pFrame2, Width, Height, AVPixelFormat.AV_PIX_FMT_RGBA, 4);
             }
             // Prepare scaling 2
             if ((cropRequired && dstPixelFormat != AVPixelFormat.AV_PIX_FMT_RGBA))
@@ -264,6 +264,16 @@ namespace UltraStar.Core.Unmanaged.FFmpeg
         }
 
         /// <summary>
+        /// Gets the width of the final adjusted frame.
+        /// </summary>
+        public int Width { get; private set; }
+
+        /// <summary>
+        /// Gets the height of the final adjusted frame.
+        /// </summary>
+        public int Height { get; private set; }
+
+        /// <summary>
         /// Converts an <see cref="AVFrame"/> using the previously set parameters.
         /// </summary>
         /// <param name="_pSrcFrame">The source frame.</param>
@@ -331,7 +341,8 @@ namespace UltraStar.Core.Unmanaged.FFmpeg
                 if (result < 0) return null;
                 _pFrame = _pFrame3;
             }
-
+            // Copy timestamp from original frame
+            if (_pFrame != _pSrcFrame) _pFrame->BestEffortTimestamp = _pSrcFrame->BestEffortTimestamp;
             return _pFrame;
         }
     }

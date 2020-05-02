@@ -212,6 +212,40 @@ namespace UltraStar.Core.Unmanaged.FFmpeg
             array[7] = (byte*)Element7;
             return array;
         }
+
+        /// <summary>
+        /// Returns a float pointer array with all the elements.
+        /// </summary>
+        public unsafe float*[] ToFloatPtrArray()
+        {
+            float*[] array = new float*[Size];
+            array[0] = (float*)Element0;
+            array[1] = (float*)Element1;
+            array[2] = (float*)Element2;
+            array[3] = (float*)Element3;
+            array[4] = (float*)Element4;
+            array[5] = (float*)Element5;
+            array[6] = (float*)Element6;
+            array[7] = (float*)Element7;
+            return array;
+        }
+
+        /// <summary>
+        /// Returns a short pointer array with all the elements.
+        /// </summary>
+        public unsafe short*[] ToShortPtrArray()
+        {
+            short*[] array = new short*[Size];
+            array[0] = (short*)Element0;
+            array[1] = (short*)Element1;
+            array[2] = (short*)Element2;
+            array[3] = (short*)Element3;
+            array[4] = (short*)Element4;
+            array[5] = (short*)Element5;
+            array[6] = (short*)Element6;
+            array[7] = (short*)Element7;
+            return array;
+        }
     }
 
     /// <summary>

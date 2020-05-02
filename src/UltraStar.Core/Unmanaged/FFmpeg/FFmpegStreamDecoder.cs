@@ -54,6 +54,7 @@ namespace UltraStar.Core.Unmanaged.FFmpeg
         public FFmpegStreamDecoder(string url, AVMediaType mediaType, int threadCount = 1)
         {
             int result;
+            URL = url;
             // Get handle of media file
             _pFormatContext = FFmpeg.AVFormatContextAlloc();
             result = FFmpeg.AVFormatOpenInput(_pFormatContext, url);
@@ -148,6 +149,11 @@ namespace UltraStar.Core.Unmanaged.FFmpeg
         public string CodecName { get; }
 
         /// <summary>
+        /// Get the url used for decoding.
+        /// </summary>
+        public string URL { get; }
+
+        /// <summary>
         /// Gets the current available frame.
         /// </summary>
         public AVFrame* CurrentFrame
@@ -191,6 +197,9 @@ namespace UltraStar.Core.Unmanaged.FFmpeg
                 result = FFmpeg.AVCodecReceiveFrame(_pCodecContext, _pFrame);
                 if (result != FFmpeg.AV_ERROR_EAGAIN)
                 {
+                    // Check for End of file
+                    if (result == FFmpeg.AV_ERROR_EOF)
+                        return false;
                     // Check for errors
                     if (result < 0)
                     {
@@ -204,8 +213,6 @@ namespace UltraStar.Core.Unmanaged.FFmpeg
                         return false;
                     }
                     firstFrame = false;
-                    if (result == FFmpeg.AV_ERROR_EOF)
-                        return false;
                     return true;
                 }
                 // EAGAIN had been responded, which means that more packets are required to do decoding. So lets get the next packet.
@@ -215,12 +222,6 @@ namespace UltraStar.Core.Unmanaged.FFmpeg
                     FFmpeg.AVPacketUnref(_pPacket);
                     // Get the next packet from the stream
                     result = FFmpeg.AVReadFrame(_pFormatContext, _pPacket);
-                    // Check for errors
-                    if (result < 0)
-                    {
-                        if (isError(result, ref errorCode)) return false;
-                        else continue;
-                    }
                     // Check for End of file
                     if (result == FFmpeg.AV_ERROR_EOF)
                     {
@@ -231,6 +232,12 @@ namespace UltraStar.Core.Unmanaged.FFmpeg
                             return false;
                         // No error
                         break;
+                    }
+                    // Check for errors
+                    if (result < 0)
+                    {
+                        if (isError(result, ref errorCode)) return false;
+                        else continue;
                     }
                     // Packet available
                     if (_pPacket->StreamIndex == streamIndex)

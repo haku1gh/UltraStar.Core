@@ -161,7 +161,6 @@ namespace UltraStar.Core.Unmanaged.FFmpeg
         /// <summary>
         /// Delegate for av_strerror.
         /// </summary>
-        [return: MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(ConstCharPtrMarshaler))]
         [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         private unsafe delegate int ffmpeg_av_strerror_delegate(int errnum, byte* errbuf, ulong errbuf_size);
         /// <summary>
@@ -355,6 +354,27 @@ namespace UltraStar.Core.Unmanaged.FFmpeg
         {
             ffmpeg_av_freep_delegate del = LibraryLoader.GetFunctionDelegate<ffmpeg_av_freep_delegate>(libraryHandleAvUtil, "av_freep");
             del(&ptr);
+        }
+
+        /// <summary>
+        /// Delegate for av_hwdevice_ctx_create.
+        /// </summary>
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        private unsafe delegate int ffmpeg_av_hwdevice_ctx_create_delegate(IntPtr* device_ctx, int type, [MarshalAs(UnmanagedType.LPUTF8Str)] string device, AVDictionary* opts, int flags);
+        /// <summary>
+        /// Open a device of the specified type and create an AVHWDeviceContext for it.
+        /// </summary>
+        /// <param name="device_ctx">
+        /// On success, a reference to the newly-created device context will be written here.
+        /// The reference is owned by the caller and must be released with av_buffer_unref() when no longer needed.
+        /// On failure, NULL will be written to this pointer.
+        /// </param>
+        /// <param name="type">The type of the device to create. </param>
+        /// <returns>0 on success, a negative AVERROR code on failure.</returns>
+        public unsafe static int AVCreateHWDeviceContext(IntPtr* device_ctx, int type)
+        {
+            ffmpeg_av_hwdevice_ctx_create_delegate del = LibraryLoader.GetFunctionDelegate<ffmpeg_av_hwdevice_ctx_create_delegate>(libraryHandleAvUtil, "av_hwdevice_ctx_create");
+            return del(device_ctx, type, null, null, 0);
         }
 
         #endregion avutil

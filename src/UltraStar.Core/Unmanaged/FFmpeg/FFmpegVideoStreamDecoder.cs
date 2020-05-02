@@ -22,7 +22,8 @@ namespace UltraStar.Core.Unmanaged.FFmpeg
         /// </summary>
         /// <param name="url">The URL of the media file.</param>
         /// <param name="threadCount">The number of threads to use for decoding.</param>
-        public FFmpegVideoStreamDecoder(string url, int threadCount = -1) : base(url, AVMediaType.AVMEDIA_TYPE_VIDEO, threadCount == -1 ? Environment.ProcessorCount / 2 : threadCount)
+        public FFmpegVideoStreamDecoder(string url, int threadCount = -1) :
+            base(url, AVMediaType.AVMEDIA_TYPE_VIDEO, threadCount == -1 ? Math.Min(Environment.ProcessorCount / 2, 4) : threadCount)
         {
             // Set properties
             CodecLongName = "unknown";
