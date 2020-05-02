@@ -9,7 +9,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using UltraStar.Core.ThirdParty.Serilog;
 using UltraStar.Core.Unmanaged.Bass;
 using UltraStar.Core.Utils;
@@ -28,8 +27,11 @@ namespace UltraStar.Core.Audio
         private readonly int deviceID;
         private int handle;
         private float[] buffer;
+        private BassStreamProcedure internalCallback;
         private bool running = false;
         private bool paused = false;
+        private bool preFillBufferWithSilence;
+        private long remainingDelay = 0; // Unit is 1x sample per channel
 
         /// <summary>
         /// Initializes a new instance of <see cref="BassAudioPlayback"/>.
@@ -39,7 +41,8 @@ namespace UltraStar.Core.Audio
         /// <param name="audioPlaybackCallback">A callback function for the audio playback.</param>
         /// <param name="noSound"><see langword="true"/> if a virtual playback device shall be used;
         /// otherwise <see langword="false"/> and the default playback device will be used.</param>
-        public BassAudioPlayback(int samplerate, int channels, AudioPlaybackCallback audioPlaybackCallback, bool noSound) :
+        /// <param name="preFillBufferWithSilence">><see langword="true"/> if all buffers should be prefilled with 0 before start; otherwise <see langword="false"/>.</param>
+        public BassAudioPlayback(int samplerate, int channels, AudioPlaybackCallback audioPlaybackCallback, bool noSound, bool preFillBufferWithSilence) :
             base(samplerate, channels, audioPlaybackCallback, noSound)
         {
             deviceID = noSound ? 0 : 1;
@@ -56,7 +59,8 @@ namespace UltraStar.Core.Audio
             if (audioPlaybackCallback != null)
             {
                 buffer = new float[LibrarySettings.AudioPlaybackBufferSize];
-                handle = Bass.StreamCreate(samplerate, channels, BassStreamCreateFlags.Float, playbackCallback);
+                internalCallback = playbackCallback;
+                handle = Bass.StreamCreate(samplerate, channels, BassStreamCreateFlags.Float, internalCallback);
             }
             else
             {
@@ -66,6 +70,7 @@ namespace UltraStar.Core.Audio
             int syncHandle = Bass.ChannelSetSyncDeviceFail(handle, deviceFailCallback);
             if (syncHandle == 0) throw new BassException(Bass.GetErrorCode());
             // Pre-buffer
+            this.preFillBufferWithSilence = preFillBufferWithSilence;
             if (audioPlaybackCallback != null)
                 ReInitialize();
         }
@@ -76,12 +81,35 @@ namespace UltraStar.Core.Audio
         private unsafe int playbackCallback(int handle, IntPtr bufferPtr, int length, IntPtr user)
         {
             if (buffer == null) return 0;
-            int maxLength = length / 4;
+
+            int maxLength = length >> 2;
             if (maxLength > buffer.Length) maxLength = buffer.Length;
-            int returnedLength = audioPlaybackCallback(this, buffer, maxLength);
             float* _pBuffer = (float*)bufferPtr;
-            for (int i = 0; i < returnedLength; i++)
-                _pBuffer[i] = buffer[i];
+            int returnedLength = 0;
+
+            if (preFillBufferWithSilence)
+            {
+                maxLength = length >> 2;
+                for (int i = 0; i < maxLength; i++) _pBuffer[i] = 0;
+                remainingDelay = -maxLength;
+                returnedLength = length;
+                preFillBufferWithSilence = false;
+            }
+            else
+            {
+                if (remainingDelay > 0)
+                {
+                    returnedLength = (int)Math.Min(remainingDelay, maxLength);
+                    remainingDelay -= returnedLength;
+                    returnedLength = returnedLength << 2;
+                }
+                else
+                    returnedLength = audioPlaybackCallback(this, buffer, maxLength) * 4;
+                fixed (float* _pInternalBuffer = buffer)
+                {
+                    Buffer.MemoryCopy(_pInternalBuffer, _pBuffer, length, returnedLength);
+                }
+            }
             return returnedLength;
         }
 
@@ -277,8 +305,9 @@ namespace UltraStar.Core.Audio
                         }
                     }
                 }
-                // Free buffer
+                // Free other resources
                 buffer = null;
+                internalCallback = null;
                 // Raise event
                 if (disposing) onClosed();
             }
@@ -313,11 +342,18 @@ namespace UltraStar.Core.Audio
         /// <summary>
         /// Starts the playback.
         /// </summary>
-        public override void Start()
+        /// <param name="delay">The delay in micro seconds [us] before playback shall start.</param>
+        public override void Start(long delay = 0)
         {
             // Check if disposed
             if (isDisposed)
                 throw new ObjectDisposedException(nameof(BassAudioRecording));
+            // Setup delay
+            remainingDelay = (delay * Samplerate * Channels / 1000000) + remainingDelay;
+            if (remainingDelay > 0)
+                Array.Clear(buffer, 0, buffer.Length);
+            else
+                remainingDelay = 0;
             // Play
             lock (lockBassAccess)
             {
@@ -332,11 +368,18 @@ namespace UltraStar.Core.Audio
         /// <summary>
         /// Restarts the playback.
         /// </summary>
-        public override void Restart()
+        /// <param name="delay">The delay in micro seconds [us] before playback shall start.</param>
+        public override void Restart(long delay = 0)
         {
             // Check if disposed
             if (isDisposed)
                 throw new ObjectDisposedException(nameof(BassAudioRecording));
+            // Setup delay
+            remainingDelay = (delay * Samplerate * Channels / 1000000) + remainingDelay;
+            if (remainingDelay > 0)
+                Array.Clear(buffer, 0, buffer.Length);
+            else
+                remainingDelay = 0;
             // Play
             lock (lockBassAccess)
             {

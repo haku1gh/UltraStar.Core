@@ -130,14 +130,15 @@ namespace UltraStar.Core.Audio
         /// <param name="audioPlaybackCallback">A callback function for the audio playback, or NULL if audio data is manually provided.</param>
         /// <param name="noSound"><see langword="true"/> if a virtual playback device shall be used;
         /// otherwise <see langword="false"/> and the default playback device will be used.</param>
-        public static AudioPlayback Open(int samplerate = 48000, int channels = 2, AudioPlaybackCallback audioPlaybackCallback = null, bool noSound = false)
+        /// <param name="preFillBufferWithSilence">><see langword="true"/> if all buffers should be prefilled with 0 before start; otherwise <see langword="false"/>.</param>
+        public static AudioPlayback Open(int samplerate = 48000, int channels = 2, AudioPlaybackCallback audioPlaybackCallback = null, bool noSound = false, bool preFillBufferWithSilence = false)
         {
             // Get the type where the class AudioPlayback is implemented
             Type audioPlaybackClass = Type.GetType(LibrarySettings.AudioPlaybackClassName, true);
             // Get the constructor
-            ConstructorInfo cInfo = audioPlaybackClass.GetConstructor(new Type[] { typeof(int), typeof(int), typeof(AudioPlaybackCallback), typeof(bool) });
+            ConstructorInfo cInfo = audioPlaybackClass.GetConstructor(new Type[] { typeof(int), typeof(int), typeof(AudioPlaybackCallback), typeof(bool), typeof(bool) });
             // Return the newly created object
-            return (AudioPlayback)cInfo.Invoke(new object[] { samplerate, channels, audioPlaybackCallback, noSound });
+            return (AudioPlayback)cInfo.Invoke(new object[] { samplerate, channels, audioPlaybackCallback, noSound, preFillBufferWithSilence });
         }
 
         /// <summary>
@@ -196,12 +197,14 @@ namespace UltraStar.Core.Audio
         /// <summary>
         /// Starts the playback.
         /// </summary>
-        public abstract void Start();
+        /// <param name="delay">The delay in micro seconds [us] before playback shall start.</param>
+        public abstract void Start(long delay = 0);
 
         /// <summary>
         /// Restarts the playback.
         /// </summary>
-        public abstract void Restart();
+        /// <param name="delay">The delay in micro seconds [us] before playback shall start.</param>
+        public abstract void Restart(long delay = 0);
 
         /// <summary>
         /// Pauses the playback.
