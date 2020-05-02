@@ -23,12 +23,12 @@ namespace UltraStar.Core
         /// <param name="name">The name of audio playback device.</param>
         /// <param name="type">The type of the audio playback device or "Unknown" if this is not available on the platform.</param>
         /// <param name="isDefault">An indicator whether the device is the default device.</param>
-        /// <param name="minimumBufferLength">The minimum buffer length in milliseconds [ms] of the device (or 0 if unknown).</param>
-        /// <param name="latency">The average delay in milliseconds [ms] of the device (or 0 if unknown).</param>
+        /// <param name="minimumBufferLength">The minimum buffer length in micro seconds [us] of the device (or 0 if unknown).</param>
+        /// <param name="latency">The average delay in micro seconds [us] of the device (or 0 if unknown).</param>
         /// <param name="channels">The number of channels supported by the device (or 0 if unknown).</param>
         /// <param name="samplerate">The sample rate of the device (or 0 if unknown).</param>
         /// <param name="volume">The volume of the device (or -1 if unknown). 0=Silent, 1=Max.</param>
-        public USAudioPlaybackDeviceInfo(int deviceID, string name, string type, bool isDefault, int minimumBufferLength, int latency, int channels, int samplerate, float volume)
+        public USAudioPlaybackDeviceInfo(int deviceID, string name, string type, bool isDefault, long minimumBufferLength, long latency, int channels, int samplerate, float volume)
         {
             Name = name;
             Type = type;
@@ -61,17 +61,17 @@ namespace UltraStar.Core
         public bool IsDefault { get; }
 
         /// <summary>
-        /// Gets the minimum buffer length in milliseconds [ms] of the device (or 0 if unknown).
+        /// Gets the minimum buffer length in micro seconds [us] of the device (or 0 if unknown).
         /// </summary>
         /// <remarks>
         /// This also impacts the latency for playback of audio recordings.
         /// </remarks>
-        public int MinimumBufferLength { get; }
+        public long MinimumBufferLength { get; }
 
         /// <summary>
-        /// Gets the average delay in milliseconds [ms] of the device (or 0 if unknown).
+        /// Gets the average delay in micro seconds [us] of the device (or 0 if unknown).
         /// </summary>
-        public int Latency { get; }
+        public long Latency { get; }
 
         /// <summary>
         /// Gets the number of channels supported by the device (or 0 if unknown).

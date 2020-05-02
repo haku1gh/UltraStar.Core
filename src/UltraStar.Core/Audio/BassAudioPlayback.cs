@@ -184,8 +184,8 @@ namespace UltraStar.Core.Audio
                         }
                         catch { }
                     }
-                    returnInfo = new USAudioPlaybackDeviceInfo(deviceID, deviceInfo.Name, deviceInfo.Type.ToString(), deviceInfo.IsDefault, info.MinimumBufferLength,
-                    info.Latency, info.SpeakerCount, info.Samplerate, volume);
+                    returnInfo = new USAudioPlaybackDeviceInfo(deviceID, deviceInfo.Name, deviceInfo.Type.ToString(), deviceInfo.IsDefault, info.MinimumBufferLength * 1000,
+                    info.Latency * 1000, info.SpeakerCount, info.Samplerate, volume);
                 }
                 else
                     returnInfo = new USAudioPlaybackDeviceInfo(deviceID, deviceInfo.Name, deviceInfo.Type.ToString(), deviceInfo.IsDefault, 0, 0, 0, 0, -1);
