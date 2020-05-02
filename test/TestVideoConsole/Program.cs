@@ -5,6 +5,8 @@ using System.IO;
 using System.Runtime.InteropServices;
 using UltraStar.Core;
 using UltraStar.Core.Unmanaged.FFmpeg;
+using UltraStar.Core.Video;
+using UltraStar.Core.Utils;
 
 namespace TestVideoConsole
 {
@@ -18,7 +20,7 @@ namespace TestVideoConsole
 
             string url = "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
             FFmpegVideoStreamDecoder vsd = new FFmpegVideoStreamDecoder(url);
-            vsd.Seek(95.0d);
+            vsd.Seek(6.5d);
             bool result = vsd.DecodeNextFrame(out int errorCode);
             result = vsd.DecodeNextFrame(out errorCode);
             result = vsd.DecodeNextFrame(out errorCode);
@@ -34,6 +36,46 @@ namespace TestVideoConsole
             }
 
             vsd.Close();
+
+            sw.Restart();
+            FFmpegVideoDecoder videoDecoder = new FFmpegVideoDecoder("http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4", UsPixelFormat.BGR24);
+            Console.WriteLine("FFmpeg Video Decoder created. Property stats:");
+            Console.WriteLine("=======================================================================================");
+            Console.WriteLine("DecoderRunning : " + videoDecoder.DecoderRunning);
+            Console.WriteLine("Items in Buffer: " + videoDecoder.ItemsCount);
+            Console.WriteLine("Codec          : " + videoDecoder.CodecName);
+            Console.WriteLine("CodecLongName  : " + videoDecoder.CodecLongName);
+            Console.WriteLine("Width          : " + videoDecoder.Width);
+            Console.WriteLine("Height         : " + videoDecoder.Height);
+            Console.WriteLine("Duration       : " + videoDecoder.Duration);
+            Console.WriteLine("FrameRate      : " + videoDecoder.FrameRate);
+            Console.WriteLine("PixelFormat    : " + videoDecoder.PixelFormat);
+            Console.WriteLine("StartTimestamp : " + videoDecoder.StartTimestamp);
+
+            Console.WriteLine("");
+            Console.WriteLine("Decoding all frames:");
+            Console.WriteLine("=======================================================================================");
+            int counter = 0;
+            while (videoDecoder.DecoderRunning)
+            {
+                while (!videoDecoder.ItemsAvailable)
+                {
+                    System.Threading.Thread.Sleep(20);
+                    if (!videoDecoder.DecoderRunning) break;
+                }
+                if (videoDecoder.ItemsAvailable)
+                {
+                    TimestampItem<byte[]> entry = videoDecoder.NextItem();
+                    if (counter % 100 == 0)
+                        Console.WriteLine("Frame: " + counter.ToString().PadLeft(5, '0') + ", Timestamp: " + Math.Round((double)entry.Timestamp / 1000000, 3).ToString("F3").PadLeft(8, '0').Replace(',', '.'));
+                    counter++;
+                }
+                //if (counter == 500) break;
+            }
+            System.Threading.Thread.Sleep(1000);
+            videoDecoder.Close();
+            sw.Stop();
+            Console.WriteLine("Total Time: " + Math.Round((double)sw.ElapsedMilliseconds / 1000, 3).ToString("F3").PadLeft(8, '0').Replace(',', '.') + "sec");
 
             Console.ReadKey();
         }
