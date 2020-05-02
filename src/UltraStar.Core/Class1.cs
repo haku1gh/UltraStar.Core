@@ -12,6 +12,7 @@ using System.Runtime.CompilerServices;
 
 // Temporarily added here for testing access of project TestVideoConsole
 [assembly: InternalsVisibleTo("TestVideoConsole")]
+[assembly: InternalsVisibleTo("TestGUI")]
 
 namespace UltraStar.Core
 {
