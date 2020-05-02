@@ -268,6 +268,7 @@
     <Compile Include="USAudioPlaybackDeviceInfo.cs" />
     <Compile Include="UsConfig.cs" />
     <Compile Include="USAudioRecordingDeviceInfo.cs" />
+    <Compile Include="UsImage.cs" />
     <Compile Include="UsOptions.cs" />
     <Compile Include="UsPixelFormat.cs" />
     <Compile Include="Utils\Architecture.cs" />
@@ -280,7 +281,9 @@
     <Compile Include="Utils\SystemInformation.cs" />
     <Compile Include="Utils\TimestampItem.cs" />
     <Compile Include="Utils\VolumeConversion.cs" />
+    <Compile Include="Video\FFmpegImageDecoder.cs" />
     <Compile Include="Video\FFmpegVideoDecoder.cs" />
+    <Compile Include="Video\ImageDecoder.cs" />
     <Compile Include="Video\VideoDecoder.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -44,14 +44,6 @@ namespace UltraStar.Core
         // Provide logging capabilities for view
     }
 
-    public class UsImage
-    {
-        public float StartTimestamp;
-        public int Width;
-        public int Height;
-        public byte[] Image;
-    }
-
     public class UsLyricLine
     {
         public float StartTimestamp;
