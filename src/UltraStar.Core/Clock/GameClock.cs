@@ -62,6 +62,7 @@ namespace UltraStar.Core.Clock
         public void Start()
         {
             zeroOffset = delay;
+            watch.Restart();
             Running = true;
             Paused = false;
         }
@@ -104,6 +105,14 @@ namespace UltraStar.Core.Clock
         }
 
         /// <summary>
+        /// Gets the elapsed micro seconds [us].
+        /// </summary>
+        public long Elapsed
+        {
+            get { return (1000000 * watch.ElapsedTicks / Stopwatch.Frequency) - zeroOffset; }
+        }
+
+        /// <summary>
         /// Gets the elapsed milli seconds [ms].
         /// </summary>
         public long ElapsedMilliseconds
@@ -112,19 +121,11 @@ namespace UltraStar.Core.Clock
         }
 
         /// <summary>
-        /// Gets the elapsed micro seconds [us].
-        /// </summary>
-        public long ElapsedMicroseconds
-        {
-            get { return (1000000 * watch.ElapsedTicks / Stopwatch.Frequency) - zeroOffset; }
-        }
-
-        /// <summary>
         /// Gets the elapsed seconds [s].
         /// </summary>
-        public float Elapsed
+        public float ElapsedSeconds
         {
-            get { return (float)ElapsedMicroseconds / 1000000; }
+            get { return (float)watch.ElapsedTicks / Stopwatch.Frequency - (zeroOffset / 1000000f); }
         }
 
         /// <summary>
