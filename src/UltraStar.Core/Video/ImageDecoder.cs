@@ -8,6 +8,8 @@
 #endregion License
 
 using System;
+using System.Reflection;
+using UltraStar.Core.Utils;
 
 namespace UltraStar.Core.Video
 {
@@ -16,6 +18,22 @@ namespace UltraStar.Core.Video
     /// </summary>
     public abstract class ImageDecoder
     {
+        /// <summary>
+        /// Opens a new audio decoder.
+        /// </summary>
+        /// <param name="pixelFormat">The pixel format of the image.</param>
+        /// <param name="maxWidth">The maximum width of the output image.</param>
+        /// <param name="aspectRatio">The aspect ratio of the output image. Set to -1 to keep the existing aspect ratio.</param>
+        public static ImageDecoder Open(UsPixelFormat pixelFormat, int maxWidth = 1920, float aspectRatio = -1.0f)
+        {
+            // Get the type where the class ImageDecoder is implemented
+            Type imageDecoderClass = Type.GetType(LibrarySettings.ImageDecoderClassName, true);
+            // Get the constructor
+            ConstructorInfo cInfo = imageDecoderClass.GetConstructor(new Type[] { typeof(UsPixelFormat), typeof(int), typeof(float) });
+            // Return the newly created object
+            return (ImageDecoder)cInfo.Invoke(new object[] { pixelFormat, maxWidth, aspectRatio });
+        }
+
         /// <summary>
         /// Decodes an image into an <see cref="UsImage"/>.
         /// </summary>

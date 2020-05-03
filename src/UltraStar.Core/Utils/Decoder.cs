@@ -225,6 +225,10 @@ namespace UltraStar.Core.Utils
         {
             get
             {
+                // Check if disposed
+                if (isDisposed)
+                    return false;
+                // Return value
                 bool returnValue;
                 lock (buffer) returnValue = (buffer.Count > 0);
                 return returnValue;
@@ -238,6 +242,10 @@ namespace UltraStar.Core.Utils
         {
             get
             {
+                // Check if disposed
+                if (isDisposed)
+                    return false;
+                // Return value
                 bool returnValue;
                 lock (buffer) returnValue = (buffer.Count == (buffer.Size - nonOverwritingItems));
                 return returnValue;
@@ -251,6 +259,10 @@ namespace UltraStar.Core.Utils
         {
             get
             {
+                // Check if disposed
+                if (isDisposed)
+                    return 0;
+                // Return value
                 int returnValue;
                 lock (buffer) returnValue = buffer.Count;
                 return returnValue;
@@ -264,6 +276,10 @@ namespace UltraStar.Core.Utils
         /// <exception cref="IndexOutOfRangeException">No item is available. Check with <see cref="ItemsAvailable"/> before calling this method.</exception>
         public T NextItem()
         {
+            // Check if disposed
+            if (isDisposed)
+                throw new ObjectDisposedException(nameof(Decoder<T>));
+            // Return value
             T returnItem;
             lock (buffer)
             {
@@ -285,6 +301,10 @@ namespace UltraStar.Core.Utils
         /// <returns>An array containing the requested items.</returns>
         public T[] NextItems(int maxCount)
         {
+            // Check if disposed
+            if (isDisposed)
+                return null;
+            // Return value
             T[] returnArray;
             lock (buffer)
             {
@@ -307,6 +327,10 @@ namespace UltraStar.Core.Utils
         /// <exception cref="IndexOutOfRangeException">No item is available. Check with <see cref="ItemsAvailable"/> before calling this method.</exception>
         public T PeekNextItem()
         {
+            // Check if disposed
+            if (isDisposed)
+                throw new ObjectDisposedException(nameof(Decoder<T>));
+            // Return value
             T returnItem;
             lock (buffer)
             {
@@ -324,6 +348,10 @@ namespace UltraStar.Core.Utils
         /// <returns>An array containing the requested items.</returns>
         public T[] PeekNextItems(int maxCount)
         {
+            // Check if disposed
+            if (isDisposed)
+                return null;
+            // Return value
             T[] returnArray;
             lock (buffer)
             {

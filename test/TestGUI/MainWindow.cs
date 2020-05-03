@@ -36,16 +36,16 @@ namespace TestGUI
             string url2 = "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
             string url3 = "<Enter picture file here>";
 
-            imageDecoder = new FFmpegImageDecoder(UsPixelFormat.BGR24, 400, 1);
-            UsImage image = imageDecoder.DecodeImage(url3);
+            imageDecoder = ImageDecoder.Open(UsPixelFormat.BGR24, 400, 1);
+            image = imageDecoder.DecodeImage(url3);
             int stride = image.Width * 3;
             int rest = stride % 4;
             if (rest != 0) stride += 4 - rest;
             imageBox.Image = new Bitmap(image.Width, image.Height, stride, PixelFormat.Format24bppRgb, Marshal.UnsafeAddrOfPinnedArrayElement(image.Data, 0));
 
-            videoDecoder = new FFmpegVideoDecoder(url, UsPixelFormat.BGR24);
+            videoDecoder = VideoDecoder.Open(url, UsPixelFormat.BGR24, 1280);
 
-            audioDecoder = new FFmpegAudioDecoder(url2);
+            audioDecoder = AudioDecoder.Open(url2);
             while (!audioDecoder.BufferFull)
             {
                 System.Threading.Thread.Sleep(10);

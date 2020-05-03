@@ -8,6 +8,7 @@
 #endregion License
 
 using System;
+using System.Reflection;
 using UltraStar.Core.Utils;
 
 namespace UltraStar.Core.Audio
@@ -23,6 +24,20 @@ namespace UltraStar.Core.Audio
         /// <param name="minimumBufferSize">The minimum size of the internal buffer.</param>
         public AudioDecoder(int minimumBufferSize) : base(minimumBufferSize, LibrarySettings.AudioDecoderNonOverwritingItems)
         { }
+
+        /// <summary>
+        /// Opens a new audio decoder.
+        /// </summary>
+        /// <param name="url">The URL of the media file.</param>
+        public static AudioDecoder Open(string url)
+        {
+            // Get the type where the class AudioDecoder is implemented
+            Type audioDecoderClass = Type.GetType(LibrarySettings.AudioDecoderClassName, true);
+            // Get the constructor
+            ConstructorInfo cInfo = audioDecoderClass.GetConstructor(new Type[] { typeof(string) });
+            // Return the newly created object
+            return (AudioDecoder)cInfo.Invoke(new object[] { url });
+        }
 
         /// <summary>
         /// Gets an audio playback callback from the decoder.

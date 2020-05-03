@@ -37,7 +37,7 @@ namespace TestVideoConsole
             vsd.Close();
 
             sw.Restart();
-            FFmpegVideoDecoder videoDecoder = new FFmpegVideoDecoder(url, UsPixelFormat.RGBA);
+            VideoDecoder videoDecoder = VideoDecoder.Open(url, UsPixelFormat.RGBA);
             Console.WriteLine("FFmpeg Video Decoder created. Property stats:");
             Console.WriteLine("=======================================================================================");
             Console.WriteLine("DecoderRunning : " + videoDecoder.DecoderRunning);

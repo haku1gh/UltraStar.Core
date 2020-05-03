@@ -8,6 +8,7 @@
 #endregion License
 
 using System;
+using System.Reflection;
 using UltraStar.Core.Utils;
 
 namespace UltraStar.Core.Video
@@ -23,6 +24,23 @@ namespace UltraStar.Core.Video
         /// <param name="minimumBufferSize">The minimum size of the internal buffer.</param>
         public VideoDecoder(int minimumBufferSize) : base(minimumBufferSize, LibrarySettings.VideoDecoderNonOverwritingItems)
         { }
+
+        /// <summary>
+        /// Opens a new audio decoder.
+        /// </summary>
+        /// <param name="url">The URL of the media file.</param>
+        /// <param name="pixelFormat">The pixel format of the video frames.</param>
+        /// <param name="maxWidth">The maximum width of the output video.</param>
+        /// <param name="aspectRatio">The aspect ratio of the output video. Set to -1 to keep the existing aspect ratio.</param>
+        public static VideoDecoder Open(string url, UsPixelFormat pixelFormat, int maxWidth = 1920, float aspectRatio = -1.0f)
+        {
+            // Get the type where the class VideoDecoder is implemented
+            Type videoDecoderClass = Type.GetType(LibrarySettings.VideoDecoderClassName, true);
+            // Get the constructor
+            ConstructorInfo cInfo = videoDecoderClass.GetConstructor(new Type[] { typeof(string), typeof(UsPixelFormat), typeof(int), typeof(float) });
+            // Return the newly created object
+            return (VideoDecoder)cInfo.Invoke(new object[] { url, pixelFormat, maxWidth, aspectRatio });
+        }
 
         /// <summary>
         /// Gets the name of the codec used for decoding.

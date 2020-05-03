@@ -218,6 +218,10 @@ namespace UltraStar.Core.Audio
         /// <returns>A <see cref="AudioPlaybackCallback"/> delegate which can be called to retrieve audio samples.</returns>
         public override AudioPlaybackCallback GetAudioPlaybackCallback()
         {
+            // Check if disposed
+            if (isDisposed)
+                throw new ObjectDisposedException(nameof(FFmpegAudioDecoder));
+            // Return value
             return audioPlaybackCallback;
         }
 
@@ -237,10 +241,14 @@ namespace UltraStar.Core.Audio
         /// <returns>The number of audio samples written by the function.</returns>
         private int audioPlaybackCallback(AudioPlayback handle, float[] buffer, int maxLength)
         {
+            // Check if disposed
+            if (isDisposed) return 0;
+            // Check if decoder already stopped or if no new data is available
             if (!base.DecoderRunning && !base.ItemsAvailable && tempSampleStoragePos == 0) return 0;
+            // Setup some temporary variables
             int bufferPos = 0;
             int maxRemainingSamples = maxLength;
-            // 
+            // First empty temporary buffer
             if (tempSampleStoragePos > 0)
             {
                 int count = Math.Min(tempSampleStoragePos, maxRemainingSamples);
@@ -254,6 +262,7 @@ namespace UltraStar.Core.Audio
                     return bufferPos;
                 }
             }
+            // Otherwise copy data from ring buffer
             do
             {
                 if (base.ItemsAvailable)

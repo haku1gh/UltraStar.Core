@@ -9,6 +9,7 @@
 
 using System;
 using UltraStar.Core.Audio;
+using UltraStar.Core.Video;
 
 namespace UltraStar.Core.Utils
 {
@@ -75,12 +76,22 @@ namespace UltraStar.Core.Utils
         /// Where -1 represents an automatic detection based on available processor cores.
         /// Value equal or greater than 1 represent a fixed number of cores.
         /// </remarks>
-        public static readonly int VideoDecodingThreadCount = -1;
+        public static readonly int VideoDecodingThreadCount = 4;
 
         /// <summary>
         /// The number of video frames which can be retrieved from the decoder before any of these frames will be overwritten.
         /// </summary>
         public static readonly int VideoDecoderNonOverwritingItems = 4;
+
+        /// <summary>
+        /// The full qualified class name of the video decoder implementation.
+        /// </summary>
+        public static readonly string VideoDecoderClassName = typeof(FFmpegVideoDecoder).AssemblyQualifiedName;
+
+        /// <summary>
+        /// The full qualified class name of the image decoder implementation.
+        /// </summary>
+        public static readonly string ImageDecoderClassName = typeof(FFmpegImageDecoder).AssemblyQualifiedName;
 
         /// <summary>
         /// The number of audio sample packets which can be retrieved from the decoder before any of these sample packets will be overwritten.
@@ -94,5 +105,10 @@ namespace UltraStar.Core.Utils
         /// Higher numbers improve slightly the efficiency when providing the data to an audio playback.
         /// </remarks>
         public static readonly int AudioDecoderSamplePacketSize = 512;
+
+        /// <summary>
+        /// The full qualified class name of the audio decoder implementation.
+        /// </summary>
+        public static readonly string AudioDecoderClassName = typeof(FFmpegAudioDecoder).AssemblyQualifiedName;
     }
 }
