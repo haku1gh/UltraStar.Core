@@ -210,7 +210,7 @@ namespace UltraStar.Core.Utils
         /// <param name="minimumBufferSize">The minimum size of the internal buffer.</param>
         protected void resizeBuffer(int minimumBufferSize)
         {
-            lock (buffer) buffer.Resize(minimumBufferSize);
+            lock (buffer) buffer.Resize(minimumBufferSize + nonOverwritingItems);
         }
 
         /// <summary>
