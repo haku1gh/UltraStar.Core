@@ -68,6 +68,7 @@ namespace UltraStar.Core
         /// This value can range from 100 to 5000 milliseconds. Default is 500 milliseconds.
         /// Any values provided outside this range will be automatically capped.
         /// Larger buffers will not cause additional delays.
+        /// Low values could result in audio stutters.
         /// </remarks>
         public static int AudioPlaybackBufferLength
         {
