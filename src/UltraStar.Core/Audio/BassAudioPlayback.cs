@@ -27,7 +27,8 @@ namespace UltraStar.Core.Audio
         private readonly int deviceID;
         private int handle;
         private float[] buffer;
-        private BassStreamProcedure internalCallback;
+        private BassStreamProcedure internalCallback = null;
+        private BassSyncProcedure failureCallback = null;
         private bool running = false;
         private bool paused = false;
         private bool preFillBufferWithSilence;
@@ -56,6 +57,7 @@ namespace UltraStar.Core.Audio
             }
             // Open a new BASS stream
             Bass.CurrentDevice = deviceID;
+            Bass.SetConfiguration(BassConfigurationOption.PlaybackBufferLength, UsOptions.AudioPlaybackBufferLength);
             if (audioPlaybackCallback != null)
             {
                 buffer = new float[LibrarySettings.AudioPlaybackBufferSize];
@@ -67,7 +69,8 @@ namespace UltraStar.Core.Audio
                 handle = Bass.StreamCreate(samplerate, channels, BassStreamCreateFlags.Float, BassStreamProcedureType.Push);
             }
             if (handle == 0) throw new BassException(Bass.GetErrorCode());
-            int syncHandle = Bass.ChannelSetSyncDeviceFail(handle, deviceFailCallback);
+            failureCallback = deviceFailCallback;
+            int syncHandle = Bass.ChannelSetSyncDeviceFail(handle, failureCallback);
             if (syncHandle == 0) throw new BassException(Bass.GetErrorCode());
             // Pre-buffer
             this.preFillBufferWithSilence = preFillBufferWithSilence;
@@ -291,8 +294,12 @@ namespace UltraStar.Core.Audio
                         noSoundDeviceUsers.Remove(this);
                         if (noSoundDeviceUsers.Count == 0)
                         {
-                            Bass.CurrentDevice = deviceID;
-                            Bass.DeviceFree();
+                            try
+                            {
+                                Bass.CurrentDevice = deviceID;
+                                Bass.DeviceFree();
+                            }
+                            catch { }
                         }
                     }
                     else
@@ -300,14 +307,20 @@ namespace UltraStar.Core.Audio
                         defaultDeviceUsers.Remove(this);
                         if (defaultDeviceUsers.Count == 0)
                         {
-                            Bass.CurrentDevice = deviceID;
-                            Bass.DeviceFree();
+                            try
+                            {
+                                Bass.CurrentDevice = deviceID;
+                                Bass.DeviceFree();
+                            }
+                            catch { }
                         }
                     }
+
                 }
                 // Free other resources
                 buffer = null;
                 internalCallback = null;
+                failureCallback = null;
                 // Raise event
                 if (disposing) onClosed();
             }
