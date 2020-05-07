@@ -195,6 +195,18 @@ namespace UltraStar.Core.Audio
         public abstract void ReInitialize();
 
         /// <summary>
+        /// Pushes sample data to the audio playback.
+        /// </summary>
+        /// <remarks>
+        /// This function shall only be used when no callback function had been provided.
+        /// All data must be stored in a non-planar way. E.g. if the playback has 2 channels (A and B), the data is stored as ABABAB... in the buffer.
+        /// </remarks>
+        /// <param name="buffer">The buffer containing the sample data.</param>
+        /// <param name="length">The number of audio samples provided in the buffer.</param>
+        /// <returns>The number of samples per channel queued outside the main playback buffer.</returns>
+        public abstract int Push(float[] buffer, int length);
+
+        /// <summary>
         /// Starts the playback.
         /// </summary>
         /// <param name="delay">The delay in micro seconds [us] before playback shall start.</param>
