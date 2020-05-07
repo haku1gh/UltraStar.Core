@@ -287,6 +287,7 @@
     <Compile Include="Video\FFmpegVideoDecoder.cs" />
     <Compile Include="Video\ImageDecoder.cs" />
     <Compile Include="Video\VideoDecoder.cs" />
+    <Compile Include="Voice\RecordPitch.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="libs\linux\arm64\libbass.so">
@@ -306,7 +307,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="libs\mac\" />
-    <Folder Include="Voice\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="libs\windows\x64\avcodec-58.dll">
