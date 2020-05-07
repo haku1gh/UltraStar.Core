@@ -30,6 +30,7 @@ namespace UltraStar.Core
         /// <param name="volume">The volume of the device (or -1 if unknown). 0=Silent, 1=Max.</param>
         public USAudioRecordingDeviceInfo(int deviceID, string name, string type, bool isDefault, int inputs, string[] inputNames, int channels, int samplerate, float volume)
         {
+            DeviceID = deviceID;
             Name = name;
             Type = type;
             IsDefault = isDefault;
