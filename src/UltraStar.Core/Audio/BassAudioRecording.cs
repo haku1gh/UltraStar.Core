@@ -440,6 +440,8 @@ namespace UltraStar.Core.Audio
             private readonly float[] emptyBuffer;
             private readonly float[] channelVolume;
             private int handle;
+            private BassRecordProcedure internalCallback = null;
+            private BassSyncProcedure failureCallback = null;
 
             /// <summary>
             /// Gets the recording device info for the active recording.
@@ -541,10 +543,12 @@ namespace UltraStar.Core.Audio
                 Position = 0;
                 // Start recording
                 Bass.SetConfiguration(BassConfigurationOption.RecordingBufferLength, UsOptions.AudioRecordingBufferLength);
+                internalCallback = recordingCallback;
                 handle = Bass.RecordingDeviceStart(samplerate, Channels, BassRecordStartFlags.RecordPause | BassRecordStartFlags.Float,
-                    recordingCallback, callbackPeriod[(int)UsOptions.AudioRecordingDelay]);
+                    internalCallback, callbackPeriod[(int)UsOptions.AudioRecordingDelay]);
                 if (handle == 0) throw new BassException(Bass.GetErrorCode());
-                int syncHandle = Bass.ChannelSetSyncDeviceFail(handle, deviceFailCallback);
+                failureCallback = deviceFailCallback;
+                int syncHandle = Bass.ChannelSetSyncDeviceFail(handle, failureCallback);
                 if (syncHandle == 0) throw new BassException(Bass.GetErrorCode());
                 Paused = true;
             }
@@ -556,6 +560,8 @@ namespace UltraStar.Core.Audio
             {
                 Stop(false);
                 Stopped = null;
+                internalCallback = null;
+                failureCallback = null;
             }
 
             /// <summary>
