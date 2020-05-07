@@ -70,6 +70,8 @@
     <Compile Include="Audio\BassAudioPlayback.cs" />
     <Compile Include="Audio\BassAudioRecording.cs" />
     <Compile Include="Audio\FFmpegAudioDecoder.cs" />
+    <Compile Include="Audio\WaveAudioEncoder.cs" />
+    <Compile Include="Audio\WaveAudioFormat.cs" />
     <Compile Include="Class1.cs" />
     <Compile Include="Clock\GameClock.cs" />
     <Compile Include="Clock\GlobalClock.cs" />
