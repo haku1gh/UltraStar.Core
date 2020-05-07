@@ -386,6 +386,21 @@ namespace UltraStar.Core.Audio
         }
 
         /// <summary>
+        /// Gets the number of samples per channel currently buffered in the recording stream.
+        /// </summary>
+        public override int BufferCount
+        {
+            get
+            {
+                // Check if disposed
+                if (isDisposed)
+                    throw new ObjectDisposedException(nameof(BassAudioRecording));
+                // Return value
+                return activeRecordingDevice.BufferCount;
+            }
+        }
+
+        /// <summary>
         /// Gets or sets the volume of the recording stream.
         /// </summary>
         /// <remarks>
@@ -817,6 +832,28 @@ namespace UltraStar.Core.Audio
                     throw new AudioException("Invalid channel from recording device accessed.");
                 // Return value
                 return channelVolume[channel];
+            }
+
+            /// <summary>
+            /// Gets the number of samples per channel currently buffered in the recording stream.
+            /// </summary>
+            public int BufferCount
+            {
+                get
+                {
+                    // Check if recording already stopped
+                    if (handle == 0) return 0;
+                    // Return value
+                    int value;
+                    lock (lockBassAccess)
+                    {
+                        value = Bass.ChannelGetBufferedDataCount(handle);
+                        if (value == -1)
+                            throw new BassException(Bass.GetErrorCode());
+                        value /= (4 * Channels); // A single audio sample is of type float = 4 bytes.
+                    }
+                    return value;
+                }
             }
 
             /// <summary>

@@ -242,6 +242,11 @@ namespace UltraStar.Core.Audio
         public abstract long Position { get; }
 
         /// <summary>
+        /// Gets the number of samples per channel currently buffered in the playback stream.
+        /// </summary>
+        public abstract int BufferCount { get; }
+
+        /// <summary>
         /// Gets or sets the volume of the playback stream.
         /// </summary>
         /// <remarks>

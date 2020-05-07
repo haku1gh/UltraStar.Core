@@ -712,6 +712,22 @@ namespace UltraStar.Core.Unmanaged.Bass
         #region Channels
 
         /// <summary>
+        /// Delegate for BASS_ChannelGetData.
+        /// </summary>
+        [UnmanagedFunctionPointer(CallingConvention.Winapi, CharSet = CharSet.Ansi)]
+        private delegate int bass_channelgetdata_delegate(int handle, IntPtr buffer, int length);
+        /// <summary>
+        /// Gets the number of bytes buffered for the particular channel.
+        /// </summary>
+        /// <param name="handle"></param>
+        /// <returns>If successful, the number of bytes in the channel's buffer is returned, else -1 is returned. Use <see cref="GetErrorCode" /> to get the error code.</returns>
+        public static int ChannelGetBufferedDataCount(int handle)
+        {
+            bass_channelgetdata_delegate del = LibraryLoader.GetFunctionDelegate<bass_channelgetdata_delegate>(libraryHandle, "BASS_ChannelGetData");
+            return del(handle, IntPtr.Zero, 0);
+        }
+
+        /// <summary>
         /// Delegate for BASS_ChannelGetAttribute.
         /// </summary>
         [UnmanagedFunctionPointer(CallingConvention.Winapi, CharSet = CharSet.Ansi)]
