@@ -11,33 +11,13 @@ using System;
 using System.Runtime.CompilerServices;
 
 // Temporarily added here for testing access of project TestVideoConsole
+[assembly: InternalsVisibleTo("TestAudioConsole")]
 [assembly: InternalsVisibleTo("TestVideoConsole")]
 [assembly: InternalsVisibleTo("TestGUI")]
 
 namespace UltraStar.Core
 {
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
-    public class Class1
-    {
-
-        public static void Asdsad()
-        {
-            Console.WriteLine("Version: " + Unmanaged.Bass.Bass.GetVersion());
-            int deviceID = 0;
-            while(Unmanaged.Bass.Bass.GetDeviceInfo(deviceID, out Unmanaged.Bass.BassDeviceInfo info))
-            {
-                Console.WriteLine("DeviceID: " + deviceID);
-                Console.WriteLine("Name: " + info.Name);
-                Console.WriteLine("Type: " + info.Type);
-                Console.WriteLine("IsDefault: " + info.IsDefault);
-                Console.WriteLine("IsEnabled: " + info.IsEnabled);
-                Console.WriteLine("IsLoopback: " + info.IsLoopback);
-                Console.WriteLine("Driver: " + info.Driver);
-                Console.WriteLine("");
-                deviceID++;
-            }
-        }
-    }
 
     public class UsLogging
     {
@@ -89,5 +69,6 @@ namespace UltraStar.Core
         }
 
     }
+
 #pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
 }
