@@ -20,7 +20,7 @@ namespace UltraStar.Core.Utils
     public abstract class Decoder<T> : IDisposable
     {
         // Private variables
-        private RingBuffer<T> buffer;
+        private IRingBuffer<T> buffer;
         private Thread workerThread;
         private EventWaitHandle sleepWaitHandle;        // Sleep wait handle
         private readonly int nonOverwritingItems;
