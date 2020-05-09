@@ -75,7 +75,7 @@ namespace UltraStar.Core.Audio
                 // Nothing found, so open a new recording device
                 if (activeRecordingDevice == null)
                 {
-                    activeRecordingDevice = new ActiveRecordingDevice(deviceID, 2, samplerate, input);
+                    activeRecordingDevice = new ActiveRecordingDevice(deviceID, channels, samplerate, input);
                     activeRecordingDevice.AddUser(this);
                     activeRecordingDevices.Add(activeRecordingDevice);
                 }
