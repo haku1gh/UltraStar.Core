@@ -110,5 +110,24 @@ namespace UltraStar.Core.Utils
         /// The full qualified class name of the audio decoder implementation.
         /// </summary>
         public static readonly string AudioDecoderClassName = typeof(FFmpegAudioDecoder).AssemblyQualifiedName;
+
+        /// <summary>
+        /// An indicator whether the full pitch detector analysis should be performed.
+        /// </summary>
+        /// <remarks>
+        /// For testing a pitch detector implementation it makes sense to set this value to <see langword="true"/>.
+        /// For optimum performance this value should be set to <see langword="false"/>.
+        /// </remarks>
+        public static readonly bool PitchDetectorFullAnalysis = true;
+
+        /// <summary>
+        /// The minimum pitch to be used for a pitch detector.
+        /// </summary>
+        public static readonly int PitchDetectorMinimumPitch = 36; // 36 = C2, Before begin of Bass
+
+        /// <summary>
+        /// The maximum pitch to be used for a pitch detector.
+        /// </summary>
+        public static readonly int PitchDetectorMaximumPitch = 86; // 86 = D6, Behind end of Sophrano
     }
 }

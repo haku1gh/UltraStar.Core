@@ -29,6 +29,7 @@ namespace UltraStar.Core
             AudioPlaybackBufferLength = 500;
             AudioFilePreBufferLength = 1000;
             VideoFilePreBufferLength = 500;
+            MicrophoneThreshold = 10;
         }
 
         private static int audioRecordingBufferLength;
@@ -127,6 +128,29 @@ namespace UltraStar.Core
                 if (value < 500) value = 500;
                 if (value > 10000) value = 10000;
                 videoFilePreBufferLength = value;
+            }
+        }
+
+        private static int microphoneThreshold;
+        /// <summary>
+        /// Gets or sets the microphone threshold in [%].
+        /// </summary>
+        /// <remarks>
+        /// Microphones which are used for recording can or will usually contain some noise.
+        /// This could have various reasons, from the low quality of a microphone to simply the sound catching the music played.
+        /// 
+        /// This value can range from 0 to 50 percent. Default is 10 percent.
+        /// Any values provided outside this range will be automatically capped.
+        /// Values above 25 percent are usually not recommended.
+        /// </remarks>
+        public static int MicrophoneThreshold
+        {
+            get { return microphoneThreshold; }
+            set
+            {
+                if (value < 0) value = 0;
+                if (value > 50) value = 50;
+                microphoneThreshold = value;
             }
         }
     }

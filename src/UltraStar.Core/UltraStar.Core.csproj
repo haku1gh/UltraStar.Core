@@ -287,6 +287,10 @@
     <Compile Include="Video\FFmpegVideoDecoder.cs" />
     <Compile Include="Video\ImageDecoder.cs" />
     <Compile Include="Video\VideoDecoder.cs" />
+    <Compile Include="Voice\ClassicPitchDetector.cs" />
+    <Compile Include="Voice\PitchDetectorCallback.cs" />
+    <Compile Include="Voice\VoiceException.cs" />
+    <Compile Include="Voice\PitchDetector.cs" />
     <Compile Include="Voice\RecordPitch.cs" />
   </ItemGroup>
   <ItemGroup>
