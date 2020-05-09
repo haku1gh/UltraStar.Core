@@ -74,7 +74,7 @@ namespace UltraStar.Core.Voice
             {
                 this.pitch = (byte)pitch;
                 pitchRelative = (byte)(pitch % 12);
-                frequency = (float)Math.Pow(2, (this.pitch - 69) / 12) * 440;
+                frequency = (float)Math.Pow(2, (double)(this.pitch - 69) / 12) * 440;
             }
             this.volume = volume;
             loudness = (byte)(VolumeConversion.ConvertLinearToLoudness(volume) * 100);
