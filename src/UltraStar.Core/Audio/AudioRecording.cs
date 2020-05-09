@@ -66,6 +66,38 @@ namespace UltraStar.Core.Audio
         }
 
         /// <summary>
+        /// Gets information about the default recording device. <see langword="null"/> is returned in case no default device is available.
+        /// </summary>
+        public static USAudioRecordingDeviceInfo DefaultDevice
+        {
+            get
+            {
+                // Get the type where the class AudioRecording is implemented
+                Type audioRecordingClass = Type.GetType(LibrarySettings.AudioRecordingClassName, true);
+                // Get the property "DefaultDevice"
+                PropertyInfo pinfo = audioRecordingClass.GetProperty("DefaultDevice", BindingFlags.Public | BindingFlags.Static | BindingFlags.GetProperty | BindingFlags.DeclaredOnly);
+                // Call the property
+                return (USAudioRecordingDeviceInfo)pinfo.GetValue(null);
+            }
+        }
+
+        /// <summary>
+        /// Gets an indicator whether the default recording device is available.
+        /// </summary>
+        public static bool IsDefaultDeviceAvailable
+        {
+            get
+            {
+                // Get the type where the class AudioRecording is implemented
+                Type audioRecordingClass = Type.GetType(LibrarySettings.AudioRecordingClassName, true);
+                // Get the property "IsDefaultDeviceAvailable"
+                PropertyInfo pinfo = audioRecordingClass.GetProperty("IsDefaultDeviceAvailable", BindingFlags.Public | BindingFlags.Static | BindingFlags.GetProperty | BindingFlags.DeclaredOnly);
+                // Call the property
+                return (bool)pinfo.GetValue(null);
+            }
+        }
+
+        /// <summary>
         /// Opens a new audio recording device.
         /// </summary>
         /// <param name="device">The audio recording device.</param>
@@ -181,12 +213,14 @@ namespace UltraStar.Core.Audio
         /// <summary>
         /// Starts the recording.
         /// </summary>
-        public abstract void Start();
+        /// <param name="delay">The delay in micro seconds [us] before recording shall start.</param>
+        public abstract void Start(long delay = 0);
 
         /// <summary>
         /// Restarts the recording.
         /// </summary>
-        public abstract void Restart();
+        /// <param name="delay">The delay in micro seconds [us] before recording shall start.</param>
+        public abstract void Restart(long delay = 0);
 
         /// <summary>
         /// Pauses the recording.

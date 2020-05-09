@@ -151,6 +151,38 @@ namespace UltraStar.Core.Audio
         }
 
         /// <summary>
+        /// Gets information about the default recording device. <see langword="null"/> is returned in case no default device is available.
+        /// </summary>
+        public static new USAudioRecordingDeviceInfo DefaultDevice
+        {
+            get
+            {
+                USAudioRecordingDeviceInfo[] devices = GetDevices();
+                for (int i = 0; i < devices.Length; i++)
+                {
+                    if (devices[i].IsDefault) return devices[i];
+                }
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Gets an indicator whether the default recording device is available.
+        /// </summary>
+        public static new bool IsDefaultDeviceAvailable
+        {
+            get
+            {
+                USAudioRecordingDeviceInfo[] devices = GetDevices();
+                for (int i = 0; i < devices.Length; i++)
+                {
+                    if (devices[i].IsDefault) return true;
+                }
+                return false;
+            }
+        }
+
+        /// <summary>
         /// Finalizes this instance.
         /// </summary>
         ~BassAudioRecording()
@@ -245,23 +277,25 @@ namespace UltraStar.Core.Audio
         /// <summary>
         /// Starts the recording.
         /// </summary>
-        public override void Start()
+        /// <param name="delay">The delay in micro seconds [us] before recording shall start.</param>
+        public override void Start(long delay = 0)
         {
-            startRecording(false);
+            startRecording(false, delay);
         }
 
         /// <summary>
         /// Restarts the recording.
         /// </summary>
-        public override void Restart()
+        /// <param name="delay">The delay in micro seconds [us] before recording shall start.</param>
+        public override void Restart(long delay = 0)
         {
-            startRecording(true);
+            startRecording(true, delay);
         }
 
         /// <summary>
         /// Helpermethod to start recording.
         /// </summary>
-        private void startRecording(bool restart)
+        private void startRecording(bool restart, long delay = 0)
         {
             // Check if disposed
             if (isDisposed)
@@ -272,7 +306,7 @@ namespace UltraStar.Core.Audio
             lock (lockBassAccess)
             {
                 activeRecordingDevice.Pause(false);
-                activeRecordingDevice.Start(restart);
+                activeRecordingDevice.Start(restart, SampleRate, delay);
             }
         }
 
@@ -457,6 +491,7 @@ namespace UltraStar.Core.Audio
             private int handle;
             private BassRecordProcedure internalCallback = null;
             private BassSyncProcedure failureCallback = null;
+            private long remainingDelay = 0; // Unit is 1x sample per channel
 
             /// <summary>
             /// Gets the recording device info for the active recording.
@@ -603,6 +638,12 @@ namespace UltraStar.Core.Audio
                 int pos = 0, bufferPos = 0;
                 while (pos < length)
                 {
+                    if (remainingDelay > 0)
+                    {
+                        pos++;
+                        remainingDelay--;
+                        continue;
+                    }
                     for (int c = 0; c < Channels; c++)
                         buffer[c][bufferPos] = _pBuffer[pos++] * channelVolume[c];
                     bufferPos++;
@@ -757,10 +798,16 @@ namespace UltraStar.Core.Audio
             /// Starts the recording.
             /// </summary>
             /// <param name="restart"><see langword="true"/> if the recording should be restarted; otherwise <see langword="false"/>.</param>
-            public void Start(bool restart)
+            /// <param name="samplerate">The samplerate for recording.</param>
+            /// <param name="delay">The delay in micro seconds [us] before recording shall start.</param>
+            public void Start(bool restart, int samplerate, long delay = 0)
             {
                 // Check if recording already stopped
                 if (handle == 0) return;
+                // Setup delay
+                remainingDelay = (delay * samplerate * Channels / 1000000);
+                if (remainingDelay < 0)
+                    remainingDelay = 0;
                 // Start recording
                 lock (listeners)
                 {
