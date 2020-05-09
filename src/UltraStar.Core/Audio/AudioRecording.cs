@@ -47,7 +47,7 @@ namespace UltraStar.Core.Audio
             DeviceID = deviceID;
             Channel = channel;
             this.audioRecordingCallback = audioRecordingCallback;
-            Samplerate = samplerate;
+            SampleRate = samplerate;
             Input = input;
         }
 
@@ -278,7 +278,7 @@ namespace UltraStar.Core.Audio
         /// <remarks>
         /// This is not necessarily the same as the devices sample rate.
         /// </remarks>
-        public int Samplerate { get; }
+        public int SampleRate { get; }
 
         /// <summary>
         /// Gets the used input on the device.

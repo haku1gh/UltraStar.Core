@@ -235,7 +235,7 @@ namespace UltraStar.Core.Audio
                 if (!running)
                 {
                     if (!activeRecordingDevice.Running)
-                        activeRecordingDevice.Initialize(Samplerate, Input);
+                        activeRecordingDevice.Initialize(SampleRate, Input);
                     activeRecordingDevice.Attach(this, audioRecordingCallback, Channel);
                     running = true;
                 }

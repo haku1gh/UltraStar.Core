@@ -38,7 +38,7 @@ namespace UltraStar.Core.Audio
         /// otherwise <see langword="false"/> and the default playback device will be used.</param>
         public AudioPlayback(int samplerate, int channels, AudioPlaybackCallback audioPlaybackCallback, bool noSound)
         {
-            Samplerate = samplerate;
+            SampleRate = samplerate;
             Channels = channels;
             this.audioPlaybackCallback = audioPlaybackCallback;
             IsUsingNoSoundDevice = noSound;
@@ -274,7 +274,7 @@ namespace UltraStar.Core.Audio
         /// <remarks>
         /// This is not necessarily the same as the devices sample rate.
         /// </remarks>
-        public int Samplerate { get; }
+        public int SampleRate { get; }
 
         /// <summary>
         /// Gets the number of channels the playback has.

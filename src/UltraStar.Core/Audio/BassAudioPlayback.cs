@@ -394,7 +394,7 @@ namespace UltraStar.Core.Audio
             if (isDisposed)
                 throw new ObjectDisposedException(nameof(BassAudioRecording));
             // Setup delay
-            remainingDelay = (delay * Samplerate * Channels / 1000000) + remainingDelay;
+            remainingDelay = (delay * SampleRate * Channels / 1000000) + remainingDelay;
             if (remainingDelay > 0)
                 Array.Clear(buffer, 0, buffer.Length);
             else
@@ -420,7 +420,7 @@ namespace UltraStar.Core.Audio
             if (isDisposed)
                 throw new ObjectDisposedException(nameof(BassAudioRecording));
             // Setup delay
-            remainingDelay = (delay * Samplerate * Channels / 1000000) + remainingDelay;
+            remainingDelay = (delay * SampleRate * Channels / 1000000) + remainingDelay;
             if (remainingDelay > 0)
                 Array.Clear(buffer, 0, buffer.Length);
             else
